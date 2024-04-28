@@ -261,6 +261,12 @@
 			<artifactId>amqp-client</artifactId>
 			<version>3.0.4</version>
 		</dependency>
+		<!-- 定时器 -->
+		<dependency>
+			<groupId>quartz</groupId>
+			<artifactId>quartz</artifactId>
+			<version>1.5.2</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>
