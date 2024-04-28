@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Api2Server配置列表管理</title>
+    <!--[if lt IE 9]>
+    <script src='resources/js/assets/javascripts/html5shiv.js' type='text/javascript'></script>
+    <![endif]-->
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
+        name='viewport' />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/bootstrap/bootstrap.css'
+        media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/light-theme.css'
+        id='color-settings-body-color' media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/demo.css'
+        media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/jquery-ui.css'
+        media='screen' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/ui.jqgrid.css'
+        media='screen' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/prettify.css' />
+    <link type='text/css' rel='stylesheet' href='console/css/ystep.css' />
+    <link type='text/css' rel='stylesheet' href='console/css/css.css' media='all' />
+    <script type='text/javascript' src='resources/js/assets/javascripts/jquery/jquery.min.js'></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/jquery.jqGrid.min.js"></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/prettify.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/codetabs.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/themeswitchertool.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/i18n/grid.locale-cn.js'></script>
+    <script type="text/ecmascript" src='resources/js/My97DatePicker/WdatePicker.js'></script>
+    <script type='text/javascript' src='GetJS?button.js'></script>
+    <script type='text/javascript' src="GetJS?messagebox.js"></script>
+    <script type='text/javascript' src='GetJS?combobox.js'></script>
+    <script type='text/javascript' src="GetJS?dataform.js"></script>
+    <script type='text/javascript' src="GetJS?popupwindow.js"></script>
+    <script type='text/javascript' src='GetJS?js/ystep.js'></script>
+    <script type='text/javascript' src='console/js/public.js'></script>
+    <script type='text/javascript' src='GetJS?js/checkradio.js'></script>
+</head>
+<body>
+	<div class='row-fluid' id='content-wrapper'>
+		<div class='span12'>
+			<div class='row-fluid'>
+				<div class='span12 box bordered-box orange-border' style='margin-bottom: 0;'>
+					<div class='row-fluid'>
+						<div class='span12 box'>
+							<div class='box-content'>
+								
+								<table width="100%" border="0" cellspacing="0" cellpadding="0" id="SearchTable">
+									<tr>
+										<td style="width: 25%;">
+											<table width="100%" border="0" cellspacing="10" cellpadding="0">
+												<tr>
+													<td class="titleCss90">
+														报文类型
+													</td>
+													<td class="tdCss">
+														<input id='txtMESSAGE_TYPE' type='text' style="width: 100%;" datafield="SearchTable.MESSAGE_TYPE" />
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+								<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 10px;
+									border-bottom: 1px solid #114;">
+									<tr>
+										<td style="text-align: left; padding-right: 10px; padding-left: 10px;">
+											<button id="btnSearch" class='btn btn-primary btn-small' style='margin-bottom: 5px'>
+												<i class='icon-search'></i>查 询
+											</button>
+											<button id="btnRemove" class='btn btn-primary btn-small' style='margin-bottom: 5px'
+												onclick="ClearAllInput('SearchTable')">
+												<i class='icon-trash'></i>重 置
+											</button>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>					
+					<div>						
+					</div>
+					<div class='responsive-table' id="grdTable">
+						<table id="jg">
+						</table>
+						<div id="jqGridPager">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+//加载下拉数据源
+function getConditon() {
+	return "{\"SearchTable\":[{\"TYPE\":\"=COMMON\"}]}";
+}
+//grid宽高自适应
+$(document).ready(function () {
+	window.onresize = function () {
+		setGridSize("#jg",168);
+    }
+	var defaultWhere="{\"SearchTable\":[{\"IS_ENABLED\":\"1\"}]}"
+	$("#jg").jqGrid({
+		datatype: "json",
+		url: "GetAccessLimitList",
+		postData: {
+			'CommandData':defaultWhere
+		}, //发送数据 
+		colNames: ['状态','INDX','限制等级','接入方代码','ip地址','报文类型','限制标识','拦截次数','是否有效 ','创建时间','修改时间','版本号'],
+		colModel: [
+		                { name: 'STATUS', index: 'STATUS', width: 60, formatter: stateShow },
+				        { name: 'INDX', index: 'INDX', width: 50 },
+				        { name: 'LIMIT_LEVEL', index: 'LIMIT_LEVEL', width: 100, formatter: LevelShow },
+				        { name: 'MESSAGE_SOURCE', index: 'MESSAGE_SOURCE', width: 120 },
+				        { name: 'CLIENT_IP', index: 'CLIENT_IP', width: 150 },
+				        { name: 'MESSAGE_TYPE', index: 'MESSAGE_TYPE', width: 150 },
+						{ name: 'LIMIT_FLAG', index: 'LIMIT_FLAG', width: 100, formatter: FlagShow },
+						{ name: 'LIMIT_COUNT', index: 'LIMIT_COUNT', width:100 },
+						{ name: 'IS_ENABLED', index: 'IS_ENABLED', width: 60,align: "center" },
+						{ name: 'CREATE_TIME', index: 'CREATE_TIME', width: 150 , formatter: "date", formatoptions: { srcformat: 'Y-m-d H:i:s', newformat: 'Y-m-d H:i:s'} },
+						{ name: 'MODIFY_TIME', index: 'MODIFY_TIME', width: 150 , formatter: "date", formatoptions: { srcformat: 'Y-m-d H:i:s', newformat: 'Y-m-d H:i:s'} },
+						{ name: 'REC_VER', index: 'REC_VER', width: 100 }
+        	        ],
+					viewrecords: true, 
+		height: 530,
+		rowNum: 15, //每页显示记录数
+		//datatype: 'local',
+		rowList: [15, 50, 100], //可调整每页显示的记录数
+		rownumbers: true,
+		rownumWidth: 25,
+		multiselect: false, //是否支持多选 
+		multiselectWidth: 35, //是否支持多选 
+		viewrecords: true, //是否显示行数 
+		//shrinkToFit: false, //
+		pager: "#jqGridPager", //分页工具栏
+		altRows: true,
+		altclass: 'someClass',
+		// loadonce : true,
+		//caption: "**Data",
+		sortable: true,
+		//水平滚动条
+		loadui: "none",
+		shrinkToFit: false,
+		autoScroll: true,
+		//排序开始
+		onSortCol: function (colName, Id, sortorder) {
+			//colName   排序字段
+			//Id   第几列
+			//sortorder  排序  desc 倒序  asc 正序
+			$("#jg").jqGrid('setGridParam', {
+				url: "GetAccessLimitList" ,
+				postData: {
+					'OrderField': colName,
+					'Order': sortorder
+				}, //发送数据 
+				page: 1
+			}).trigger("reloadGrid"); //重新载入 
+		},
+		loadComplete: function () {
+			var rowNum = $("#jg").jqGrid('getGridParam', 'records');
+			if (rowNum <= 0) {
+				if ($("#norecords").html() == null)
+					$("#jg").parent().append("<div id=\"norecords\" class=\"norecords\">暂无数据！</div>");
+				$("#norecords").show();
+			}
+			else {//如果存在记录，则隐藏提示信息。
+				$("#norecords").hide();
+			}
+		},
+		beforeRequest: function () {
+			if (top.showloading) {
+				top.showloading();
+			}
+		},
+		gridComplete: function () {
+			if (top.hideloading) {
+				top.hideloading();
+			}
+		}
+	});
+		
+	setGridSize("#jg",168);
+	//显示某一列
+	//$("#jg").setGridParam().showCol("colname").trigger("reloadGrid");
+	//隐藏某一列
+	$("#jg").setGridParam().hideCol("INDX").trigger("reloadGrid");
+	//查询
+	$("#btnSearch").click(function () {
+		$("#jg").jqGrid('setGridParam', {
+			url: "GetAccessLimitList",
+			postData: {
+				'CommandData': FormToData('SearchTable')
+			}, //发送数据 
+			page: 1
+		}).trigger("reloadGrid"); //重新载入 
+
+	})
+});
+function stateShow(cellvalue, options, rowObject) {
+	var rt = "";
+	switch (rowObject.STATUS) {
+		case '0':
+			rt += "<span class=\"label label-warning\">异常</span>";
+			break;
+		case '1':
+			rt += "<span class=\"label label-success\">正常</span>";
+			break;
+	}
+	return rt;
+}
+function LevelShow(cellvalue, options, rowObject) {
+	var rt = "";
+	switch (rowObject.LIMIT_LEVEL) {
+		case '1':
+			rt += "<span class=\"label label-warning\">ip级别</span>";
+			break;
+		case '2':
+			rt += "<span class=\"label label-success\">接入方级</span>";
+			break;
+		case '3':
+			rt += "<span class=\"label label-success\">消息类型级</span>";
+			break;
+	}
+	return rt;
+}
+function FlagShow(cellvalue, options, rowObject) {
+	var rt = "";
+	switch (rowObject.LIMIT_FLAG) {
+		case '0':
+			rt += "<span class=\"label label-warning\">不限制</span>";
+			break;
+		case '1':
+			rt += "<span class=\"label label-success\">限制</span>";
+			break;
+	}
+	return rt;
+}
+//处理返回值
+function showSuccess(s) {
+	var v = eval("(" + s + ")");
+	if (v.IsOk == "1") {
+		ShowMessages(v.ErrMessage, "系统提示", "msgok", function okFunction() {
+			$("#jg").trigger("reloadGrid");
+		}, 0);
+
+	}
+	else
+		ShowMessages(v.ErrMessage, "系统提示", "msgwaring", null, 0);
+}
+</script>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<SqlMap>
+	 <select id="GetConfigPathList">
+		<![CDATA[
+		  Select INDX,
+		  SOURCEFILEPATH,
+		  CONFIGNAME,
+		  TARGETFILEPATH,
+		  BACKPATH,
+		  ERRORPATH,
+		  SENDPATH,
+		  SENDTYPE,
+		  SENDADRESS,
+		  SENDUSERNAME,
+		  SENDUSERPWD,
+		  RECEIVEPATH,
+		  RECEIVETYPE,
+		  RECEIVEADRESS,
+		  RECEIVEUSERNAME,
+		  RECEIVEUSERPWD,
+		  USEREMAIL,
+		  SOURCEFILETYPE,
+		  TARGETFILETYPE,
+		  REMARK,
+		  ORG_ID,
+		  SENDTYPENAME,
+		  RECEIVETYPENAME,
+		  SOURCEFILETYPENAME,
+		  TARGETFILETYPENAME,
+		  P_INDX,
+		  FUNCTIONTYPE,
+		  FUNCTIONTYPENAME,
+		  LOCALFILEPATH,
+		  LOCALFILESWITCH
+		  FROM exs_convert_config_path S 
+		  WHERE VALID_STATE = 1 
+	   	  << AND S.CONFIGNAME like #CONFIGNAME# >>
+	      << AND S.ORG_ID like #ORG_ID# >>
+	      << AND S.FUNCTIONTYPE = #FUNCTIONTYPE# >>
+	      << AND S.SOURCEFILETYPE = #SOURCEFILETYPE# >>
+	      << AND S.TARGETFILETYPE = #TARGETFILETYPE# >>
+	      << AND S.SENDTYPE = #SENDTYPE# >>
+	      << AND S.RECEIVETYPE = #RECEIVETYPE# >>
+	      << AND S.RECEIVETYPE = #RECEIVETYPE# >>
+	      ORDER BY INDX DESC
+		]]>
+	</select>
+	
+	
+	
+	<select id="GetConfigNameList">
+	 <![CDATA[
+		SELECT 
+		     exs_convert_config_name.P_INDX              AS P_INDX,
+       		exs_convert_config_path.INDX                AS PATHINDX,
+       		exs_convert_config_name.SEQ                 AS SEQ,
+      		exs_convert_config_name.SOURCEFILEFLOOR     AS SOURCEFILEFLOOR,
+       		exs_convert_config_name.SOURCENOTENAME     ,
+       		exs_convert_config_name.TARGETFILEFLOOR    ,
+       		exs_convert_config_name.TARGETCOLNAME      ,
+       		exs_convert_config_name.DEFVALUE           ,
+       		exs_convert_config_name.ISSUBLIST          ,
+       		exs_convert_config_name.ISSUBLISTNAME      ,
+	        exs_convert_config_name.TARGETNOTEATTRIBUTE,
+	        exs_convert_config_name.TARGETNOTEISINPUT  ,
+	        exs_convert_config_name.CN_REMAKE          ,
+	        exs_convert_config_name.MAPPING            ,
+	        exs_convert_config_name.FUNCTION           ,
+	        exs_convert_config_name.REMARK             ,
+	        exs_convert_config_name.INDX                AS INDX
+  		FROM exs_convert_config_path
+  			LEFT JOIN exs_convert_config_name ON (exs_convert_config_name.P_INDX=exs_convert_config_path.INDX)
+ 		WHERE 1 = 1 
+ 			AND exs_convert_config_name.P_INDX=#INDX#
+   			<< AND exs_convert_config_path.ORG_ID=#ORG_ID# >> 
+     	ORDER BY  cast( exs_convert_config_name.SEQ   as   SIGNED   INTEGER)
+]]>
+	</select>
+	
+	<select id="GetMessFileLogList">
+		 <![CDATA[
+		 SELECT 
+            LOG.INDX,
+            LOG.DATA_SOURCE,
+            LOG.SERIAL_NO,
+            LOG.TARGET_FILE_NAME,
+            LOG.SOURCE_FILE_NAME, 
+            LOG.FILE_PATH,
+            LOG.PROCESS_MSG,
+            LOG.TRANSFORMATION_CODE,
+            LOG.TRANSFORMATION_NAME,
+            LOG.SEND_CODE,
+            LOG.SEND_NAME,
+            LOG.CREATE_TIME,
+            LOG.SEND_TIME,
+            LOG.RECEIPT_RESULT,
+            LOG.RECEIPT_TIME,
+            LOG.TRANSFORMATION_TIME,
+            LOG.SOURCE_BACK_PATH,
+            LOG.SUCCESS_BACK_PATH,
+            LOG.REMARKS,
+            CONFIG.CONFIGNAME,
+            CONFIG.INDX CONFIG_INDX,
+            CONFIG.SOURCEFILETYPE,
+            CONFIG.SOURCEFILETYPENAME,
+            CONFIG.TARGETFILETYPE,
+            CONFIG.TARGETFILETYPENAME,
+            CONFIG.FUNCTIONTYPE,
+            CONFIG.FUNCTIONTYPENAME,
+            CONFIG.SENDTYPE,
+            CONFIG.SENDTYPENAME,
+            CONFIG.RECEIVEADRESS,
+            CONFIG.RECEIVETYPE,           
+            CONFIG.RECEIVETYPENAME
+          FROM exs_convert_log  LOG
+            LEFT JOIN exs_convert_config_path CONFIG ON LOG.CONFIG_PATH_ID = CONFIG.INDX
+            WHERE 1=1 
+		  << AND SERIAL_NO = #SERIAL_NO# >>
+		  << AND SOURCE_FILE_NAME LIKE #SOURCE_FILE_NAME#>>
+		  << AND TARGET_FILE_NAME LIKE #TARGET_FILE_NAME#>>
+		  ORDER BY INDX DESC
+		 ]]>
+	</select>
+	<select id="GetTemplet">
+		 <![CDATA[
+		 SELECT INDX,  TEMPLET_NAME,  TEMPLET_MARK,  TEMPLET_CREATE_TIME,  TEMPLET_TYPE,  TEMPLET_ORG_ID,  TEMPLET_PATH  from exs_convert_templet  WHERE TEMPLET_TYPE='A'
+		  ORDER BY INDX DESC
+		 ]]>
+	</select>
+</SqlMap>

@@ -1,0 +1,254 @@
+.page-space {
+    margin-top: 5px !important;
+    margin-left: 5px !important;
+    margin-right: 5px !important;
+	background: #F4F4F4;
+}
+
+.toolbar {
+    border-top: 0px solid #EEEEEE;
+    border-bottom: 0px solid #EEEEEE;
+    height: 33px;
+    line-height: 33px;
+    background-color: #F9F9F9;
+	margin-left: 2px
+}
+
+.photo-list {
+	
+}
+
+.photo-list ul {
+	list-style: none;
+	margin-left: 30px;
+}
+
+.photo-list ul li {
+	display: block;
+	float: left;
+	position: relative;
+	width: 110px;
+	height: 110px;
+	padding: 15px;
+	border: 1px solid #e5e5e5;
+	background-color: #FFF;
+	-moz-box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
+	box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
+	-webkit-box-shadow: 0 2px 0 rgba(0, 0, 0, 0.05);
+	border: 1px solid #e5e5e5;
+	border-bottom-width: 3px;
+	display: block;
+	padding: 5px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+
+.photo-list .photo {
+	display: block;
+	color: #fff;
+	text-decoration: none;
+	padding: 0 20px;
+}
+
+.photo-list .photo:hover {
+	background-color: #060;
+}
+
+.removephoto {
+	display:block;
+	width:16px;
+	height:16px;
+}
+
+.photoinfo {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	height: 0px;
+	color: #fff;
+	background: rgba(0, 0, 0, 0.6);
+}
+
+.photoinfo h3 {
+	font-weight: normal;
+	font-size: 12px;
+	width: 110px;
+	height: 30px;
+	line-height: 30px;
+	display: block;
+	overflow: hidden;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-left:5px;
+	
+
+}
+
+.photoinfo p {
+	
+	position:relative;
+
+	display: block;
+	height: 70px;
+	
+	top:17px;
+
+	display: none;
+	
+	
+	
+	
+}
+.photo-btn{
+	display: block;
+	width: 100px;
+	height: 30px;
+	line-height: 30px;
+	border:1px solid white;
+	margin-left: 3px;
+	margin-top:5px;
+	text-align:center;
+	color:white;
+	letter-spacing:2px;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	
+}
+.photo-btn:hover{
+	background-color: white;
+	color:black;
+	text-decoration: none;
+	
+	
+}
+.group-title {
+    margin-bottom: 5px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 15px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    font-family: "Microsoft YaHei";
+    color: #085c99;
+    background: url(../img/line.png) no-repeat left bottom;
+
+}
+.td70 {
+    width: 70px;
+    font-size: 12px;
+    font-family: "Microsoft YaHei";
+	white-space:nowrap;
+	display:inline-block;
+}
+.td80 {
+    width: 80px;
+    font-size: 12px;
+    font-family: "Microsoft YaHei";
+	white-space:nowrap;
+}
+.td90 {
+    width: 90px;
+    font-size: 12px;
+    font-family: "Microsoft YaHei";
+	white-space:nowrap;
+}
+.td110 {
+    width: 110px;
+    font-size: 12px;
+    font-family: "Microsoft YaHei";
+	white-space:nowrap;
+}
+
+.p-top5 {
+    padding-top: 5px;
+
+}
+
+#fm {
+    margin: 0;
+    padding: 10px 30px;
+}
+
+.ftitle {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.fitem {
+    margin-bottom: 5px;
+}
+
+.fitem label {
+    display: inline-block;
+    width: 80px;
+}
+.box .box-content {
+padding: 10px;
+border: 1px solid #dddddd;
+background: white;
+display: block;
+-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.055);
+-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.055);
+box-shadow: 0 1px 3px rgba(0, 0, 0, 0.055);
+margin-bottom:5px;
+}
+.search-box{
+	padding-top:7px !important;;
+}
+
+.lbl-check{
+	
+}
+.lbl-text{
+	white-space: nowrap;
+	font-family: "Microsoft YaHei";
+	font-size:14px;
+	height:30px;
+	line-height:30px;
+	padding-left:3px;
+	font-weight:bold;
+	color:#4b5f7b;
+	letter-spacing:1px;
+ 
+}
+
+.tip-red{
+	border-left:3px solid #bb3d3b;
+}
+.tip-blue{
+	border-left:3px solid #e3e3e3;
+}
+.commentForm
+{
+	width:100%;
+	
+	
+}
+.commentForm a
+{
+	text-decoration:none;
+	letter-spacing:1px;
+    line-height: 30px;
+    color: #157fed;
+    text-align: center;
+    font-weight: bold;
+}
+.dotline{
+	width: 100%;
+	border-top: 1px dashed #b0b0b0;
+}
+.table-comment{
+	 border-collapse: collapse;
+	  border:1px solid #ccc;
+	  
+}
+.table-comment td{
+	
+	  border:1px solid #ccc;
+      
+}

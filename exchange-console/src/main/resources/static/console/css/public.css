@@ -1,0 +1,12 @@
+/*各项目Css.css公共样式 2017-11-21 09:00 崔笑*/
+#DeclLimitDataList .tdSelectCss{padding-right:6px;height:15px;line-height:25px;padding-left:5px;font-size:12px;padding-bottom:8px;padding-top:0}
+#DeclLimitDataList table.combobox{margin-top:0}
+#DeclLimitDataList .tdCss{padding-top:1px}
+#LimitData input{padding-left:0;padding-right:0;margin-right:0;margin-left:-2px}
+#LimitData .tdCss{padding-bottom:0;padding-left:0;padding-right:0;vertical-align:middle;margin-bottom:8px}
+#LimitData .titleCss100{width:100px;padding:0;padding-right:2px;text-align:right;margin-bottom:18px;white-space:nowrap;vertical-align:middle}
+#LimitData .tdCss input[type=text]{border:1px solid #ccc;font-size:12px;border-radius:0;width:98%;margin-bottom:0}
+#LimitData table.combobox{margin-top:0}
+#LimitData td table{margin-top:10px}
+#AttData table.combobox,#PackType table.combobox,#goodsContData table.combobox{margin-top:0}
+#AttData .tdSelectCss,#PackType .tdSelectCss,#goodsContData .tdSelectCss{padding-top:0}

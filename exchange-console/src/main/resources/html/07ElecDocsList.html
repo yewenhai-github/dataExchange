@@ -1,0 +1,466 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>电子审单规则维护</title>
+<!--[if lt IE 9]>
+    <script src='../resources/js/assets/javascripts/html5shiv.js' type='text/javascript'></script>
+    <![endif]-->
+<!-- jqgrid -->
+<link
+	href="../../resources/js/assets/stylesheets/bootstrap/bootstrap.css"
+	media="all" rel="stylesheet" type="text/css" />
+<link href="GetCSSTemplet?light-theme.css"
+	id="color-settings-body-color" media="all" rel="stylesheet"
+	type="text/css" />
+<link href="../../resources/js/jqgrid/css/jquery-ui.css"
+	rel="stylesheet" type="text/css" media="screen" />
+<link href="GetCSSTemplet?ui.jqgrid.css" rel="stylesheet"
+	type="text/css" media="screen" />
+<link href="../../resources/js/jqgrid/css/prettify.css" rel="stylesheet" />
+<script src="../../resources/js/assets/javascripts/jquery/jquery.min.js"
+	type="text/javascript"></script>
+<script src="../../resources/js/jqgrid/js/jquery.jqGrid.min.js"
+	type="text/ecmascript"></script>
+<script src="../../resources/js/jqgrid/js/prettify.js"
+	type="text/ecmascript"></script>
+<script src="../../resources/js/jqgrid/js/codetabs.js"
+	type="text/ecmascript"></script>
+<script src="../../resources/js/jqgrid/js/themeswitchertool.js"
+	type="text/ecmascript"></script>
+<script src="../../resources/js/jqgrid/js/i18n/grid.locale-cn.js"
+	type="text/ecmascript"></script>
+<script src="../../resources/js/My97DatePicker/WdatePicker.js"
+	type="text/javascript"></script>
+<!-- ztree -->
+<link href="../../resources/js/ztree/zTreeStyle/tree.css"
+	rel="stylesheet" type="text/css">
+	<link href="../../resources/js/ztree/zTreeStyle/zTreeStyle.css"
+		rel="stylesheet" type="text/css">
+		<script src="../../resources/js/ztree/jquery.ztree.core-3.5.js"
+			type="text/javascript"></script>
+		<script src="../../resources/js/ztree/jquery.ztree.excheck-3.5.js"
+			type="text/javascript"></script>
+		<script src="../../resources/js/ztree/jquery.ztree.exedit-3.5.js"
+			type="text/javascript"></script>
+		<!-- lgjs -->
+		<link href="GetCSSTemplet?Css.css" rel="stylesheet" />
+		<script src="GetJS?input.js" type="text/javascript"></script>
+		<script src="GetJS?messagebox.js" type="text/javascript"></script>
+		<script src="GetJS?dataform.js" type="text/javascript"></script>
+		<script src="GetJS?combobox.js" type="text/javascript"></script>
+		<script src="GetJS?popupwindow.js" type="text/javascript"></script>
+		<script src="GetJS?button.js" type="text/javascript"></script>
+		<link href="console/FormCss.css" rel="stylesheet" />
+		<SCRIPT type="text/javascript" src="ElecDocsList.js"></SCRIPT>
+</head>
+
+<body class='contrast-red' style="padding-left: 5px;">
+	<div class='row-fluid' id='content-wrapper'>
+		<div class='row-fluid'>
+			<div class='span12'>
+				
+				<table id='searchinfo' width="100%" border="0" cellspacing="0"
+					cellpadding="0" class="tableBorder" style="margin-bottom: 10px;">
+					<tr>
+						<td valign="top">
+							<table width="100%" border="0" cellspacing="0" cellpadding="0">
+								<tr>
+									<td align="left" valign="top">
+										<ul id="ruleTree" class="ztree"
+											style="overflow: auto; height: 100%; width: 100%;"></ul>
+									</td>
+								</tr>
+							</table>
+						</td>
+						<td width="2%">
+							<table width="100%" border="0" cellspacing="0" cellpadding="0">
+								<tr>
+									<td>&nbsp;</td>
+								</tr>
+							</table>
+						</td>
+						<td width="90%">
+							<table width="100%" border="0" cellspacing="0" cellpadding="0">
+								<tr>
+									<td>
+										<table width="100%" border="0" cellspacing="0" cellpadding="0"
+											style="margin-bottom: 10px; border-bottom: 1px solid #eee;">
+											<tr>
+												<td></td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<table width="100%" border="0" cellspacing="0" cellpadding="0"
+											style="margin-bottom: 10px; border-bottom: 1px solid #eee;">
+											<tr>
+												<td>
+													<div class='responsive-table' id="gridTable">
+														<table id="jqGrid">
+														</table>
+														<div id="jqGridPager"></div>
+													</div>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<table width="100%" border="0" cellspacing="0" cellpadding="0"
+											style="margin-bottom: 10px; border-bottom: 1px solid #eee;">
+											<tr>
+												<td
+													style="text-align: left; padding-right: 10px; padding-left: 0px;">
+													<button id='btnAdd' onclick="Clear()"
+														class='btn btn-primary btn-small'
+														style='margin-bottom: 5px'>
+														<i class='icon-search'></i>新建
+													</button>
+													<button id="btnSaveData" class='btn btn-primary btn-small'
+														style='margin-bottom: 5px' commandname="SavaRuleCheck"
+														commanddatas="FormToData('RuleData');"
+														commandok="showSuccess" isvalidate="1">
+														<i class='icon-save'></i>保 存
+													</button>
+													<button id='btnCancel' onclick="cancelRows()"
+														class='btn btn-primary btn-small'
+														style='margin-bottom: 5px'>
+														<i class='icon-search'></i>作废
+													</button>
+													<button id='btnRecover' onclick="recoverRows()"
+														class='btn btn-primary btn-small'
+														style='margin-bottom: 5px'>
+														<i class='icon-search'></i>恢复
+													</button>
+													<button class='btn btn-primary btn-small'
+														disabled="disabled"
+														style='margin-bottom: 5px; display: none;'>
+														<i class='icon-search'></i>批量新建
+													</button>
+													<button class='btn btn-primary btn-small'
+														disabled="disabled"
+														style='margin-bottom: 5px; display: none;'>
+														<i class='icon-search'></i>批量修改
+													</button>
+													<button class='btn btn-primary btn-small'
+														disabled="disabled"
+														style='margin-bottom: 5px; display: none;'>
+														<i class='icon-search'></i>删除
+													</button>
+													<button id="btnAcTime" onclick="setActiveTime()"
+														class='btn btn-primary btn-small'
+														style='margin-bottom: 5px; display: none;'>
+														<i class='icon-search'></i>设置有效期
+													</button>
+													<button id='btnPublish' onclick="publishRows()"
+														class='btn btn-primary btn-small'
+														style='margin-bottom: 5px; display: none;'>
+														<i class='icon-search'></i>发布
+													</button>
+													<button class='btn btn-primary btn-small'
+														disabled="disabled"
+														style='margin-bottom: 5px; display: none;'>
+														<i class='icon-search'></i>同步总局
+													</button>
+													<button class='btn btn-primary btn-small'
+														disabled="disabled"
+														style='margin-bottom: 5px; display: none;'>
+														<i class='icon-search'></i>复制
+													</button>
+												</td>
+											</tr>
+										</table>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div id="actimediv">
+											<table width="100%" border="0" cellspacing="0"
+												cellpadding="0">
+												<tr>
+													<td style="width: 33%;">
+														<table width="100%" border="0" cellspacing="0"
+															cellpadding="0">
+															<tr>
+																<td class="titleCss100">开始有效时间：</td>
+																<td class="tdCss"><input id='ACTIVE_TIME_BEGIN'
+																	type='text'
+																	onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+																	class="Wdate" judge="date"
+																	timeformat="YYYY-MM-DD hh:mm:ss" /></td>
+															</tr>
+														</table>
+													</td>
+													<td style="width: 33%;">
+														<table width="100%" border="0" cellspacing="0"
+															cellpadding="0">
+															<tr>
+																<td class="titleCss100">截至有效时间：</td>
+																<td class="tdCss"><input id='ACTIVE_TIME_END'
+																	type='text' style="width: 100%;"
+																	onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+																	class="Wdate" judge="date"
+																	timeformat="YYYY-MM-DD hh:mm:ss" /></td>
+															</tr>
+														</table>
+													</td>
+													<td style="width: 33%;">
+														<table width="100%" border="0" cellspacing="0"
+															cellpadding="0">
+															<tr>
+																<td>
+																	<button id="btncomfirmAcTime" onclick="comfirmAcTime()"
+																		class='btn btn-primary btn-small'
+																		style='margin-bottom: 5px'>
+																		<i class='icon-search'></i>确定
+																	</button>
+																	<button id="btncancelAcTime" onclick="cancelAcTime()"
+																		class='btn btn-primary btn-small'
+																		style='margin-bottom: 5px'>
+																		<i class='icon-search'></i>取消
+																	</button>
+																</td>
+															</tr>
+														</table>
+													</td>
+												</tr>
+											</table>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<div id="RuleData">
+											<div class='row-fluid'>
+												<div class='page-header'>
+													<input type="hidden" id="txtTableId" /> <input
+														type="hidden" datafield="RULE_CHECK.Indx" id='INDX' /> <input
+														type="hidden" datafield="RULE_CHECK.POINT_ID"
+														id='POINT_ID' isNoCrear="1" /> <input type="hidden"
+														datafield="RULE_CHECK.REC_VER" id='REC_VER' /> <input
+														type="hidden" id='txtPointCode' /> <input type="hidden"
+														id='SHOW_HIT_EX_CON' />
+													<table width="100%" border="0" cellspacing="0"
+														cellpadding="0">
+														<tr>
+															<td style="width: 25%;">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss100">规则编号</td>
+																		<td class="tdCss"><input
+																			datafield="RULE_CHECK.RULE_NO" id='RULE_NO'
+																			type='text' ismust="1" errorMsg="规则编号不能为空" /></td>
+																	</tr>
+																</table>
+															</td>
+															<td style="width: 25%;">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss100">规则名称</td>
+																		<td class="tdCss"><input
+																			datafield="RULE_CHECK.RULE_NAME" id='RULE_NAME'
+																			type='text' ismust="1" errorMsg="规则名称不能为空" /></td>
+																	</tr>
+																</table>
+															</td>
+															<td style="width: 50%;" colspan="2">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss100">提示内容</td>
+																		<td class="tdCss"><input
+																			datafield="RULE_CHECK.WARNING_INFO" id='WARNING_INFO'
+																			type='text' ismust="1" errorMsg="提示内容不能为空" /></td>
+																	</tr>
+																</table>
+															</td>
+														</tr>
+
+														<tr>
+															<td style="width: 25%;">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss100">命中执行</td>
+																		<td class="tdSelectCss"><input
+																			datafield="RULE_CHECK.RULE_HIT_EX" ismust="1"
+																			valuefield="RULE_CHECK.RULE_HIT_EX" id="RULE_HIT_EX"
+																			type="combobox" columnheader="编号,名称"
+																			columns="CODE,NAME" datasourcename="RULE_B_CONFIG"
+																			checkfield="CODE" showfields="NAME"
+																			errmessage="没有这个值！" pagesize="20" ismust="1"
+																			SaveField="CODE" /></td>
+																	</tr>
+																</table>
+															</td>
+															<td style="width: 25%;">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss100">命中率</td>
+																		<td class="tdCss"><input
+																			datafield="RULE_CHECK.CHK_HIT_PERCENT"
+																			id='CHK_HIT_PERCENT' type='text' placeholder="0~100"
+																			ismust="1" errorMsg="规则执行命中率不能为空" value="100" /></td>
+																	</tr>
+																</table>
+															</td>
+															<td style="width: 25%;">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss100">有效时间从</td>
+																		<td class="tdCss"><input id='ACTIVE_TIME_BEGIN1'
+																			datafield="RULE_CHECK.ACTIVE_TIME_BEGIN" type='text'
+																			onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+																			class="Wdate" judge="date"
+																			timeformat="YYYY-MM-DD hh:mm:ss" /></td>
+																	</tr>
+																</table>
+															</td>
+															<td style="width: 25%;">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss100">到</td>
+																		<td class="tdCss"><input id='ACTIVE_TIME_END1'
+																			datafield="RULE_CHECK.ACTIVE_TIME_END" type='text'
+																			style="width: 100%;"
+																			onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"
+																			class="Wdate" judge="date"
+																			timeformat="YYYY-MM-DD hh:mm:ss" /></td>
+																	</tr>
+																</table>
+															</td>
+														</tr>
+
+														<tr>
+															<td style="width: 25%;">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss100">比对项</td>
+																		<td class="tdSelectCss"><input
+																			datafield="RULE_CHECK.COULMN_NAME"
+																			valuefield="RULE_CHECK.COULMN_VALUE" id="COULMN_NAME"
+																			type="combobox" columnheader="编号,名称"
+																			columns="FIELD_CODE,FIELD_NAME"
+																			datasourcename="RULE_B_MAPPING"
+																			getquerydata="getCoulmnName('DECL_II_C')"
+																			checkfield="FIELD_CODE,FIELD_NAME"
+																			showfields="FIELD_NAME" errmessage="没有这个值！"
+																			pagesize="100" startval="=" savefield="INDX"
+																			aftercheck="getSelectValue()" /></td>
+																	</tr>
+																</table>
+															</td>
+															<td style="width: 25%;">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss100">操作符</td>
+																		<td class="tdSelectCss"><input
+																			datafield="RULE_CHECK.OP_CHAR"
+																			valuefield="RULE_CHECK.OP_CHAR_VALUE" id="OP_CHAR"
+																			type="combobox" columnheader="编码,名称"
+																			columns="CODE,NAME" datasourcename="RULE_B_CONFIG"
+																			getquerydata="getOpChar()" checkfield="CODE"
+																			showfields="NAME" errmessage="没有这个值！" pagesize="10"
+																			startval="=" SaveField="CODE" /></td>
+																	</tr>
+																</table>
+															</td>
+															<td style="width: 25%;" align="rigth">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss100">右边类型</td>
+																		<td class="tdSelectCss"><input id="RIGHT_TYPE"
+																			type="combobox" columnheader="名称" columns="NAME"
+																			datasourcename="RULE_B_CONFIG"
+																			datafield="RULE_CHECK.RIGHT_TYPE"
+																			valuefield="RULE_CHECK.RIGHT_TYPE_VALUE"
+																			getquerydata="getRightType()" checkfield="NAME"
+																			showfields="NAME" errmessage="没有这个值！" pagesize="10"
+																			SaveField="CODE" aftercheck="getSelectValue()" /></td>
+																	</tr>
+																</table>
+															</td>
+															<td style="width: 25%;" colspan="1">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss100">右边项</td>
+																		<td class="tdCss"><input id='OP_VALUE'
+																			type='text' style="width: 100%; display: none;" /> <input
+																			id='txtOP_VALUE' type='text' style="width: 100%;" />
+																		</td>
+																	</tr>
+																</table>
+															</td>
+														</tr>
+														<tr>
+															<td style="width: 100%;" colspan="4" align="left">
+																<table border="0" cellspacing="0" cellpadding="0">
+																	<tr>
+																		<td>
+																			<button id='btnPreGen' onclick="pre('Gen')"
+																				class='btn btn-primary btn-small'
+																				style='margin-bottom: 5px'>
+																				<i class='icon-search'></i>生成规则前提
+																			</button>
+																			<button id='btnPreAnd' onclick="pre('And')"
+																				class='btn btn-primary btn-small'
+																				style='margin-bottom: 5px'>
+																				<i class='icon-search'></i>且
+																			</button>
+																			<button id='btnPreOr' onclick="pre('Or')"
+																				class='btn btn-primary btn-small'
+																				style='margin-bottom: 5px'>
+																				<i class='icon-search'></i>或
+																			</button>
+																		</td>
+																	</tr>
+																</table>
+															</td>
+														</tr>
+														<tr>
+															<td colspan="4" style="width: 100%; text-align: left;">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss100">规则命中条件</td>
+																		<td class="tdCss"><textarea
+																				datafield="RULE_CHECK.RULE_HIT_CON"
+																				id='RULE_HIT_CON' rows="3" cols="4"
+																				style="width: 100%; height: 50px;" ismust="1"></textarea>
+																		</td>
+																	</tr>
+																</table>
+															</td>
+														</tr>
+													</table>
+												</div>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+</html>
+
+

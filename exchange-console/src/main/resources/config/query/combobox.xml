@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<SqlMap>
+	<select id="GetComboboxDept">
+		<![CDATA[
+		    select s.org_id DEPT_ID,s.orgname DEPT_NAME 
+        from s_auth_organization s 
+       where IS_ENABLED = '1'
+			   and type = 1
+         << and p_org_id in(select indx from s_auth_organization t where org_id = #ORG_ID#) >>
+		]]>
+	</select>
+	<select id="GetComboboxOrg">
+		<![CDATA[
+		    select s.org_id,s.org_name org_name 
+		    from s_auth_organization s 
+			 where IS_ENABLED = '1'
+			   and type = 0
+			  << and ORG_ID in(SELECT org_id FROM s_auth_organization  where  FIND_IN_SET (indx,getChildLst(#ORG_ID#)) and type = 0) >>
+		]]>
+	</select>
+	<select id="GetComboboxRole">
+		<![CDATA[
+		    SELECT r.INDX,
+			       r.ROLE_NAME,
+			       r.ROLE_DESC
+			  FROM s_auth_role r
+			 WHERE r.IS_ENABLED = '1'
+			 << and ORG_ID = #ORG_ID# >>
+		]]>
+	</select>
+	<select id="GetComboboxCurrency">
+		<![CDATA[
+		    select  *  
+		    from 	s_base_code_type 
+		    where is_enabled=1 and CODE_TYPE='CURRENCY'
+		]]>
+	</select>
+	<select id="GetCodeDictCombobox">
+		<![CDATA[
+		    select indx as id,CODE_DISPLAY_VALUE_CN as text
+		    from 	s_base_code_type 
+		    where IS_ENABLED=1
+		]]>
+	</select>
+	<select id="GetAlmUserComboboxSelect">
+		<![CDATA[
+            select us_username as text,us_username as id from users
+		]]>
+	</select>
+	<select id="GetTestComboboxFroSelect2">
+		<![CDATA[
+		      select B.*,B.US_USERNAME as text,B.US_USERNAME AS id from users B WHERE 1=1
+		      << AND B.US_USERNAME like #US_USERNAME# >>
+		]]>
+	</select>
+	<select id="GetProjectComboboxFroSelect2">
+		<![CDATA[
+		    select INDX as CODE,PROJECT_ALIAS_NAME as NAME  
+		    from T_PROJECT 
+		    where is_enabled=1
+		    << AND PROJECT_NAME like #NAME# >>
+		]]>
+	</select>
+	<select id="GetProjectComboboxFroSelect3">
+		<![CDATA[
+		    select INDX as CODE,PROJECT_ALIAS_NAME as NAME  
+		    from T_PROJECT 
+		    where is_enabled=1 and ifnull(Project_Status_Id,'1') <> '7'
+		    << AND PROJECT_NAME like #NAME# >>
+		]]>
+	</select>
+	<select id="GetAlmIdComboboxFroSelect2">
+		<![CDATA[
+		    select BG_BUG_ID as CODE,BG_PROJECT as NAME
+		    from BUG WHERE ROWNUM<=100
+		    order by BG_BUG_ID DESC
+		]]>
+	</select>
+	<select id="GetCustomerNoComboboxFroSelect2">
+		<![CDATA[
+		    select CUSTOMER_NO as CODE,CUSTOMER_NAME as NAME
+		    from S_AUTH_ENTERPRISE
+		    order by CUSTOMER_NO
+		]]>
+	</select>
+	<select id="GetProjectComboboxPurchase">
+		<![CDATA[
+		    select INDX as CODE, PROJECT_NAME as NAME from T_PURCHASE
+               where 1=1
+		    << AND PROJECT_NAME like #NAME# >>
+		]]>
+	</select>
+	<select id="GetProgrammeCombobox">
+		<![CDATA[
+      select t.programme_code as CODE, t.programme_name as NAME from t_purchase_programme t
+      where 1=1
+      << AND PROJECT_ID = #PROJECT_CODE# >>
+		   
+		]]>
+	</select>
+	<select id="GetSeverityComboboxFroSelect2">
+		<![CDATA[
+		    select  t.*,t.CODE_VALUE as id,t.CODE_VALUE || '-' || t.CODE_DISPLAY_VALUE_CN as text  
+		    from 	s_base_code_type t 
+		    where t.is_enabled=1 and t.CODE_TYPE='SEVERITY_TYPE'
+		    order by t.code_order
+		]]>
+	</select>
+	<select id="GetCustomerComboboxFroSelect2">
+		<![CDATA[
+		    select  t.*,t.CODE_VALUE as id,t.CODE_VALUE || '-' || t.CODE_DISPLAY_VALUE_CN as text
+		    from 	s_base_code_type t
+		    where t.is_enabled=1 and t.CODE_TYPE='CUSTOMER_STATUS'
+		    <<  and t.CODE_VALUE in(#CODE_VALUE#) >>
+		]]>
+	</select>
+	<select id="GetProblemComboboxFroSelect2">
+		<![CDATA[
+		    select  t.*,t.CODE_VALUE as id,t.CODE_VALUE || '-' || t.CODE_DISPLAY_VALUE_CN as text
+		    from 	s_base_code_type t
+		    where t.is_enabled=1 and t.CODE_TYPE='PROBLEM_STATUS'
+		]]>
+	</select>
+	<select id="GetPriorityComboboxFroSelect2">
+		<![CDATA[
+		    select  t.*,t.CODE_VALUE as id,t.CODE_VALUE || '-' || t.CODE_DISPLAY_VALUE_CN as text  
+		    from 	s_base_code_type t 
+		    where t.is_enabled=1 and t.CODE_TYPE='PRIORITY_TYPE'
+		]]>
+	</select>
+	<select id="GetReproduceComboboxFroSelect2">
+		<![CDATA[
+		    select  t.*,t.CODE_VALUE as id,t.CODE_DISPLAY_VALUE_CN as text  
+		    from 	s_base_code_type t 
+		    where t.is_enabled=1 and t.CODE_TYPE='REPRODUCE_TYPE'
+		]]>
+	</select>
+	<select id="GetCauseAnalysisComboboxFroSelect2">
+		<![CDATA[
+		    select  t.CODE_VALUE as id,t.CODE_DISPLAY_VALUE_CN as text
+		    from 	s_base_code_type t
+		    where t.is_enabled=1 and t.CODE_TYPE='CAUSE_ANALYSIS'
+		    order by t.code_order
+		]]>
+	</select>
+	<select id="GetTestComboboxCheckSelect">
+		<![CDATA[
+		     select t.* from s_base_code_type t 
+		    where t.is_enabled=1 and t.CODE_TYPE='CODE_REVIEW'
+		]]>
+	</select>
+	<select id="GetComboboxProvince">
+		<![CDATA[
+		     select t.* from s_base_code_type t 
+		    where t.is_enabled=1 and t.CODE_TYPE='PROVINCE'
+		    order by code_order
+		]]>
+	</select>
+	<select id="GetStatesComboboxFroSelect2">
+		<![CDATA[
+		    select  t.*,t.CODE_VALUE as id,t.CODE_VALUE || '-' || t.CODE_DISPLAY_VALUE_CN as text  
+		    from 	s_base_code_type t 
+		    where t.is_enabled=1 and t.CODE_TYPE='STATES_TYPE'
+		    order by t.code_order
+		]]>
+	</select>
+
+	<select id="GetComboboxRectStatus">
+		<![CDATA[
+		    select t.CODE_VALUE as id,t.CODE_DISPLAY_VALUE_CN as text  
+		      from s_base_code_type t 
+		     where t.is_enabled=1 
+		       and t.CODE_TYPE = 'RECT_STATUS'
+		]]>
+	</select>
+	<select id="GetComboboxFinalStatus">
+		<![CDATA[
+		    select t.CODE_VALUE as id,t.CODE_DISPLAY_VALUE_CN as text  
+		      from s_base_code_type t 
+		     where t.is_enabled=1 
+		       and t.CODE_TYPE = 'FINAL_STATUS'
+		]]>
+	</select>
+	<select id="GetComboboxMailType">
+		<![CDATA[
+		    select t.CODE_VALUE as id,t.CODE_DISPLAY_VALUE_CN as text
+		      from s_base_code_type t
+		     where t.is_enabled=1
+		       and t.CODE_TYPE = 'MAIL_TYPE' ORDER BY CODE_ORDER
+		]]>
+	</select>
+	<select id="GetComboboxScriptType">
+		<![CDATA[
+		    select * from s_base_code_type where is_enabled = '1' and code_type = 'SCRIPT_TYPE'
+		]]>
+	</select>
+	<select id="GetComboboxScriptStatus">
+		<![CDATA[
+		    select * from s_base_code_type where is_enabled = '1' and code_type = 'SCRIPT_STATUS'
+		]]>
+	</select>
+	<select id="GetProgrammeComboboxForSelect2">
+		<![CDATA[
+		   select p.programme_code as CODE ,p.programme_name as NAME from T_PURCHASE_PROGRAMME p ,T_PURCHASE t   where t.indx = p.project_id
+		    << AND t.PROJECT_NAME like #PROJECT_NAME# >>
+		]]>
+	</select>
+
+	<select id="GetPurchaseGoodsComboboxForSelect2">
+		<![CDATA[
+		  select p.INDX as CODE, p.GOODS_NAME as NAME from T_PURCHASE_GOODS p ,T_PURCHASE t   where t.indx = p.MAIN_INDX
+		    << AND t.PROJECT_NAME like #PROJECT_NAME# >>
+		]]>
+	</select>
+	<select id="GetComboboxWmzd">
+		<![CDATA[
+		   select t.code_value as CODE ,t.code_display_value_cn as NAME
+		     from s_base_code_type t
+		    where t.is_enabled=1
+		    << and t.code_type=#CODE_TYPE# >>
+		    << and t.p_code_value=#P_CODE_VALUE# >>
+		    order by t.code_order
+		]]>
+	</select>
+	<select id="GetComboboxDishonestyLevel">
+		<![CDATA[
+		   select t.CODE_VALUE as ID ,CONCAT(t.CODE_VALUE , '-' , t.CODE_DISPLAY_VALUE_CN ) as TEXT 
+		     from s_base_code_type t 
+		    where t.is_enabled=1 and t.CODE_TYPE='DISHONESTY_LEVEL'
+		    order by t.code_order
+		]]>
+	</select>
+	<select id="GetComboboxCustomsCode">
+		<![CDATA[
+		   select t.CODE_VALUE as ID ,CONCAT(t.CODE_VALUE , '-' , t.CODE_DISPLAY_VALUE_CN ) as TEXT 
+		     from s_base_code_type t 
+		    where t.is_enabled=1 and t.CODE_TYPE='CUSTOMS_CODE'
+		   << and CODE_VALUE = #CODE_VALUE# >>		    
+		    order by t.code_order
+		]]>
+	</select>
+	<select id="GetComboboxFreeDeclStatus">
+		<![CDATA[
+			select
+				distinct
+				filing_status_code as ID,
+				filing_status_name as TEXT
+			from t_free_decl
+		]]>
+	</select>
+	<select id="GetGroupDealCombobox">
+		<![CDATA[
+			select group_bill_no,indx,packing_date,foreign_trade_company,market_purchase_no from
+			t_group_deal where 1=1
+			and customs_satus_code = '3'
+			and is_customs_clearance = '1'
+			and is_create_freedecl = '0'
+			<< and group_bill_no like #group_bill_no# >>
+			<< and creator = #creator# >>
+			order by input_time desc
+		]]>
+	</select>
+	
+	<select id="GetComboboxMarket">
+		<![CDATA[
+		   select market_purchase_no,company_name,market_area_name,house_no from t_reg_supplier_business where filing_status_code = '3' order by create_time
+		]]>
+	</select>
+	<select id="GetComboboxGoodsReg">
+		<![CDATA[
+		   select goods_reg_no from t_reg_supplier_goods where filing_status_code = '3' and market_purchase_no = #market_purchase_no# order by create_time
+		]]>
+	</select>
+	<select id="GetComboboxGroupWarehouse">
+		<![CDATA[
+		   select * 
+		     from t_reg_group_warehouse t 
+		    where t.is_enabled=1 
+		    and filing_status_code = 3
+		    order by t.indx
+		]]>
+	</select>
+	
+	<select id="GetComboboxHsCode">
+		<![CDATA[
+		    select cast(@n:=@n+1 as char) seq_no, 
+		           substr(hs_code,1,6) hs_code,
+		           hs_cname,
+				   concat(substr(hs_code,1,6),'|',hs_cname) chs_cname
+			  from s_base_hscode,(select @n:= 0) d
+		     where hs_code = concat(substr(hs_code,1,6),'0000')
+		      order by hs_code
+		]]>
+	</select>
+	
+	<select id="GetComboboxGroupCargo">
+		<![CDATA[
+		   select goods_serial_no from t_group_cargo where group_bill_no = #group_bill_no# order by create_time
+		]]>
+	</select>
+	<select id="GetComboboxGroupContainer">
+		<![CDATA[
+		   select cont_no from t_group_container where group_bill_no = #group_bill_no# order by create_time
+		]]>
+	</select>
+	<select id="GetComboboxAgent">
+		<![CDATA[
+		   select filling_reg_no,company_name,org_no,establish_time from t_reg_foreign_trade_company t where filing_status_code = '3' order by t.create_time desc
+		]]>
+	</select>
+	<select id="GetComboboxSoe">
+		<![CDATA[
+		   select soe_self_reg_no,soe_person_name from t_reg_soe_self t order by t.create_time desc
+		]]>
+	</select>
+	<select id="GetComboboxMeasurementUnit">
+		<![CDATA[
+		    select itemcode,itemname
+		    from s_base_measurementunit
+		    where is_enabled=1
+		]]>
+	</select>
+		<select id="GetComboboxBusiness">
+		<![CDATA[
+		    select market_purchase_no,house_no,business_type,business_name,business_phone_no
+		    from t_reg_supplier_business
+		    where 1=1
+		    << and business_type= #business_type#>>
+		    << and filing_status_code= #filing_status_code#>>
+		    << and market_purchase_no= #market_purchase_no#>>
+		    << and creator= #creator#>>
+		]]>
+	</select>
+</SqlMap>

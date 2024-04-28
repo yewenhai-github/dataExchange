@@ -1,0 +1,211 @@
+@charset "UTF-8";
+/*css 初始化 */
+body {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+html, body, ul, li, ol, dl, dd, dt, p, h1, h2, h3, h4, h5, h6, form, fieldset, legend, img { margin:0; padding:0; }
+fieldset, img,input,button { border:none; padding:0;margin:0;outline-style:none; }
+ul, ol { list-style:none; }
+input { padding-top:0; padding-bottom:0; font-family: "SimSun","宋体";}
+select, input { vertical-align:middle;}
+select, input, textarea { font-size:12px; margin:0; }
+.content_input_file>.content_input_text:hover {
+    border-color:#FF503F;
+}
+.uploadFileBtn:hover {
+    border-color:#FF503F;
+}
+input:hover {
+    border-color: #ff503f!important;
+}
+textarea { resize:none; } /*防止拖动*/
+img {border:0;	vertical-align:middle; }  /*  去掉图片低测默认的3像素空白缝隙*/
+table { border-collapse:collapse; }
+body {
+    font:12px/150% "微软雅黑",Arial,Verdana,"\5b8b\4f53";
+    color:#666;
+    background:#fff
+}
+body{
+    -moz-user-select:none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.clearfix:before,.clearfix:after {
+    content:"";
+    display:table;
+}
+.clearfix:after{clear:both;}
+.clearfix{
+    *zoom:1;/*IE/7/6*/
+}
+
+a {color:#666; text-decoration:none; }
+h1,h2,h3,h4,h5,h6 {text-decoration:none;font-weight:normal;font-size:100%;}
+s,i,em{font-style:normal;text-decoration:none;}
+/*公共类*/
+.w {  /*版心 提取 */
+    /*width: 1930px;*/
+    margin:0 auto;
+}
+body {
+    background-color: #F1F1F1;
+}
+.fl {
+    float:left
+}
+.fr {
+    float:right
+}
+.al {
+    text-align:left
+}
+.ac {
+    text-align:center
+}
+.ar {
+    text-align:right
+}
+.hide {
+    display:none
+}
+
+
+
+
+
+
+
+.login_guohui {
+  
+    
+/*    background:url(../imgs/login/huohui.png) top center no-repeat;*/
+  /*  position:absolute;
+	left: 50%;
+    margin-left: -25%;
+    top: 20%;
+	margin-top: -100px;*/
+	position:absolute;
+	text-align:center;
+	top: 5%;
+	left: 0;
+	right:0;
+	
+}
+.login_guohui img{
+   width: 50%;
+   height: 50%;
+}
+
+
+.login_content_left_title
+ {
+    height: 51px;
+    line-height: 51px;
+    font-size: 24px;
+    color: #fd9604;
+}
+
+.login_content_left_details_type {
+    height: 28px;
+    line-height: 28px;
+
+}
+
+/*右侧*/
+.login_content_right {
+    width: 334px;
+    padding-left:45px;
+}
+.login_content_right_title {
+    height: 51px;
+    line-height: 51px;
+    font-size: 26px;
+    color:#fff;
+}
+.login_content_login_input ,.login_content_password_input{
+    line-height: 50px;
+    background-color: #fff;
+    font-size: 14px;
+    -webkit-rtl-ordering: logical;
+    -webkit-user-select: text;
+    cursor: auto;
+    width: 100%;
+    height: 50px;
+    background-repeat: no-repeat;
+    background-position: 14px center;
+    padding-left: 50px;
+    display: inline-block;
+    border-radius: 5px;
+    border: 1px solid #dddddd;
+    font-size: 16px;
+    color: #737373;
+    margin-bottom: 20px;
+    background-color: #fff;
+    vertical-align: middle;
+    box-sizing: border-box;
+    overflow: visible;
+    outline-style: none;
+}
+.login_content_login_input {
+    margin-top:60px;
+    width: 375px;
+    padding-left:60px;
+}
+.login_content_password_input {
+    margin-top:20px;
+    width: 375px;
+    padding-left:60px;
+}
+.login_content_login,.login_content_password {
+    position: relative;
+}
+.user_icon {
+    position: absolute;
+    width: 24px;
+    height: 50px;
+    top: 70px;
+    left: 24px;
+    background: url(/resources/images/hnzzImages/user.png) no-repeat;
+}
+
+.pas_icon {
+    position: absolute;
+    width: 24px;
+    height: 50px;
+    top: 31px;
+    left: 24px;
+    background-repeat: no-repeat;
+    background-position:14px center;
+    padding-left: 50px;
+    background: url(/resources/images/hnzzImages/psw.png) no-repeat;
+}
+.login_now a{
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+    background-color: #0d6eae;
+    width: 265px;
+    margin-top:20px;
+    color:#fff;
+    font-size: 24px;
+    text-align: center;
+}
+.login_now a:hover {
+    background-color: #4caaec;
+    color:#fff;
+}
+
+.login_sj {
+    width: 375px;
+    background: #ff8d00;
+    font-size: 20px;
+    color: #fff;
+    margin-top: 28px;
+    display: inline-block;
+    height: 50px;
+    border-radius: 5px;
+    border: 1px solid #dddddd;
+    margin-bottom: 20px;
+}

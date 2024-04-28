@@ -1,0 +1,17 @@
+--ExeCoulmnName.flt
+SELECT TABLE_NAME||'.'||COLUMN_NAME||'='||'ALTER TABLE '||TABLE_NAME||' ADD '||COLUMN_NAME||' '||DATA_TYPE||decode(DATA_TYPE,'DATE','','('||DATA_LENGTH||')')||';' FieldName
+  FROM USER_TAB_COLUMNS u 
+ WHERE TABLE_NAME in('exs_quartz_config');
+
+--ExeCoulmnDesc.flt
+SELECT TABLE_NAME||'.'||COLUMN_NAME||'='||'COMMENT ON COLUMN '||TABLE_NAME||'.'||COLUMN_NAME||' IS '''||(SELECT COMMENTS FROM USER_COL_COMMENTS WHERE TABLE_NAME = U.TABLE_NAME AND COLUMN_NAME = U.COLUMN_NAME)||''';' FieldDesc
+  FROM USER_TAB_COLUMNS u 
+ WHERE TABLE_NAME in('exs_quartz_config');
+
+
+
+
+
+
+
+

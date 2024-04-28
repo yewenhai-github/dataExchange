@@ -1,0 +1,183 @@
+/* @version 1.0 | 20171019
+ * @license: none (public login)
+ */
+@charset "utf-8";
+/*--------------- 
+总体 
+---------------*/
+body { position:relative; width:100%; font:normal 14px/28px "微软雅黑"  !important;; background:#fff; color:#555; }
+a { text-decoration:none; color:#555; }
+.content_frame .contentNav li a {color:#555 !important;}
+a:hover { color:#555; }
+button, input[type=submit], input[type=reset] { font-family:"微软雅黑" !important; cursor:pointer; }
+/*---------------
+登录 
+---------------*/
+.bg1 { position:fixed; width:100%; height:100%; text-align:center; background:#519dd8 url(../images/bg1.png) repeat-x; }
+.bg2 { height:100%; background:url(../images/bg2.png) repeat-x left bottom; }
+.bg3 { height:100%; background:url(../images/bg3.png) no-repeat center center; }
+.loginLogo { position:absolute; left:30px; top:20px; width:167px; height:23px; text-align:left; text-indent:-9999px; background:url(../images/logo.png) no-repeat; }
+.loginText { position:absolute; left:0; top:50%; margin-top:-220px; width:100%; height:80px; line-height:normal; font-size:36px; font-weight:600; color:#fff; }
+.loginForm { position:absolute; left:50%; top:50%; margin-left:-400px; margin-top:-100px; width:800px; height:80px; background:#194666; border-radius:3px; }
+.loginForm input, .loginForm a { margin:18px 10px; border:0 none; border-radius:3px; }
+.loginForm input[type=text], .loginForm input[type=password] { width:260px; height:38px; line-height:38px; text-indent:10px; }
+.loginForm button, .loginForm a { width:90px; height:40px; line-height:40px; background:url(../images/btn1.png) repeat-x; color:#fff; }
+
+
+
+.loginForm a { background-image:url(../images/btn2.png); }
+.loginForm button:hover, .loginForm a:hover { box-shadow:inset 0 0 5px rgba(255,255,255,.5); }
+.loginForm .dib { font-size:14px; }
+.loginLink { position:absolute; left:50%; top:50%; margin-left:-400px; width:800px; text-align:right; }
+.loginLink a { padding-left:22px; background:url(../images/link.png) no-repeat left center; color:#fff; }
+.loginLink a:hover { text-decoration:underline; }
+.loginFoot { position:absolute; left:0; bottom:0; width:100%; line-height:180px; color:#fff; }
+/*---------------
+引导 
+---------------*/
+.wrapper { position:relative; margin:0 auto; width:1000px; }
+.poaHead { height:60px; line-height:60px; background:#085c99; color:#fff; }
+.poaLogo { float:left; width:185px; height:60px; text-indent:-9999px; background:url(../images/logo2.png) no-repeat left center; }
+.poaText { float:right; font-size:20px; font-weight:bold; }
+.poaWelcome { height:90px; line-height:90px; }
+.poaName { float:left; font-size:20px; color:#114fa6; }
+.poaMember { float:right; margin-top:30px; width:90px; height:30px; line-height:30px; text-align:center; font-size:16px; background:#f26522; color:#fff; border-radius:5px; }
+.poaMember:hover { color:#fff; opacity:.8; }
+.poaOut { float:right; margin-right:35px; padding-left:25px; background:url(../images/out.png) no-repeat left center; }
+.poaInfo { float:right; margin-right:35px; }
+.poaInfo strong { font-size:16px; color:#f26522; }
+.poaOut:hover, .poaInfo:hover { color:#f26522; }
+.poaOut:hover { background-image:url(../images/out2.png); }
+.poaBanner { position:relative; width:100%; height:300px; overflow:hidden; }
+.poaBanner img { position:absolute; left:50%; top:0; margin-left:-960px; width:1920px; height:300px; }
+.poaSearch { display:inline-block; width:100%; height:190px; background:#f5f5f5; }
+.poaSearch ul { margin:45px auto 20px auto; width:800px; height:30px; line-height:30px; line-height:normal; }
+.poaSearch li { display:inline-block; margin-right:30px; font-size:20px; color:#999; cursor:pointer; }
+.poaSearch li.active { color:#f26522; }
+.poaForm { text-align:center; }
+.poaSearch .tri { position:absolute; top:41px; left:170px; width:20px; height:14px; background:url(../images/tri.png) no-repeat; }
+.poaSearch input[type=text] { width:670px; height:40px; line-height:40px; font-size:16px; text-indent:15px; border:5px #aaa solid; border-radius:10px; }
+.poaSearch input[type=submit] { margin-left:10px; padding-left:40px; width:110px; height:50px; line-height:50px; font-size:20px; border:0 none; border-radius:5px; background:#f26522 url(../images/zoom.png) no-repeat 15px center; color:#fff; font-family:"微软雅黑"; cursor:pointer; }
+.poaLink { display:inline-block; padding:30px 0 100px 0; }
+.poaLink li { float:left; margin-right:20px; margin-bottom:20px; width:318px; height:98px; line-height:98px; font-size:20px; background:#f2f9ff no-repeat 30px top; border:1px #418dd9 solid; border-radius:5px; transition:all .5s; -moz-transition:all .5s; -webkit-transition:all .5s; -o-transition:all .5s; -ms-transition:all .5s; }
+.poaLink a { display:block; padding-left:130px; width:188px; height:100%; color:#418dd9; transition:color .5s; -moz-transition:color .5s; -webkit-transition:color .5s; -o-transition:color .5s; -ms-transition:color .5s; }
+.poaLink li.poaLink1 { background-image:url(../images/link1.png); }
+.poaLink li.poaLink2 { background-image:url(../images/link2.png); }
+.poaLink li.poaLink3 { background-image:url(../images/link3.png); }
+.poaLink li.poaLink4 { background-image:url(../images/link4.png); }
+.poaLink li.poaLink5 { background-image:url(../images/link5.png); }
+.poaLink li.poaLink6 { background-image:url(../images/link6.png); }
+.poaLink li.poaLink7 { background-image:url(../images/link7.png); }
+.poaLink li.poaLink8 { background-image:url(../images/link8.png); }
+.poaLink li.poaLink9 { background-image:url(../images/link9.png); }
+.poaLink li.poaLink3, .poaLink li.poaLink6, .poaLink li.poaLink9 { margin-right:0; }
+.poaLink li:hover { background-color:#418dd9; background-position:30px bottom; transition:all .5s; -moz-transition:all .5s; -webkit-transition:all .5s; -o-transition:all .5s; -ms-transition:all .5s; }
+.poaLink li:hover a { color:#fff; transition:color .5s; -moz-transition:color .5s; -webkit-transition:color .5s; -o-transition:color .5s; -ms-transition:color .5s; }
+.poaFoot { height:60px; line-height:60px; text-align:center; background:#085c99; color:#fff; }
+/*---------------
+平台头部
+---------------*/
+.header { position:fixed; z-index:2; width:100%; height:50px; line-height:50px; background:#085c9a url(../images/header.jpg) no-repeat left center; color:#fff; }
+.logo { float:left; margin-left:20px; margin-right:50px; width:185px; height:50px; text-indent:-9999px; background:url(../images/logo.png) no-repeat left center; }
+.webname { display:inline-block; font-size:22px; font-weight:600; }
+.menu { float:right; position:relative; }
+.menu p { width:50px; height:50px; background:#418dd9; overflow:hidden; }
+.menu button { width:50px; height:50px; background:url(../images/gear.png) no-repeat center center; transition-duration:1s; -webkit-transition-duration:1s; -o-transition-duration:1s; -ms-transition-duration:1s; -moz-transition-duration:1s; }
+.menu:hover button { transform:rotate(360deg); -webkit-transform:rotate(360deg); -o-transform:rotate(360deg); -ms-transform:rotate(360deg); -moz-transform:rotate(360deg); }
+.menu ul { display:none; position:absolute; top:50px; right:0; }
+.menu:hover ul { display:block; }
+.menu li { width:120px; height:40px; line-height:40px; border-bottom:1px #0864a6 solid; background:#418dd9; }
+.menu img { display:inline-block; margin:10px 10px 10px 20px; }
+.menu a { color:#fff; }
+.time { float:right; padding-right:30px; }
+/*---------------
+平台侧边
+---------------*/
+.nav { 
+position:fixed; left:0; top:0; width:215px; height:100%; border-right:1px #ccc solid; background:#f5f5f5;
+ }
+.userName { margin-top:50px; padding:20px; height:30px; line-height:30px; font-size:18px; color:#418dd9; border-bottom:1px #ccc solid; box-shadow:0 1px 0 #fff; }
+.userName img { margin-right:10px; }
+.navBtn { position:absolute; top:75px; right:20px; width:22px; height:18px; background:url(../images/nav.png) no-repeat; }
+.subNav { padding-top:15px; }
+.subNav li { height:50px; line-height:50px; border-bottom:1px #ccc solid; font-size:16px; border-left:5px #f5f5f5 solid; background:no-repeat 0 0; }
+.subNav li.active, .subNav li.active:hover { border-left:5px #418dd9 solid; background-color:#00c0ef; background-position:0 -50px; }
+.subNav li:hover { border-left:5px #eee solid; background-color:#eee; }
+.subNav a{ margin-left:10px;width:100%; height:100%; text-indent:55px; color:#999;margin-top: 30px;}/* */
+.subNav i {margin-left:10px;color:#999;line-height:50px;font-size: 23px !important;}
+.subNav li.active a { color:#fff; }
+/*---------------
+主体内容
+---------------*/
+.content { padding:50px 0px 0px 200px;height: 100% }
+.content_frame{padding:0px 5px 0px 25px !important;}
+.mainTitle { padding:20px 0; font-size:22px; color:#418dd9; border-bottom:1px #ccc solid; }
+.mainTitle img { display:inline-block; margin-right:15px; }
+.picNav li { display:inline-block; margin:25px 0 25px 50px; width:157px; height:180px; font-size:20px; font-weight:bold; text-align:center; background:no-repeat; }
+.picNav a { color:#fff; }
+.picNav strong { display:block; padding-top:50px; padding-bottom:25px; font-size:50px; }
+.contentNav { border:1px #ccc solid; }
+.contentNav li { display:inline-block; height:40px; line-height:40px; border-right:1px #ccc solid; background:#fff no-repeat 10px 0; }
+.contentNav li:hover { background-color:#418dd9; background-position:10px -40px; cursor:pointer !important;}
+.contentNav li.disable, .contentNav li.disable:hover { background-color:#fff; background-position:10px -80px; }
+.contentNav a { display:block; padding:0 40px 0 30px; height:100%; font-size:14px; }
+.contentNav li:hover a { color:#fff !important; }
+.contentNav li a i { color:cornflowerblue; }
+.contentNav li:hover a i { color:#fff; }
+.contentNav li.disable:hover a:hover { cursor:default; }
+.contentNav li.disable a, .contentNav li.disable:hover a { color:#bbb; }
+.content .input1 { width:290px;}
+.content .input2 { width:700px;}
+.content .select7 { width:700px;}
+.content .select1 { width:290px;}
+.content .select2 { width:130px;}
+.box { min-width:950px; overflow-x:scroll; }
+.table1 { display:inline-block; padding:20px 0; width:100%; border:1px #ccc solid; }
+.table1 th, .table1 td { padding:10px 15px; text-align:left; }
+.table1 label { padding-right:20px; color:#999; }
+/*.content input[type=text], .content select, .content textarea, .alertContent input[type=text] { height:30px; line-height:30px; text-indent:15px; font-size:14px; color:#999; border:1px #ccc solid; }*/
+/*.content textarea { padding:15px; width:100%; max-width:830px; height:100px; text-indent:0px; }*/
+.content [class^="table"] input[type=text], .content select, .content textarea, .alertContent input[type=text] { height:30px; line-height:30px; text-indent:15px; font-size:14px; color:#999; border:1px #ccc solid; }
+.content [class^="table"] textarea { padding:15px; width:100%; max-width:830px; height:100px; text-indent:0px; }
+.content input[type=text]:focus, .content select:focus, .content input[type=text].focus { border:1px #418dd9 solid; }
+.table2 { width:100%; min-width:1200px; border:1px #ccc solid; }
+.table2 th, .table2 td { padding:5px 15px; text-align:center; border:1px #ccc solid; }
+.table3 { width:100%; border:1px #ccc solid }
+.table3 th, .table3 td { padding:15px 20px; text-align:left; border-left:1px #ccc solid; border-right:1px #ccc solid; }
+.table3 th { font-size:16px; color:#418dd9; border-top:2px #418dd9 solid; border-bottom:1px #ccc solid; }
+.table3 td { padding:20px 20px 0 20px; }
+.uploadCustom{float: right;height:20px !important;margin-top: -20px;}
+.uploadCustom td{border:0px #ccc solid;text-align: center}
+.table3 tr:last-child td { padding-bottom:20px; }
+.table3 a { line-height:18px; cursor:pointer; }
+/*---------------
+分页
+---------------*/
+.page { padding-left:20px; border:1px #ccc solid; }
+.page li { display:inline-block; margin:10px 5px 10px 0; }
+.page select { width:55px; height:30px; border:1px #ccc solid; }
+.page a { display:inline-block; padding:0 10px; height:28px; line-height:28px; border:1px #ccc solid; }
+.page li.active a { background:#00c0ef; color:#fff; }
+/*---------------
+图表
+---------------*/
+.figBox { border:1px #ccc solid; border-radius:5px; overflow:hidden; }
+.figBox2 { display:inline-block; width:49%; }
+.figTitle { height:50px; line-height:50px; font-size:18px; color:#fff; background:#00c0ef; }
+.figTitle img { margin-left:10px; }
+.figTitle button { float:right; margin-right:10px; width:50px; height:50px; background:url(../images/tri2.png) no-repeat; }
+.figContent { padding:20px; text-align:center; }
+/* ---------
+弹出
+----------- */
+.alert { display:none; vertical-align:middle; position:fixed; z-index:99; left:0; top:0; width:100%; height:100%; text-align:center; background:url(../images/black.png); }
+.alertBox { display:table-cell; vertical-align:middle; text-align:center; }
+.alertContent { position:relative; margin:0 auto; width:600px; text-align:left; background:#fff; }
+.alertContent table { width:100%; }
+.alertContent caption { margin-bottom:20px; padding:20px 30px; font-size:20px; text-align:left; color:#418dd9; border-bottom:1px #ccc solid; }
+.alertContent th { padding:10px 30px; }
+.alertContent td { padding:10px 30px 10px 0; }
+.alertContent input[type=text] { width:100%; }
+.alertContent .btnTd { padding:25px 0 35px 0; text-align:center; }
+.alertContent .btnTd input { display:inline-block; margin:0 15px; width:90px; height:35px; line-height:35px; font-size:16px; background:#418dd9; color:#fff; border:0 none; }
+.alertContent .btnTd input.reset { background:#ccc; }

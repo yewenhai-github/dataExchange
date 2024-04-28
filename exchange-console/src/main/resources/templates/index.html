@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>数据交换平台 - 首页</title>
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+	<link rel='stylesheet' type='text/css' href='resources/admin/css/font-face.css'/>
+    <link rel="stylesheet" type="text/css" href="resources/admin/css/theme.css"/>
+    <link rel="stylesheet" type="text/css" href="resources/admin/css/premium.css"/>
+    <link rel="stylesheet" type="text/css" href="resources/admin/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="resources/js/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="resources/js/easyui1.9.4/themes/metro/easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="resources/js/easyui1.9.4/themes/icon.css"/>
+    
+    <script type="text/javascript" src="resources/admin/js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="resources/js/easyui1.9.4/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="resources/js/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="resources/js/dataform.js"></script>
+    <script type="text/javascript" src="resources/js/base-loading.js"></script>
+    
+    <script type="text/javascript" src="resources/js/easyuiext/jquery.slimscroll.js"></script>
+    
+    <style type="text/css">
+        #line-chart {height: 300px;width: 800px;margin: 0px auto;margin-top: 1em;}
+        .navbar-default .navbar-brand, .navbar-default .navbar-brand:hover {color: #fff;}
+        html, body {overflow-y: hidden;font-family: Times New Roman;font-size: 13px;}
+        .nav:before {content: "";}
+        .breadcrumb {padding: 10px 0;}
+        .tabs-item{margin: 5px 5px;}
+    </style>
+</head>
+<body class="theme-blue">
+<div class="navbar navbar-default" role="navigation" style="margin-bottom: 0px;" >
+    <div class="navbar-header">
+        <!-- <span style="font-size: 25px;color: #ddd;font-weight: bold;"><img src="resources/admin/img/logo.png" alt="logo"/><span style="margin-left: 10px;" ></span></span> -->
+    	<h5 style="color: #fff;font-size: 24px;">数据交换平台</h5>
+    </div>
+    <div class="navbar-collapse collapse" style="height: 1px;">
+        <ul id="main-menu" class="nav navbar-nav navbar-right">
+				<!-- <li class="dropdown hidden-xs">
+					<a href="pages/help/help.html" style="color: white">帮助中心</a>
+				</li>
+				<li class="dropdown hidden-xs">
+					<a href="pages/query/index.html" style="color: white">状态查询</a>
+				</li> -->
+				<li class="dropdown hidden-xs">
+					<a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" style="color: white">
+						<span class="glyphicon glyphicon-user padding-right-small" style="position: relative; top: 3px;"></span>
+						<span id="loginusername"></span>
+						<i class="fa fa-caret-down"></i>
+					</a>
+					<ul class="dropdown-menu">
+						<li id="viewUser">
+							<a href="javascript:void(0);">
+								<div>我的账号</div>
+							</a>
+						</li>
+						<li id="modifyPwd">
+							<a href="javascript:void(0);">
+								<div>修改密码</div>
+							</a>
+						</li>
+						<li class="divider"></li>
+						<li id="logout">
+							<a tabindex="-1">
+								<div>退出</div>
+							</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+    </div>
+</div>
+
+<div class="sidebar-nav" id="menu" style="width: 180px;height: 100%">
+    <div class="remove-scroll" style="height: 100%">
+    <ul></ul>
+    </div>
+</div>
+
+<div class="content">
+    <div class="header" style="margin-bottom: 0px;" hidden="hidden">
+        <ul class="breadcrumb">
+            <li style="font-size:15px;"><b><span id="his1"><span>首页</span></span></b></li>
+            <li style="font-size:15px;"><b><span id="his2"></span></b></li>
+        </ul>
+    </div>
+    <div id="tt" class="easyui-tabs">
+	        <div class="main-content" title="首页">
+		        <iframe id="iframeHright" class="page-iframe" src="main.html" frameborder="no" border="no"  style="height: 98%;width: 100%;"  scrolling="auto">
+				</iframe>
+	   		 </div>
+	</div>
+	<div id="mm" class="easyui-menu" style="width:150px;" hidden="hidden">  
+       <div id="mm-tabclose" class="tabs-item" name="1">关闭</div>  
+       <div id="mm-tabcloseall" class="tabs-item" name="2">关闭全部</div>
+       <div id="mm-tabcloseother" class="tabs-item"  name="3">关闭其它</div>  
+       <div class="menu-sep"></div>  
+       <div id="mm-tabcloseleft" class="tabs-item" name="5">关闭左侧</div>
+       <div id="mm-tabcloseright" class="tabs-item" name="4">关闭右侧</div>  
+   </div>
+</div>
+<div id="Pop_Ship" style="overflow: hidden;width: 100%;height:100%"></div>
+<div id="Pop_ShipP"></div>
+<div id="Photo"></div>
+</body>
+</html>
+<script type="text/javascript">
+    /*<![CDATA[*/
+    /** $(document).ready(function(){
+        var str = getRequestName(location.search,"locale");
+        if(isNotEmpty(str)){
+            setCookie("locale",str);
+        }
+    }); */
+    $('.remove-scroll').slimscroll({
+        height: 'auto',
+        position: 'right',
+        size: "8px",
+        color: '#9ea5ab',
+        wheelStep: 5
+    });
+    $(window).resize(function () {//当浏览器大小变化时
+        $('.remove-scroll').slimscroll({
+            height: 'auto',
+            position: 'right',
+            size: "8px",
+            color: '#9ea5ab',
+            wheelStep: 5
+        });
+    });
+
+    $('#logout').click(function () {
+        $.ajax({
+            url: 'login/LoginOut',
+            type: "POST",
+            dataType: "json",
+            success: function (result) {
+                window.location.href = result.ReturnAddress
+            }
+        });
+    });
+    $('#modifyPwd').click(function () {
+        PopShip('forms/auth/passwordedit.html', '修改密码', 520, 300, parent);
+    });
+    $('#viewUser').click(function () {
+        popWindow('Pop_Ship', 'userInfo.html', "用户", 400, 300);
+        // $('#frm_bill').form('load', result.detail);
+    });
+
+    $(function () {
+        var match = document.cookie.match(new RegExp('color=([^;]+)'));
+        if (match) var color = match[1];
+        if (color) {
+            $('body').removeClass(function (index, css) {
+                return (css.match(/\btheme-\S+/g) || []).join(' ')
+            })
+            $('body').addClass('theme-' + color);
+        }
+        $('[data-popover="true"]').popover({html: true});
+
+        var uls = $('.sidebar-nav > ul > *').clone();
+        uls.addClass('visible-xs');
+        $('#main-menu').append(uls.clone());
+
+        initMenu();
+        username();
+
+    });
+
+    function username() {
+    	$.ajax({
+            url: 'auth/GetUserInfo',
+            type: "POST",
+            dataType: "json",
+            success: function (result) {
+            	$('#loginusername').text(result.username);
+            }
+        });
+    }
+
+    $("[rel=tooltip]").tooltip();
+    $(function () {
+        $('.demo-cancel-click').click(function () {
+            return false;
+        });
+    });
+    $('#iframeHright').height($(window).height() - $('.navbar').height() - $('.header').height() - 0);
+    window.onresize = function () {
+        $('#iframeHright').height($(window).height() - $('.navbar').height() - $('.header').height() - 0);
+    }
+
+    function initMenu() {
+        $.ajax({
+            type: "GET",
+            url: "auth/GetAllMenuList",
+            dataType: "json",
+            cache: false,
+            success: function (data) {
+                var menu = "";
+                $.each(data.rows, function (i, item) {
+                    //one level menu
+                    if (item.url != "" && item.url != "null" && item.url != null) {
+                        menu += "<li><a href=\"javascript:void(0)\" onclick=\"openHtml('" + item.url + "',\'" + item.menu_text + "\','')\" style=\"text-decoration:none\" class=\"nav-header\"><i class=\"fa fa-fw " + item.icon + "\"></i> " + item.menu_text + "</a></li>";
+                    } else {
+                        menu += '<li><a href="javascript:void(0);" data-target=".' + item.icon + i + '" class="nav-header" data-toggle="collapse"><i class="fa fa-fw ' + item.icon + '"></i> ' + item.menu_text + '<i class="fa fa-collapse"></i></a></li>';
+                        //two level menu
+                        var subdata = data.children;
+                        menu += '<ul class="' + item.icon + i + ' nav nav-list collapse">';
+                        $.each(subdata, function (j, subItem) {
+                            if (item.indx == subItem.parentid) {
+                                menu += "<li ><a href=\"javascript:void(0)\" onclick=\"openHtml(\'" + subItem.url + "\',\'" + item.menu_text + "\',\'" + subItem.menu_text + "\')\"><span class=\"fa fa-caret-right\"></span> " + subItem.menu_text + "</a></li>";
+                            }
+                        });
+                        menu += '</ul></li>';
+                    }
+                });
+                $("#menu ul").append(menu);
+            }
+        });
+    }
+
+    var i=1;
+    function openHtml(URL, MENU_TEXT1, MENU_TEXT2) {
+    	
+        if (URL == "" || URL == null || URL == "null") {
+            return;
+        }
+        var tmphis1 = document.getElementById("his1");
+        var tmphis2 = document.getElementById("his2");
+        var title="";
+        tmphis1.innerHTML = "";
+        tmphis2.innerHTML = "";
+        if (MENU_TEXT1 != "" && MENU_TEXT1 != null && MENU_TEXT1 != "null") {
+            tmphis1.innerHTML = MENU_TEXT1;
+        }
+        if (MENU_TEXT2 != "" && MENU_TEXT2 != null && MENU_TEXT2 != "null") {
+            tmphis2.innerHTML = MENU_TEXT2;
+        }
+        if(MENU_TEXT2 == null || MENU_TEXT2 == ""  || MENU_TEXT2 == "null"){
+        	title=MENU_TEXT1;
+        }else{
+        	title=MENU_TEXT2;
+        }
+        
+        if($('#tt').tabs('exists',title)){
+            //跳转到指定的选项卡页面
+            $('#tt').tabs('select', title);
+            return;
+        } 
+        
+        
+		i++;
+     	// 添加一个新的标签页面板（tab panel）
+        $('#tt').tabs('add',{
+            title:title,
+            closable:true,
+            content:'<iframe id="iframeHright'+i+'" class="page-iframe" src="main.html" frameborder="no" border="no" style="height: 98%;width: 100%;" scrolling="auto"></iframe>',
+            tools:[]
+        });
+        
+        var obj = document.getElementById("iframeHright"+i);
+        obj.src = URL;
+       
+        $('#tt').tabs('resize',{
+        	plain : false,  
+        	boder : false,  
+        	width:'100%',  
+        	height:$(window).height()-60
+        	});    
+    }
+    
+    $(window).resize(function() {
+    	$('#tt').tabs('resize',{
+        	plain : false,  
+        	boder : false,  
+        	width:'100%',  
+        	height:$(window).height()-60
+        	}); 
+    	});
+    
+    
+ // 监听右键事件，创建右键菜单  
+    $('#tt').tabs({
+        onContextMenu : function(e, title, index) {
+            e.preventDefault();  
+            //if (index > 0) {  
+                $('#mm').menu('show', {  
+                    left : e.pageX,  
+                    top : e.pageY  
+                }).data("tabTitle", title);  
+            //}  
+        }  
+    });  
+    // 右键菜单click  
+    $("#mm").menu({  
+        onClick : function(item) {  
+            closeTab(this, item.name);  
+        }  
+    });  
+    
+ // 删除Tabs  
+    function closeTab(menu, type) {  
+        var obj = $('#tt');  
+        ;  
+        var allTabs = obj.tabs('tabs');  
+        var allTabtitle = [];  
+        $.each(allTabs, function(i, n) {  
+            var opt = $(n).panel('options');  
+            if (opt.closable) {  
+                allTabtitle.push(opt.title);  
+            }  
+        });  
+        var curTabTitle = $(menu).data('tabTitle');  
+      
+    //  console.log('curTabTitle:' + curTabTitle)  
+      
+        var curTabIndex = obj.tabs('getTabIndex', obj.tabs('getTab', curTabTitle));  
+        /** 
+         * <pre> 
+         *      1:关闭标签页 
+         *      2:关闭全部标签页 
+         *      3:关闭其它标签页 
+         *      4:关闭右侧标签页 
+         *      5:关闭左侧标签页 
+         * </pre> 
+         */  
+        switch (type) {  
+        case '1':
+        	if(curTabIndex==0){
+        		return;
+        	}
+            obj.tabs('close', curTabTitle);  
+            break;  
+        case '2':  
+            for (var i = 0, j = allTabtitle.length; i < j; i++) {  
+                obj.tabs('close', allTabtitle[i]);  
+            }  
+            break;  
+        case '3':  
+            for (var i = 0, j = allTabtitle.length; i < j; i++) {  
+                if (curTabTitle != allTabtitle[i]) {  
+                    obj.tabs('close', allTabtitle[i]);  
+                }  
+            }  
+            obj.tabs('select', curTabTitle);  
+            break;  
+        case '4':  
+            for (var i = curTabIndex + 1 ,j = allTabtitle.length; i<=j; i++) {  
+                obj.tabs('close', allTabtitle[i-1]);  
+            }  
+            obj.tabs('select', curTabTitle);  
+            break;  
+        case '5':  
+            for (var i = 0; i < curTabIndex-1; i++) {  
+                obj.tabs('close', allTabtitle[i]);  
+            }  
+            obj.tabs('select', curTabTitle);  
+            break;  
+        }  
+      
+    }  
+    /*]]>*/
+</script>

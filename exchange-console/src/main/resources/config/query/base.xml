@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<SqlMap>
+	<select id="GetAfficheEdit">
+		<![CDATA[
+		   SELECT T.*, '' USERNAME, '' DECL_STATUS_NAME
+				  FROM T_BASE_NOTICE T
+				 WHERE T.INDX = @INDX
+   		]]>
+	</select>
+	
+	<select id="GetAfficheList">
+		<![CDATA[
+		   SELECT t.*, '' USERNAME, '' as DECL_STATUS_NAME
+				  FROM T_BASE_NOTICE t
+				 where 1 = 1
+				<< AND t.TITLE like #TITLE# >>
+				<< AND t.DEPT_STATUS like #DEPT_STATUS# >>
+				<< AND t.CREATE_TIME >=to_date(#CREATE_TIME_FROM#,'yyyy-mm-dd hh24:mi:ss') >>
+				<< AND t.CREATE_TIME < to_date(#CREATE_TIME_TO#,'yyyy-mm-dd hh24:mi:ss')+1  >>
+		]]>
+	</select>
+	
+	<select id="GetBizConfigByIndx">
+		<![CDATA[
+		    SELECT BIZ_LEVEL,A.*,
+		    	DECODE(BIZ_LEVEL,  0,'全部', 1,'企业备案',2,'商品备案',3, '保税模式', 4, '一般模式')BIZ_LEVEL_NAME,
+		    	DECODE(USE_TYPE, 1,'前台',2,'前后台',3, '后台')USE_TYPE_NAME
+			 FROM S_SYS_BIZ_CONFIG A
+		     WHERE A.INDX = @INDX
+		]]>
+	</select>
+	
+	<select id="GetBizConfigList">
+		<![CDATA[
+		   SELECT A.*,
+		   DECODE(BIZ_LEVEL,  0,'全部', 1,'企业备案',2,'商品备案',3, '保税模式', 4, '一般模式')BIZ_LEVEL_NAME ,
+		   DECODE(USE_TYPE, 1,'前台',2,'前后台',3, '后台')USE_TYPE_NAME
+		   FROM S_SYS_BIZ_CONFIG A
+		   WHERE 1=1
+		   AND ORG_ID = #ORG_ID#
+		  << AND SC_CODE like #SC_CODE# >>
+		  << AND SC_NAME like #SC_NAME# >>
+		  << AND BIZ_LEVEL like #BIZ_LEVEL# >>
+		]]>
+	</select>
+	
+	<select id="GetHSClassifyByIndx">
+		<![CDATA[
+		    SELECT * FROM S_BASE_CLASSIFY A
+		     WHERE A.INDX = @INDX
+		]]>
+	</select>
+	
+	<select id="GetHSClassifyList">
+		<![CDATA[
+		   SELECT * FROM S_BASE_CLASSIFY
+		   WHERE 1=1 
+		  << AND ITEM_TYPE like #ITEM_TYPE# >>
+		  << AND ITEM_CODE like #ITEM_CODE# >>
+		  << AND MEM_CODE like #MEM_CODE# >>
+		  << AND CONDITION like #CONDITION# >>
+		]]>
+	</select>
+	
+	<select id="GetSerialNoSetList">
+		<![CDATA[
+		SELECT T.*,
+		       '' SEQUENCE_PERIODNAME,
+		       '' SEQUENCE_PART_IDNAME
+		      FROM S_SEQ_GENERATOR T
+		     WHERE 1 = 1
+		    << AND T.SEQUENCE_PRE like #SEQUENCE_PRE# >>
+		    << AND T.SEQUENCE_NAME like #SEQUENCE_NAME# >>
+		    << AND T.SEQUENCE_ROLE like #SEQUENCE_ROLE# >>
+		    << AND T.SEQUENCE_PERIOD = #SEQUENCE_PERIOD# >>
+		    << AND T.CREATE_TIME >=to_date(#CREATE_TIME_FROM#,'yyyy-mm-dd hh24:mi:ss') >>
+		    << AND T.CREATE_TIME < to_date(#CREATE_TIME_TO#,'yyyy-mm-dd hh24:mi:ss')+1 >>
+		]]>
+	</select>
+	
+	<select id="GetSerialNoStEdit">
+		<![CDATA[
+		    SELECT S.*, 		          
+		   DECODE(S.SEQUENCE_PERIOD, 1,'日循环', 2,'月循环',3,'年循环',4, '不循环')SEQUENCE_PERIODNAME
+			  FROM S_SEQ_GENERATOR S
+			 WHERE S.INDX = #INDX#
+		]]>
+	</select>
+</SqlMap>

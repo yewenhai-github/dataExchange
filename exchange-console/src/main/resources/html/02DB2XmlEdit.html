@@ -1,0 +1,941 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>DB2Xml配置详细</title>
+    <!--[if lt IE 9]>
+    <script src='resources/js/assets/javascripts/html5shiv.js' type='text/javascript'></script>
+    <![endif]-->
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
+        name='viewport' />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/bootstrap/bootstrap.css'
+        media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/light-theme.css'
+        id='color-settings-body-color' media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/demo.css'
+        media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/jquery-ui.css'
+        media='screen' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/ui.jqgrid.css'
+        media='screen' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/prettify.css' />
+    <link type='text/css' rel='stylesheet' href='console/css/ystep.css' />
+    <link type='text/css' rel='stylesheet' href='console/css/css.css' media='all' />
+    <script type='text/javascript' src='resources/js/assets/javascripts/jquery/jquery.min.js'></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/jquery.jqGrid.min.js"></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/prettify.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/codetabs.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/themeswitchertool.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/i18n/grid.locale-cn.js'></script>
+    <script type="text/ecmascript" src='resources/js/My97DatePicker/WdatePicker.js'></script>
+    <script type='text/javascript' src='GetJS?button.js'></script>
+    <script type='text/javascript' src="GetJS?messagebox.js"></script>
+    <script type='text/javascript' src='GetJS?combobox.js'></script>
+    <script type='text/javascript' src="GetJS?dataform.js"></script>
+    <script type='text/javascript' src="GetJS?popupwindow.js"></script>
+    <script type='text/javascript' src='GetJS?js/ystep.js'></script>
+    <script type='text/javascript' src='console/js/public.js'></script>
+    <script type='text/javascript' src='GetJS?js/checkradio.js'></script>
+</head>
+<body>
+    <div class='row-fluid' id='content-wrapper'>
+        <div class='span12'>
+         <div class='row-fluid'>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" id="iideclShowTable">
+                    <tr>
+                        <td class="formLeft" id="leftBox" style="padding-right: 10px;" valign="top">
+                            <div class="row-fluid">
+                                <div class='span12 box' style='margin-bottom: 0'>
+                                    <div style="margin-left: 10px;">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                 <!-- <div class='span12 box'>  -->
+                                                    <div class='box-header'>
+                                                        <div class='title'>
+                                                            <div class='icon-edit' style="color: #00F;">
+                                                            </div>
+                                                            <strong>表头信息</strong>
+                                                        </div>
+                                                    </div>
+            <!--  <div class='row-fluid' id="GoodsTitle">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 10px;
+                    border-bottom: 1px solid #114;">
+                    <tr>
+                        <td style="text-align: left; padding: 10px; width: 70%; padding-top: 10px;">
+                            <button class='btn btn-primary btn-small' id="btnSave" type="button" commandname="SaveDB2XmlByIndx" commanddatas="FormToData('DB2XmlData')"
+                                commandok="showSuccess">
+                                <i class='icon-save'></i>保 存
+                            </button>
+                            <button class='btn btn-primary btn-small' type="button" onclick="javascript:history.go(-1);">
+                                <i class='icon-reply-all'></i>返回
+                            </button>
+                            <button id="btnDel" class='btn btn-primary btn-small'  commandname="ChangeDB2Xml" commanddatas="FormToData('DB2XmlData');"
+                                 enablefield="DB2XmlData.IS_ENABLED" enablevalue="1"
+                                 commandok="showSuccess" confirmmessage="您确定要做失效操作吗？" isvalidate="0">
+                               	 <i class='icon-remove'></i>失效
+                          	</button>
+                          	<button id="btnRecovery" class='btn btn-primary btn-small'  commandname="ChangeDB2Xml" commanddatas="FormToData('DB2XmlData');"
+                                 enablefield="DB2XmlData.IS_ENABLED" enablevalue="0"
+                                 commandok="showSuccess" confirmmessage="您确定要做恢复操作吗？" isvalidate="0">
+                               	 <i class='icon-ok'></i>恢复
+                          	</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>-->
+			  <div class='box-content' id="XmlData">
+			<div class='row-fluid' id="GoodsData">
+                <input id='INDX' type="hidden" datafield="DB2XmlData.INDX" />
+                <input id='ORG_ID' type="hidden" datafield="DB2XmlData.REC_VER" />
+                <table width="100%" border="0" cellspacing="0"
+															cellpadding="0"
+															style="margin-bottom: 10px; border-bottom: 1px solid #114;">
+															<tr>
+																<td
+																	style="text-align: left; padding-right: 10px; padding-left: 10px;">
+																	<button id="btnHistory" class='btn btn-primary btn-small' style='padding-left: 10px;' onclick="javascript:history.go(-1)"><i class='icon-reply-all'></i>返回</button>
+																	<button class='btn btn-primary btn-small' id="btnSave"
+																		type="button" commandname="SaveComDB2XmlByIndx"
+																		commanddatas="FormToData('DB2XmlData')"
+																		commandok="showSuccess">
+																		<i class='icon-save'></i>保 存
+																	</button> 
+																	<!-- <button id="btnDel" class='btn btn-primary btn-small'
+																		commandname="DelComDB2XmlByIndx"
+																		commanddatas="FormToData('DB2XmlData');"
+																		commandok="showSuccess" confirmmessage="您确定要做失效操作吗？"
+																		isvalidate="0">
+																		<i class='icon-remove'></i>作 废
+																	</button> -->
+
+																</td>
+															</tr>
+														</table>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        实例名
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtQUARTZ_NAME' datafield="DB2XmlData.QUARTZ_NAME" type='text' ismust="1"
+                                            errormsg="实例名不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        消息类型
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtMESSAGE_TYPE' type='text' datafield="DB2XmlData.MESSAGE_TYPE"
+                                            ismust="1" errormsg="消息类型不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;" colspan="2">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        源路径
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtSOURCE_PATH' type='text' datafield="DB2XmlData.SOURCE_PATH" ismust="1" errormsg="源路径不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%;" colspan="2">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        业务节点集合
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtROOT_NAMES' type='text' datafield="DB2XmlData.ROOT_NAMES" ismust="1"
+                                            errormsg="业务节点集合不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;" colspan="2">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        数据库表集合
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtDB_TABLE_NAMES' datafield="DB2XmlData.DB_TABLE_NAMES" type='text' ismust="1"
+                                            errormsg="数据库表集合不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        业务根节点
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtXML_DOCUMENT' datafield="DB2XmlData.XML_DOCUMENT" type='text' ismust="1"
+                                            errormsg="业务根节点不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        业务头节点
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtXML_HEAD' datafield="DB2XmlData.XML_HEAD" type='text' ismust="1" errormsg="业务头节点不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        流水号名称
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtSERIAL_NAME' datafield="DB2XmlData.SERIAL_NAME" type='text' ismust="1" errormsg="流水号名称不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        主键名称
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtINDX_NAME' datafield="DB2XmlData.INDX_NAME" type='text' ismust="1" errormsg="主键名称不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        外键名称
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtPINDX_NAME' datafield="DB2XmlData.PINDX_NAME" type='text' ismust="1" errormsg="外键名称不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        BLOB处理类型
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtBLOB_PROCESS' datafield="DB2XmlData.BLOB_PROCESS" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        文件名规则
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtFILE_NAME_REG' datafield="DB2XmlData.FILE_NAME_REG" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        编码格式
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtENCODING' datafield="DB2XmlData.ENCODING" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        密钥
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtAES_KEY' datafield="DB2XmlData.AES_KEY" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        入口类嵌入
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtCLASS_INVOKE' datafield="DB2XmlData.CLASS_INVOKE" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        主表类嵌入
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtROOT_METHOD_INVOKE' datafield="DB2XmlData.ROOT_METHOD_INVOKE" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        子表类嵌入
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtCHILD_METHOD_INVOKE' datafield="DB2XmlData.CHILD_METHOD_INVOKE" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%;" class="tdListBorder">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">是否有效</td>
+																			<td class="tdCss"><select name="select"
+																				id="IS_ENABLED" datafield="DB2XmlData.IS_ENABLED" 
+																				style="width: 105%; border-radius: 0PX">
+																					<option value=""></option>
+																					<option value="0">否</option>
+																					<option value="1">是</option>
+																			</select></td>
+																		</tr>
+																	</table>
+																</td>
+                        <td style="width: 25%;" class="tdListBorder">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        创建时间
+                                    </td>
+                                    <td class="tdCss">
+                                        <input datafield="DB2XmlData.CREATE_TIME" id="txtCREATE_TIME" readonly="readonly" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;" class="tdListBorder">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        修改时间
+                                    </td>
+                                    <td class="tdCss">
+                                        <input datafield="DB2XmlData.MODIFY_TIME" id="txtMODIFY_TIME" readonly="readonly" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;" class="tdListBorder">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        版本号
+                                    </td>
+                                    <td class="tdCss">
+                                        <input datafield="DB2XmlData.REC_VER" id="txtREC_VER" readonly="readonly" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+           </div>
+            <div class='row-fluid'>
+				<div class='span12 box'>
+					<div class='box-header'>
+						<div class='title'>
+							<div class='icon-edit' style="color: #00F;"></div>
+							<strong>表体信息</strong>
+						</div>
+					</div>
+					<!--  <div>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 10px;
+                            border-bottom: 1px solid #114;">
+                            <tr>
+                                <td style="text-align: left; padding: 10px; width: 70%; padding-top: 5px;">
+                                    <button class='btn btn-primary btn-small' disabled="disabled" style='margin-bottom: 5px'
+                                        id="btnNew" onclick="btnNew();" enablefield="DB2XmlData.BTNSHOW" enablevalue="1">
+                                        <i class='icon-file'></i>新 建
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>-->
+					<div class='box-content'>
+						<table id="jg">
+						</table>
+						<div id="jqGridPager"></div>
+					</div>
+					 <div class='box-content'>
+					<table width="100%" border="0" cellspacing="0" cellpadding="0"
+						style="margin-bottom: 10px; border-bottom: 1px solid #114;">
+						<tr>
+							<td
+								style="text-align: left; padding-right: 10px; padding-left: 10px;">
+								<button class='btn btn-primary btn-small' id="btnSave"
+									type="button" commandname="SaveDB2ComXmlByPIndx"
+									commanddatas="FormToData('DB2XmlComData,DB2XmlData')"
+									commandok="showSuccessP">
+									<i class='icon-save'></i>保 存
+								</button>
+								<button id="btnDel1" class='btn btn-primary btn-small'
+									commandname="DelDB2ComXmlByPIndx"
+									commanddatas="getId('jg')" validate="getId('jg')"
+									enablevalue="1" commandok="showSuccessGoods"
+									confirmmessage="您确定要做失效操作吗？" isvalidate="0">
+									<i class='icon-remove'></i>作 废
+								</button>
+							</td>
+						</tr>
+					</table>
+					<table id="DB2XmlComData" width="100%" border="0" cellspacing="0"
+						class="tdTableBorder" cellpadding="0">
+						<tr>
+							<td style="width: 25%;" class="tdListBorder">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="titleCss100">序号</td>
+										<td class="tdCss"><input datafield="DB2XmlComData.SEQ_NO"
+											id="txtSEQ_NO" type='text' /></td>
+									</tr>
+								</table>
+							</td>
+							<td style="width: 25%;" class="tdListBorder">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="titleCss100">主键名称</td>
+										<td class="tdCss"><input datafield="DB2XmlComData.INDX"
+											id="txtINDX" type='hidden' /> <input
+											datafield="DB2XmlComData.P_INDX" id="txtP_INDX" type='hidden' />
+											<input datafield="DB2XmlComData.INDX_NAME" id="txtINDX_NAME"
+											type='text'  /></td>
+									</tr>
+								</table>
+							</td>
+							<td style="width: 25%;" class="tdListBorder">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="titleCss100">子表外键名称</td>
+										<td class="tdCss"><input
+											datafield="DB2XmlComData.PINDX_NAME" id="txtPINDX_NAME"
+											type='text' /></td>
+									</tr>
+								</table>
+							</td>
+							<td style="width: 25%;" class="tdListBorder">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="titleCss100">表名</td>
+										<td class="tdCss"><input
+											datafield="DB2XmlComData.TABLE_NAME" id="txtTABLE_NAME"
+											type='text'/></td>
+									</tr>
+								</table>
+							</td>
+
+						</tr>
+						<tr>
+							<td style="width: 25%;" class="tdListBorder">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="titleCss100">消息节点名</td>
+										<td class="tdCss"><input
+											datafield="DB2XmlComData.XML_DOCUMENT_NAME"
+											id="txtXML_DOCUMENT_NAME" type='text' /></td>
+									</tr>
+								</table>
+							</td>
+							<td style="width: 25%;" class="tdListBorder">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="titleCss100">外包含节点名</td>
+										<td class="tdCss"><input
+											datafield="DB2XmlComData.XML_DISPLAY_NAME"
+											id="txtXML_DISPLAY_NAME" type='text' /></td>
+									</tr>
+								</table>
+							</td>
+
+							<td style="width: 25%;" class="tdListBorder">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="titleCss100">父级节点</td>
+										<td class="tdCss"><input
+											datafield="DB2XmlComData.XML_PARENT_DOCUMENT"
+											id="txtXML_PARENT_DOCUMENT" type='text' /></td>
+									</tr>
+								</table>
+							</td>
+							<td style="width: 25%;" class="tdListBorder">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="titleCss100">消息SQL</td>
+										<td class="tdCss"><input datafield="DB2XmlComData.XML_SQL"
+											id="txtXML_SQL" type='text' /></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td style="width: 25%;" class="tdListBorder" colspan="2">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="titleCss100">消息SQL参数</td>
+										<td class="tdCss"><input
+											datafield="DB2XmlComData.XML_SQL_PARAMS" id="txtXML_SQL_PARAMS"
+											type='text' /></td>
+									</tr>
+								</table>
+							</td>
+							<td style="width: 25%;" class="tdListBorder" colspan="2">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="titleCss100">消息SQL1</td>
+										<td class="tdCss"><input datafield="DB2XmlComData.XML_SQL1"
+											id="txtXML_SQL1" type='text' /></td>
+									</tr>
+								</table>
+							</td>
+
+						</tr>
+						<tr>
+							<td style="width: 25%;" class="tdListBorder" colspan="2">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="titleCss100">消息SQL2</td>
+										<td class="tdCss"><input datafield="DB2XmlComData.XML_SQL2"
+											id="txtXML_SQL2" type='text' /></td>
+									</tr>
+								</table>
+							</td>
+							<td style="width: 25%;" class="tdListBorder" colspan="2">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="titleCss100">消息SQL3</td>
+										<td class="tdCss"><input datafield="DB2XmlComData.XML_SQL3"
+											id="txtXML_SQL3" type='text' /></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td style="width: 100%;" class="tdListBorder" colspan="4">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="titleCss100">隐藏字段</td>
+										<td class="tdCss"><input
+											datafield="DB2XmlComData.XML_COULMN_HIDDEND"
+											id="txtXML_COULMN_HIDDEND" type='text' /></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td style="width: 100%;" class="tdListBorder" colspan="4">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="titleCss100">MAPPING转换</td>
+										<td class="tdCss"><input
+											datafield="DB2XmlComData.XML_COULMN_MAPPING"
+											id="txtXML_COULMN_HIDDEND" type='text' /></td>
+									</tr>
+								</table>
+							</td> 
+							</tr>
+						<tr>
+							<td style="width: 100%;" class="tdListBorder" colspan="4">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="titleCss100">MAPPING1转换</td>
+										<td class="tdCss"><input
+											datafield="DB2XmlComData.XML_COULMN_MAPPING1"
+											id="txtXML_COULMN_MAPPING1" type='text' /></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td style="width: 100%;" class="tdListBorder" colspan="4">
+								<table width="100%" border="0" cellspacing="0" cellpadding="0">
+									<tr>
+										<td class="titleCss100">MAPPING2转换</td>
+										<td class="tdCss"><input
+											datafield="DB2XmlComData.XML_COULMN_MAPPING2"
+											id="txtXML_COULMN_MAPPING2" type='text' /></td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					</div>
+				</div>
+			</div>
+       <!--  </div> -->
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+function InitPage() {
+    if (GetRequestName("INDX") != "") {
+        postData("GetDB2XmlByIndx?INDX=" + GetRequestName("INDX"), null, true, callback1, null)
+        $("#INDX").val(GetRequestName("INDX"));
+    }
+}
+
+$(document).ready(function () {
+
+    if (GetRequestName("INDX") == "") {
+        document.getElementById("btnDel").disabled = true;
+        document.getElementById("btnRecovery").disabled = true;
+        document.getElementById("btnNew").disabled = true;
+        document.getElementById("btnUpdate").disabled = true;
+        document.getElementById("btnDleSql").disabled = true;
+        document.getElementById("btnRecoverySql").disabled = true;
+    }
+
+    window.onresize = function () {
+        setGridSize("#jg",168);
+    };
+    //商品列表
+    $("#jg").jqGrid({
+        datatype: "json",
+        url: "GetDB2XmlSqlByPindx?Pindx=" + GetRequestName("INDX"),
+        colNames: ['INDX', 'P_INDX', '序号', 'SQL', 'SQL1', 'SQL2', 'SQL3', 'SQL参数', '是否可用', '是否有效 ', '部门编号', '权限隔离', '数据来源的分区ID', '创建人', '创建时间', '修改人', '修改时间', '版本号'],
+        colModel: [
+	    			        { name: 'INDX', index: 'INDX', width: 50, hidden: true },
+	        	            { name: 'P_INDX', index: 'P_INDX', width: 100, hidden: true },
+	        	            { name: 'SEQ_NO', index: 'SEQ_NO', width: 100 },
+	        	            { name: 'XML_SQL', index: 'XML_SQL', width: 500, formatter: urnCode },
+	        	            { name: 'XML_SQL1', index: 'XML_SQL1', width: 100 },
+	        	            { name: 'XML_SQL2', index: 'XML_SQL2', width: 100 },
+	        	            { name: 'XML_SQL3', index: 'XML_SQL3', width: 100 },
+	        	            { name: 'XML_SQL_PARAMS', index: 'XML_SQL_PARAMS', width: 100 },
+	        	            { name: 'IS_ENABLED', index: 'IS_ENABLED', width: 60, align: "center" },
+	    					{ name: 'IS_ENABLED_NAME', index: 'IS_ENABLED_NAME', width: 100 },
+	    					{ name: 'DEPT_ID', index: 'DEPT_ID', width: 100 },
+	    					{ name: 'PART_ID', index: 'PART_ID', width: 100 },
+	    					{ name: 'PART_ID_SOURCE', index: 'PART_ID_SOURCE', width: 100 },
+	    					{ name: 'CREATOR', index: 'CREATOR', width: 100, hidden: true },
+	    					{ name: 'CREATE_TIME', index: 'CREATE_TIME', width: 100, formatter: "date", formatoptions: { srcformat: 'Y-m-d H:i:s', newformat: 'Y-m-d H:i:s'} },
+	    					{ name: 'MODIFYOR', index: 'MODIFYOR', width: 100, hidden: true },
+	    					{ name: 'MODIFY_TIME', index: 'MODIFY_TIME', width: 100, formatter: "date", formatoptions: { srcformat: 'Y-m-d H:i:s', newformat: 'Y-m-d H:i:s'} },
+	    					{ name: 'REC_VER', index: 'REC_VER', width: 100, hidden: true }
+	        	        ],
+        viewrecords: true, // show the current page, data rang and total records on the toolbar
+        width: 'auto',
+        //autowidth:auto,
+        height: 200,
+        shrinkToFit: false,
+        autoScroll: true,
+        rowNum: 5, //每页显示记录数
+        rownumbers: true,
+        rownumWidth: 35,
+        multiselect: true, //是否支持多选  
+        onSelectRow: function (rowid, status, e) {
+          //  DoCommand("GetDB2ComXmlSqlByIndx?INDX=" + $("#jg").getRowData(rowid).INDX, "DB2XmlComData");
+            postData("GetDB2ComXmlSqlByIndx?INDX=" +  $("#jg").getRowData(rowid).INDX, null, true, callback2, null);
+        },
+        onSortCol: function (colName, Id, sortorder) {  //排序开始
+            $("#jg").jqGrid('setGridParam', {
+                url: "GetDB2XmlSqlByPindx?Pindx=" + GetRequestName("INDX"),
+                postData: {
+                    'OrderField': colName,
+                    'Order': sortorder
+                }, //发送数据 
+                page: 1
+            }).trigger("reloadGrid"); //重新载入 
+        }, //排序结束 
+        loadComplete: function () {
+            var rowNum = $("#jg").jqGrid('getGridParam', 'records');
+            if (rowNum <= 0) {
+                if ($("#norecords").html() == null)
+                    $("#jg").parent().append("<div id=\"norecords\" class=\"norecords\">暂无数据！</div>");
+                $("#norecords").show();
+            }
+            else {//如果存在记录，则隐藏提示信息。
+                $("#norecords").hide();
+            }
+        },
+        beforeRequest: function () {
+            if (top.showloading) {
+                top.showloading();
+            }
+        },
+        gridComplete: function () {
+            if (top.hideloading) {
+                top.hideloading();
+            }
+        }
+    });
+    setGridSize("#jg",168);
+});
+
+
+function callbackfunction() {
+    DoCommand("GetDB2XmlByIndx?INDX=" + GetRequestName("INDX"));
+}
+function showSuccess(s) {
+    var v = eval("(" + s + ")");
+    if (v.IsOk == "1") {
+        var json = v.ReturnData.replace(/"([^"]+)":/g, function (val) { return val.toUpperCase(); });
+        var data = eval("(" + json + ")");
+        if (data != null) {
+            if (data.DB2XMLDATA[0].INDX != "") {
+                ShowMessages(v.ErrMessage, "友情提示", "msgok", function okFunction() {
+                    DoCommand("GetDB2XmlByIndx?INDX=" + data.DB2XMLDATA[0].INDX);
+                    $("#jg").jqGrid('setGridParam', {
+                        url: "GetDB2XmlSqlByPindx?Pindx=" + data.DB2XMLDATA[0].INDX,
+                        page: 1
+                    }).trigger("reloadGrid"); //重新载入
+                    $("#INDX").val(data.DB2XMLDATA[0].INDX);
+                    document.getElementById("btnNew").disabled = false;
+                    document.getElementById("btnUpdate").disabled = false;
+                    document.getElementById("btnDleSql").disabled = false;
+                    document.getElementById("btnRecoverySql").disabled = false;
+                }, 0);
+            }
+        }
+        else {
+            ShowMessages(v.ErrMessage, "友情提示", "msgok", function okFunction() {
+                window.location.href = "GetHTML?html/02DB2XmlList.html";
+            }, 0);
+        }
+    }
+    else
+        ShowMessages(v.ErrMessage, "友情提示", "msgwaring", null, 0);
+}
+
+
+
+
+function showSuccessP(s) {
+	var v = eval("(" + s + ")");
+	if (v.IsOk == "1") {
+		var data = eval("(" + v.ReturnData + ")");
+		if (data != null) {
+			var json = v.ReturnData.replace(/"([^"]+)":/g, function (val) { return val.toUpperCase(); });
+			var data = eval("(" + json + ")");
+			if (data.DB2XMLCOMDATA[0].INDX != "") {
+				ShowMessages(v.ErrMessage, "友情提示", "msgok", function okFunction() {
+					//DoCommand("GetDB2AnyXmlSqlByPindx?INDX=" + data.DB2ANYDATA[0].INDX);
+					if(data.DB2XMLCOMDATA[0].P_INDX!=null){
+						$("#jg").jqGrid('setGridParam', {
+							url: "GetDB2XmlSqlByPindx?Pindx=" + $("#INDX").val(),
+							page: 1
+						}).trigger("reloadGrid");
+					}
+				}, 0);
+
+			} else {
+				ShowMessages(v.ErrMessage, "友情提示", "msgok", function okFunction() {
+					window.location.href = "GetHTML?html/02DB2XmlList.html";
+				}, 0);
+			}
+		}
+	}
+	else
+		ShowMessages(v.ErrMessage, "友情提示", "msgwaring", null, 0);
+}
+
+function btnNew() {
+    location.href = 'GetHTML?html/02DB2XmlEdit.html?Pindx=' + $("#INDX").val();
+}
+function openUpdate() {
+    var ids = $('#jg').jqGrid('getGridParam', 'selarrrow');
+    if (ids != null && ids.length != 0) {
+        if (ids.length == 1) {
+            for (var i = 0; i < ids.length; i++) {
+                var id = ids[i];
+                var row = $("#jg").jqGrid("getRowData", id);
+                var INDX = $.trim(row.INDX);
+                location.href = "GetHTML?html/02DB2XmlEdit.html?INDX=" + INDX + "&Pindx=" + $("#INDX").val();
+            }
+        } else {
+            alert("只能修改一条数据");
+        }
+    } else {
+        alert("请先勾选一条需要修改的单号");
+    }
+}
+function urnCode(cellvalue, options, rowObject) {
+    return decodeURIComponent(cellvalue);
+}
+function openChange(type) {
+    var ids = $('#jg').jqGrid('getGridParam', 'selarrrow');
+    var action = '';
+    var text = '';
+    if (type == 'btnDleSql') {
+        action = 'btnDleSql';
+        text = '失效';
+    } else if (type == "btnRecoverySql") {
+        action = 'btnRecoverySql';
+        text = '恢复';
+    }
+    var jsonArr = new Array();
+    if (ids != null && ids.length != 0) {
+        var r = confirm("确认" + text + "吗？");
+        if (r != true) {
+            return;
+        }
+        for (var i = 0; i < ids.length; i++) {
+            var rowData = $("#jg").jqGrid("getRowData", ids[i]); //根据上面的id获得本行的所有数据
+            jsonArr[i] = rowData.INDX;
+        }
+        var Indxs = jsonArr.join(',');
+        $.ajax({
+            type: "post",
+            async: false, //控制同步
+            url: "ChangeDB2XmlList",
+            data: {
+                Indxs: Indxs,
+                action: action
+            },
+            cache: false,
+            success: function (data) {
+                var v = eval("(" + data + ")");
+                ShowMessages(v.ErrMessage, "友情提示", "msgok", null, 0);
+                callbackfunction();
+            },
+            Error: function (err) {
+                ShowMessages(err, "友情提示", "msgwaring", null, 0);
+            }
+        });
+
+    } else {
+        ShowMessages("对不起,您没有选中任何记录", "友情提示", "msgwaring", null, 0);
+        return;
+    }
+}
+function callbackfunction() {
+    DoCommand("GetDB2XmlByIndx?INDX=" + $("#INDX").val());
+    $("#jg").jqGrid('setGridParam', {
+        url: "GetDB2XmlSqlByPindx?Pindx=" + $("#INDX").val(),
+        page: 1
+    }).trigger("reloadGrid"); //重新载入
+}
+
+function callback1(s) {
+    var data = eval("(" + s + ")");
+    if (data.ReturnData) {
+        var json = data.ReturnData;
+        json = json.replace(/"([^"]+)":/g, function (v) { return v.toUpperCase(); });
+        var rtdata = eval("(" + json + ")");
+        FormBind(rtdata);
+        
+        switch ($("#txtIS_ENABLED").val()) {
+            case '1':
+                $("#txtIS_ENABLED").val("是");
+                break;
+            case '0':
+                $("#txtIS_ENABLED").val("否");
+                break;
+        }
+    }
+}
+ 
+
+
+//获取所有Id
+function getId(gridId) {
+	var IsAll = 0;
+	if ($("#jg").attr("checked") == true)
+		IsAll = 1;
+	var rowKey = $("#jg").getGridParam("selrow");
+	if (IsAll == 0) {
+		if (!rowKey)
+			ShowMessages("对不起,您没有选中任何记录", "系统提示", "msgwaring", null, 0);
+		else
+			return returnEnd(gridId, IsAll);
+	}
+	else
+		return returnEnd(gridId, IsAll);
+}
+
+function returnEnd(gridId, IsAll) {
+	var selectedIDs = $("#" + gridId + "").getGridParam("selarrrow");
+  var strJson = "";
+  var strJsons = "";
+  var P_INDX="";
+  var jsonArr = new Array();
+  var jsPindx= new Array();
+  for (var i = 0; i < selectedIDs.length; i++) {
+      var rowData = $("#" + gridId + "").jqGrid("getRowData", selectedIDs[i]); //根据上面的id获得本行的所有数据
+      strJson = "{\"INDX\":\"" + rowData.INDX + "\",\"P_INDX\":\"" + rowData.P_INDX + "\"}";
+      jsonArr[i] = strJson;
+  }
+  strJsons = jsonArr.join(',');
+  return "{\"key\":[" + strJsons + "],\"IsAll\":[{\"isall\":\"" + IsAll + "\"}]}";
+}
+function showSuccessGoods(s) {
+	var v = eval("(" + s + ")");
+	if (v.IsOk == "1") {
+		
+		ShowMessages(v.ErrMessage, "友情提示", "msgok", function okFunction() {
+			//DoCommand("GetDB2AnyXmlSqlByPindx?INDX=" + data.DB2ANYDATA[0].INDX);
+				$("#jg").jqGrid('setGridParam', {
+					url: "GetDB2XmlSqlByPindx?Pindx="+$("#INDX").val(),
+					page: 1
+				}).trigger("reloadGrid");
+		}, 0);
+		
+	}
+	else
+		ShowMessages(v.ErrMessage, "系统提示", "msgwaring", null, 0);
+}
+function callback2(s){
+	 var data = eval("(" + s + ")");
+	    if (data.ReturnData) {
+	        var json = data.ReturnData;
+	        json = json.replace(/"([^"]+)":/g, function (v) { return v.toUpperCase(); });
+	        var rtdata = eval("(" + json + ")");
+	        FormBind(rtdata); 
+	    }
+}
+</script>

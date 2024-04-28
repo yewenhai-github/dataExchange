@@ -1,0 +1,295 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>定时任务监控</title>
+    <!--[if lt IE 9]>
+    <script src='resources/js/assets/javascripts/html5shiv.js' type='text/javascript'></script>
+    <![endif]-->
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
+        name='viewport' />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/bootstrap/bootstrap.css'
+        media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/light-theme.css'
+        id='color-settings-body-color' media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/demo.css'
+        media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/jquery-ui.css'
+        media='screen' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/ui.jqgrid.css'
+        media='screen' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/prettify.css' />
+    <link type='text/css' rel='stylesheet' href='console/css/ystep.css' />
+    <link type='text/css' rel='stylesheet' href='console/css/css.css' media='all' />
+    <script type='text/javascript' src='resources/js/assets/javascripts/jquery/jquery.min.js'></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/jquery.jqGrid.min.js"></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/prettify.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/codetabs.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/themeswitchertool.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/i18n/grid.locale-cn.js'></script>
+    <script type="text/ecmascript" src='resources/js/My97DatePicker/WdatePicker.js'></script>
+    <script type='text/javascript' src='GetJS?button.js'></script>
+    <script type='text/javascript' src="GetJS?messagebox.js"></script>
+    <script type='text/javascript' src='GetJS?combobox.js'></script>
+    <script type='text/javascript' src="GetJS?dataform.js"></script>
+    <script type='text/javascript' src="GetJS?popupwindow.js"></script>
+    <script type='text/javascript' src='GetJS?js/ystep.js'></script>
+    <script type='text/javascript' src='console/js/public.js'></script>
+    <script type='text/javascript' src='GetJS?js/checkradio.js'></script>
+</head>
+<body id="formSubmmit" class='contrast-red' >
+    <div class='row-fluid' id='content-wrapper'>
+        <div class='span12'>
+            <div class='row-fluid'>
+                <div class='span12 box bordered-box orange-border' style='margin-bottom: 0;'>
+                    <div class='row-fluid'>
+                        <div class='span12 box'>
+                            <div class='box-content'>
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0" id="SearchTable">
+                                    <tr>
+						                 <td style="width: 25%;">
+						                     <table width="100%" border="0" cellspacing="10" cellpadding="0">
+						                         <tr>
+						                             <td class="titleCss90">
+						                                       	交换节点
+						                             </td>
+						                             <td class="tdCss">
+					                              		<select name="select" datafield="SearchTable.msg_name" style="width: 102%; border-radius: 0PX">
+															<option value=""></option>
+															<option value="消息生成">消息生成</option>
+															<option value="消息入库">消息入库</option>
+															<option value="消息发送">消息发送</option>
+															<option value="消息落地">消息落地</option>
+															<option value="消息对传">消息对传</option>
+															<option value="文件合并">文件合并</option>
+															<option value="文件拆分">文件拆分</option>
+															<option value="接收接口">接收接口</option>
+															<option value="推送接口">推送接口</option>
+														</select>
+													 </td>
+						                         </tr>
+						                     </table>
+						                 </td>
+										<td style="width: 25%;">
+											<table width="100%" border="0" cellspacing="10" cellpadding="0">
+												<tr>
+													<td class="titleCss90">
+														实例名
+													</td>
+													<td class="tdCss">
+														<input type='text' style="width: 100%;" datafield="SearchTable.quartz_name"/>
+													</td>
+												</tr>
+											</table>
+										</td>
+										<td style="width: 25%;"></td>
+						             </tr>
+                                </table>
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 10px;
+							border-bottom: 1px solid #114;">
+							<tr>
+								<td style="text-align: left; padding-right: 10px; padding-left: 10px;">
+									<button id="btnSearch" class='btn btn-primary btn-small' style='margin-bottom: 5px'>
+                                        <i class='icon-search'></i>查 询
+                                    </button><button id="btnReset" class='btn btn-primary btn-small' style='margin-bottom: 5px;margin-left:5px;' onclick="ClearAllInput('SearchTable')">
+                                        <i class='icon-trash'></i>重 置
+                                    </button>
+								</td>
+							</tr>
+						</table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='responsive-table' id="tableQuartzConfigList">
+                <table id="jg">
+                </table>
+                <div id="grdDeclCountPager">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+﻿var GridAutoSize = function(){    	    	 
+	 setGridSize("#jg",168);
+}
+//加载下拉数据源
+function getConditon() {
+	return "{\"SearchTable\":[{\"TYPE\":\"=COMMON\"}]}";
+}
+$(document).ready(function () {
+	window.onresize = function () {
+		setGridSize("#jg",168);
+	}
+    $("#jg").jqGrid({
+        datatype: "json",
+        url: "GetPointMonitorList",
+        colNames: ['状态','交换节点','实例名','创建时间','版本号','创建人编码'],
+        colModel: [     
+                    { name: 'status', index: 'status', width: 70, formatter: stateShow },
+                    { name: 'msg_name', index: 'app_cn_name', width: 120 },
+                    { name: 'quartz_name', index: 'app_en_name', width: 120 },
+                    { name: 'create_time', index: 'create_time', width: 150, formatter: "date", formatoptions: { srcformat: 'Y-m-d H:i:s', newformat: 'Y-m-d H:i:s'}},
+                    { name: 'rec_ver', index: 'rec_ver', width: 80, },
+					{ name: 'creator', index: 'creator', width: 80, align: 'center'}
+				   ],
+        viewrecords: true,
+        height: 600,
+        rowNum: 15, //每页显示记录数
+        rowList: [15, 50, 100], //可调整每页显示的记录数
+        rownumbers: true,
+        rownumWidth: 30,
+        multiselect: true, //是否支持多选 
+        loadui: "none",       //隐藏默认的loading
+        autowidth: true,
+        viewrecords: true, //是否显示行数 
+        shrinkToFit: false,  //滚动条
+        pager: "#grdDeclCountPager", //分页工具栏
+        sortable: true,
+        altRows: true,
+        altclass: 'someClass',
+        userDataOnFooter: true,
+        //footerrow: true,
+        //loadonce: true,
+        //排序开始
+        onSortCol: function (colName, Id, sortorder) {
+            //colName   排序字段
+            //Id   第几列
+            //sortorder  排序  desc 倒序  asc 正序
+            $("#jg").jqGrid('setGridParam', {
+                url: "GetPointMonitorList",
+                postData: {
+                    'OrderField': colName,
+                    'Order': sortorder,
+                    'CommandData': FormToData('SearchTable')
+                }, //发送数据 
+                page: 1
+            }).trigger("reloadGrid"); //重新载入 
+        },
+        loadComplete: function () {
+            var rowNum = $("#jg").jqGrid('getGridParam', 'records');
+            if (rowNum <= 0) {
+                if ($("#norecords").html() == null)
+                    $("#jg").parent().append("<div id=\"norecords\" class=\"norecords\">暂无数据！</div>");
+                $("#norecords").show();
+            }
+            else {//如果存在记录，则隐藏提示信息。
+                $("#norecords").hide();
+            }
+        },
+        beforeRequest: function () {
+            if (top.showloading) {
+                top.showloading();
+            }
+        },
+        gridComplete: function () {
+            if (top.hideloading) {
+                top.hideloading();
+            }
+        }
+        });
+
+	setGridSize("#jg",168);
+    //隐藏某一列
+    $("#jg").setGridParam().hideCol("INDX").trigger("INDX");
+    $("#jg").setGridParam().hideCol("QUARTZ_TYPE").trigger("reloadGrid");
+	$("#jg").setGridParam().hideCol("SINGLETON_FLAG").trigger("reloadGrid");
+	$("#jg").setGridParam().hideCol("QUARTZ_TYPE").trigger("reloadGrid");
+    //查询
+    $("#btnSearch").click(function () {
+		$("#jg").jqGrid('setGridParam', {
+			url: "GetPointMonitorList",
+			postData: {
+				'CommandData': FormToData('SearchTable')
+			}, //发送数据 
+			page: 1
+		}).trigger("reloadGrid"); //重新载入 
+
+	})
+});
+
+function auditFlagShow(cellvalue, options, rowObject) {
+	var rt = "";
+	switch (rowObject.AUDIT_FLAG) {
+		case '0':
+			rt += "<span class=\"label label-important\">未审核</span>";
+			break;
+		case '1':
+			rt += "<span class=\"label label-success\">已审核</span>";
+			break;
+	}
+	return rt;
+}
+
+function stateShow(cellvalue, options, rowObject) {
+	var rt = "";
+	switch (cellvalue) {
+		case '0':
+			rt += "<span class=\"label label-warning\">未启动</span>";
+			break;
+		case '1':
+			rt += "<span class=\"label label-success\">已启动</span>";
+			break;
+		case '2':
+			rt += "<span class=\"label label-danger\">无法连接</span>";
+			break;
+		default:
+			rt += "";
+		break;
+	}
+	return rt;
+}
+function invoke(cellvalue, options, rowObject) {
+    return "<a href='/ExpInsp/JobOpen.do?type=Edit'><span class=\"label label-info\">启动</span></a> | <span class=\"label label-warning\">关闭</span>";
+}
+function urlCode(cellvalue, options, rowObject) {
+	var detail_uri = "GetHTML?html/01QuartzConfigEdit.html";
+	return "<a href="+detail_uri+"?INDX="+rowObject.INDX + "&CELLVALUE=" + cellvalue+"'><span style='color:#00acec'>" + cellvalue + "</a>";
+}
+
+//获取所有Id
+function getId(gridId) {
+	var IsAll = 0;
+	if ($("#txtSelectAll").attr("checked") == true)
+		IsAll = 1;
+	var rowKey = $("#jg").getGridParam("selrow");
+	if (IsAll == 0) {
+		if (!rowKey)
+			ShowMessages("对不起,您没有选中任何记录", "系统提示", "msgwaring", null, 0);
+		else
+			return returnEnd(gridId, IsAll);
+	}
+	else
+		return returnEnd(gridId, IsAll);
+}
+
+function returnEnd(gridId, IsAll) {
+	var selectedIDs = $("#" + gridId + "").getGridParam("selarrrow");
+var strJson = "";
+var strJsons = "";
+var jsonArr = new Array();
+for (var i = 0; i < selectedIDs.length; i++) {
+    var rowData = $("#" + gridId + "").jqGrid("getRowData", selectedIDs[i]); //根据上面的id获得本行的所有数据
+    strJson = "{\"INDX\":\"" + rowData.CON_INDX + "\"}";
+    jsonArr[i] = strJson;
+}
+strJsons = jsonArr.join(',');
+return "{\"key\":[" + strJsons + "],\"IsAll\":[{\"isall\":\"" + IsAll + "\"}]}";
+}
+//处理返回值
+function showSuccess(s) {
+	var v = eval("(" + s + ")");
+	if (v.IsOk == "1") {
+		ShowMessages(v.ErrMessage, "系统提示", "msgok", function okFunction() {
+			$("#jg").trigger("reloadGrid");
+		}, 0);
+
+	}
+	else
+		ShowMessages(v.ErrMessage, "系统提示", "msgwaring", null, 0);
+}
+
+</script>

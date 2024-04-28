@@ -1,0 +1,334 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Mq2Xml详细</title>
+    <!--[if lt IE 9]>
+    <script src='resources/js/assets/javascripts/html5shiv.js' type='text/javascript'></script>
+    <![endif]-->
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
+        name='viewport' />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/bootstrap/bootstrap.css' media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/light-theme.css' id='color-settings-body-color' media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/demo.css' media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/jquery-ui.css' media='screen' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/ui.jqgrid.css' media='screen' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/prettify.css' />
+    <link type='text/css' rel='stylesheet' href='console/css/ystep.css' />
+    <link type='text/css' rel='stylesheet' href='console/css/css.css' media='all' />
+    <script type='text/javascript' src='resources/js/assets/javascripts/jquery/jquery.min.js'></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/jquery.jqGrid.min.js"></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/prettify.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/codetabs.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/themeswitchertool.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/i18n/grid.locale-cn.js'></script>
+    <script type="text/ecmascript" src='resources/js/My97DatePicker/WdatePicker.js'></script>
+    <script type='text/javascript' src='GetJS?button.js'></script>
+    <script type='text/javascript' src="GetJS?messagebox.js"></script>
+    <script type='text/javascript' src='GetJS?combobox.js'></script>
+    <script type='text/javascript' src="GetJS?dataform.js"></script>
+    <script type='text/javascript' src="GetJS?popupwindow.js"></script>
+    <script type='text/javascript' src='GetJS?js/ystep.js'></script>
+    <script type='text/javascript' src='console/js/public.js'></script>
+    <script type='text/javascript' src='GetJS?js/checkradio.js'></script>
+	<script type="text/javascript">
+	function InitPage() {
+	    //加载表头
+	    postData("GetXml2MqJXByIndx?INDX=" + GetRequestName("INDX"), null, true, callback1, null)
+
+	}
+	function stateShow(cellvalue, options, rowObject) {
+		var rt = "";
+		switch (rowObject.IS_ENABLED) {
+			case '0':
+				rt += "<span class=\"label label-warning\">否</span>";
+				break;
+			case '1':
+				rt += "<span class=\"label label-success\">是</span>";
+				break;
+		}
+		return rt;
+	}
+
+	function callback1(s) {
+	    var data = eval("(" + s + ")");
+	    if (data.ReturnData) {
+	        var json = data.ReturnData;
+	        json = json.replace(/"([^"]+)":/g, function (v) { return v.toUpperCase(); });
+	        var rtdata = eval("(" + json + ")");
+	        FormBind(rtdata);
+
+	        switch ($("#txtSTATUS").val()) {
+	        case '1':
+	            $("#txtSTATUS").val("正常");
+	            break;
+	        case '0':
+	            $("#txtSTATUS").val("异常");
+	            break;
+	        }
+	        
+	        switch ($("#txtIS_ENABLED").val()) {
+	        case '1':
+	            $("#txtIS_ENABLED").val("是");
+	            break;
+	        case '0':
+	            $("#txtIS_ENABLED").val("否");
+	            break;
+	        }
+	    }
+	}
+	function showSuccess(s) {
+	    var v = eval("(" + s + ")");
+	    if (v.IsOk == "1") {
+	    	var data = eval("(" + v.ReturnData + ")");
+	        if (data != null) {
+	        	var json = v.ReturnData.replace(/"([^"]+)":/g, function (val) { return val.toUpperCase(); });
+	            var data = eval("(" + json + ")");
+	            if (data.XMLDATA[0].INDX != "") {
+	                ShowMessages(v.ErrMessage, "友情提示", "msgok", function okFunction() {
+	                    DoCommand("GetXml2MqJXByIndx?INDX=" + data.XMLDATA[0].INDX);
+	                }, 0);
+	            }
+	        }
+	        else {
+	            ShowMessages(v.ErrMessage, "友情提示", "msgok", function okFunction() {
+	                window.location.href = "GetHTML?html/03Mq2XmlList.html";
+	            }, 0);
+	        }
+	    }
+	    else
+	        ShowMessages(v.ErrMessage, "友情提示", "msgwaring", null, 0);
+	} 
+	</script>
+</head>
+<body>
+	<div class='row-fluid' id='content-wrapper'>
+		<div class='span12'>
+			<div class='row-fluid'>
+				<table width="100%" border="0" cellspacing="0" cellpadding="0"
+					id="iideclShowTable">
+					<tr>
+						<td class="formLeft" id="leftBox" style="padding-right: 10px;"
+							valign="top">
+							<div class="row-fluid">
+								<div class='span12 box' style='margin-bottom: 0'>
+									<div style="margin-left: 10px;">
+										<div class="row-fluid">
+											<div class="span12">
+												<div class='span12 box'>
+													<div class='box-content'>
+													<table width="100%" border="0" cellspacing="0"
+															cellpadding="0"
+															style="margin-bottom: 10px; border-bottom: 1px solid #114;">
+															<tr>
+																<td
+																	style="text-align: left; padding-right: 10px; padding-left: 10px;">
+
+                                                                    <!-- <button class='btn btn-primary btn-small' id="btnDel"
+																		type="button" commandname="DelMqJXByIndx"
+																		commanddatas="FormToData('XmlData')" commandok="showSuccess">
+																		<i class='icon-save'></i>作 废
+																	</button> -->
+
+																</td>
+															</tr>
+														</table>
+														<table id="XmlData" width="100%" border="0"
+															cellspacing="0" class="tdTableBorder" cellpadding="0">
+															<tr>
+															<td style="width: 25%;" class="tdListBorder">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">实例名</td>
+																			<td class="tdCss"><input
+																				datafield="XmlData.QUARTZ_NAME" id="txtQUARTZ_NAME"
+																				type='text' ismust="1" errormsg="任务名称不能为空！" /></td>
+																		</tr>
+																	</table>
+																</td>
+																
+																<td style="width: 25%;" class="tdListBorder">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">MQ用户名</td>
+																			<td class="tdCss"><input
+																				datafield="XmlData.CONSUMER_USER" id="txtCONSUMER_USER"
+																				type='text'  /></td>
+																		</tr>
+																	</table>
+																</td>
+																<td style="width: 25%;" class="tdListBorder">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">MQ密码</td>
+																			<td class="tdCss"><input
+																				datafield="XmlData.CONSUMER_PWD" id="txtCONSUMER_PWD"
+																				type='text' /></td>
+																		</tr>
+																	</table>
+																</td>
+																<td style="width: 25%;" class="tdListBorder">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">MQ名称</td>
+																			<td class="tdCss"><input
+																				datafield="XmlData.SOURCE_MQ" id="txtSOURCE_MQ"
+																				type='text' ismust="1" errormsg="源MQ名称不能为空！"  /></td>
+																		</tr>
+																	</table>
+																</td>
+															</tr>
+															<tr>
+																<td style="width: 25%;" class="tdListBorder">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">密钥</td>
+																			<td class="tdCss"><input
+																				datafield="XmlData.AES_KEY" id="txtAES_KEY"
+																				type='text'  /></td>
+																		</tr>
+																	</table>
+																</td>
+																<td style="width: 25%;" class="tdListBorder" >
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">消息模式</td>
+																			<td class="tdCss"><input
+																				datafield="XmlData.CLASS_INVOKE" id="Text2" 
+																				type='text' /></td>
+																		</tr>
+																	</table>
+																</td>
+																<!-- <td style="width: 25%;" class="tdListBorder">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">是否有效</td>
+																			<td class="tdCss"><input
+																				datafield="XmlData.IS_ENABLED"
+																				id="txtIS_ENABLED" type='text' /></td>
+																		</tr>
+																	</table>
+																</td> -->
+																<td style="width: 25%;" class="tdListBorder">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">是否有效</td>
+																			<td class="tdCss"><select name="select"
+																				id="IS_ENABLED" datafield="XmlData.IS_ENABLED"
+																				style="width: 105%; border-radius: 0PX">
+																					<option value=""></option>
+																					<option value="0">否</option>
+																					<option value="1">是</option>
+																			</select></td>
+																		</tr>
+																	</table>
+																</td>
+																<td style="width: 25%;" class="tdListBorder">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">MQ类别</td>
+																			<td class="tdCss"><input
+																				datafield="XmlData.MQ_TYPE" id="TextMQ_TYPE" ismust="1" errormsg="MQ类型不能为空！"
+																				type='text' /></td>
+																		</tr>
+																	</table>
+																</td>
+															</tr>
+															<tr>
+																<td style="width: 25%;" class="tdListBorder">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">并发数</td>
+																			<td class="tdCss"><input
+																				datafield="XmlData.THREAD_COUNT"
+																				id="txtTHREAD_COUNT" type='text'/></td>
+																		</tr>
+																	</table>
+																</td>
+																<td style="width: 25%;" class="tdListBorder">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">源MQ地址</td>
+																			<td class="tdCss"><input
+																				datafield="XmlData.CONSUMER_URL" id="txtCONSUMER_URL"
+																				type='text' /> <input datafield="XmlData.INDX"
+																				id="txtINDX" type='hidden' /></td>
+																		</tr>
+																	</table>
+																</td>
+																<td style="width: 25%;" class="tdListBorder" colspan="1">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">版本号</td>
+																			<td class="tdCss"><input
+																				datafield="XmlData.REC_VER" id="txtREC_VER"
+																				type='text' readonly="readonly"/></td>
+																		</tr>
+																	</table>
+																</td>
+																<td style="width: 25%;" class="tdListBorder">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">创建时间</td>
+																			<td class="tdCss"><input
+																				datafield="XmlData.CREATE_TIME" id="txtCREATE_TIME" type='text' readonly="readonly" /></td>
+																		</tr>
+																	</table>
+																</td>
+															</tr>
+															<tr>
+																<td style="width: 25%;" class="tdListBorder" colspan="1">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">编码格式</td>
+																			<td class="tdCss"><input
+																				datafield="XmlData.ENCODING" id="txtENCODING"
+																				type='text'  /></td>
+																		</tr>
+																	</table>
+																</td>
+																<td style="width: 25%;" class="tdListBorder"colspan="4">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">源路径</td>
+																			<td class="tdCss"><input
+																				datafield="XmlData.SOURCE_PATH"
+																				id="txtSOURCE_PATH" type='text'ismust="1" errormsg="本地Xml源路径不能为空！"  /></td>
+																		</tr>
+																	</table>
+																</td>
+																
+															</tr>
+														</table>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+

@@ -1,0 +1,77 @@
+/* @version 1.0 | 20171019
+ * @license: none (public login)
+ */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+.clr:after {
+    content: " ";
+    display: block;
+    clear: both;
+    height: 0;
+}
+.clr {
+    zoom: 1;
+    display: table;
+}
+body{font-family: '微软雅黑',Arial;font-size: 14px;line-height:1.4666666em;}
+a{text-decoration: none;color: inherit;}
+input{box-sizing: border-box;font-family: "microsoft yahei";}
+img{vertical-align: bottom;}
+select:focus {outline-style:none;}
+
+.hide{ display: none; }
+.show{ display: block; }
+.nbr{ text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
+.bold{ font-weight: bold; }
+.over{ overflow:hidden; }
+.mt30{ margin-top: 30px; }
+.fl{ float: left;}
+.fr{float:right;}
+
+.radio,.checkbox{width:1.8rem;height:1.8rem;display:inline-block;position:relative;overflow:hidden;border:0.1rem solid #999;background:#fff;}
+.radio:checked,.checkbox:checked{border:none;}
+.radio:checked::before,.checkbox:checked:before{width:1.8rem;height:1.8rem;text-align:center;line-height:1.8rem;display:block;font-family:"iconfont";content:'\e616';color:#fff;font-size:2rem;position:absolute;top:0;left:0;}
+.radio{border-radius:1.8rem;}.radio:checked::before{border-radius:1.8rem;background:#0b77f2}
+.radio.r-orange:checked::before{background:#ff6600;}
+.checkbox{border-radius:.5rem;}.checkbox:checked::before{background:#ff6600}

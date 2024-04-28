@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>menu edit</title>
+    <meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<link href="../../resources/biz/css/reset.css" rel="stylesheet" type="text/css"/>
+    <link href="../../resources/biz/css/pop.css" rel="stylesheet" type="text/css"/>
+    <link href="../../resources/js/easyui1.9.4/themes/metro/easyui.css" rel="stylesheet"/>
+    <link href="../../resources/js/easyui1.9.4/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../resources/js/easyuiext/extend/css/IconExtension.css" rel="stylesheet" type="text/css"/>
+	<link href="../../resources/js/bootstrap/css/bootstrap.css" rel="stylesheet"/>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/jquery.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="../../resources/js/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/dataform.js"></script>
+</head>
+<style>
+
+</style>
+<body class="page-space">
+	<div class="container-fluid">
+		<div class="row">
+	        <div class="col-md-12 toolbar" id="topnav">
+	            <a href="javascript:void(0)" class="easyui-linkbutton" id="submit" iconcls="icon-save">保存</a>
+	        </div>
+	    </div>
+		<form id="fm2" method="post"> 
+			<div class="row p-top5">
+				<div class="col-xs-4">
+                    <div class="lbl-text tip-blue">上级菜单</div>
+		        </div>
+		        <div class="col-xs-8">                
+		            <input name="parentid" id="parentid" class="easyui-combotree" style="height:30px;width: 100%;" />
+		        </div>
+			</div>
+			<div class="row p-top5">
+				<div class="col-xs-4">
+                     <div class="lbl-text tip-red">菜单名称</div>
+		        </div>
+		        <div class="col-xs-8">                
+		            <input name="menu_text" id="menu_text" class="easyui-textbox" style="height:30px;width: 100%"/>
+		        </div>
+	        </div>
+			<div class="row p-top5">
+				<div class="col-xs-4">
+                    <div class="lbl-text tip-blue">菜单图标</div>
+		        </div>
+		        <div class="col-xs-8">                
+		            <input name="icon" id="icon" class="easyui-textbox" style="height:30px;width: 100%"/>
+		        </div>
+			</div>
+			<div class="row p-top5">
+				<div class="col-xs-4">
+                    <div class="lbl-text tip-blue">菜单链接</div>
+		        </div>
+		        <div class="col-xs-8">                
+		            <input name="url" id="url" class="easyui-textbox"  style="height:30px;width: 100%"/>
+		        </div>
+			</div>
+			<div class="row p-top5">
+				<div class="col-xs-4">
+                     <div class="lbl-text tip-blue">菜单顺序</div>
+		        </div>
+		        <div class="col-xs-8">                
+		            <input name="order_num" id="order_num" class="easyui-numberbox" style="height:30px;width: 100%"/>
+		        </div>
+			</div>
+			<div id="selectindx" style="display:none">
+				<input name="indx" id="indx" class="easyui-textbox" /> 
+			</div>
+        </form>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+/*<![CDATA[*/
+$(function() {
+	$('#parentid').combotree({url: '../../app/user/getcomboboxmenulist'});
+	
+	if (getRequestName("ValueId") != "") {
+		var result = getRequestName("ValueId").split(",");
+		var result0 = ('null'!= result[0]?result[0]:"");
+		var result1 = ('null'!= result[1]?result[1]:"");
+		var result2 = decodeURI(decodeURI(('null'!= result[2]?result[2]:"")));
+		var result3 = ('null'!= result[3]?result[3]:"");
+		var result4 = ('null'!= result[4]?result[4]:"");
+		var result5 = ('null'!= result[5]?result[5]:"");
+		
+		$("#parentid").combotree('setValue',result0);
+		$("#order_num").textbox('setValue',result1);
+		$("#menu_text").textbox('setValue',result2);
+		$("#icon").textbox('setValue',result3);
+		$("#url").textbox('setValue',result4);
+		$("#indx").textbox('setValue',result5);
+		
+		if(result0 == '0'){
+			document.getElementById("parentid").style.display="none";
+			//document.getElementById("parentid").style.readonly="true";
+		}
+	}
+	
+	/* $('#parentid').combotree({
+	    url: '../../app/user/getcomboboxmenulist',
+	    required: true
+	}); */
+	
+	/* $.ajax({
+		  url:'../../app/user/getcomboboxmenulist',
+	      type:"POST",
+	      dataType:"json",
+	      success:function(result){
+			$('#parentid').combotree({'data': result});//id text
+	     }
+	}); */
+});
+$("#submit").click(function(){
+	/* if($("#parentid").combotree("getText")==""){
+	 	$.messager.alert("提示信息", "请选择上级菜单！");
+	 	return;
+	} */
+	if($('#menu_text').val()==""){
+		$.messager.alert("提示信息", "请填写菜单名称！");
+		return;
+	}
+	var param = $.getformElementParams($('#fm2'));
+	
+    $.ajax({
+        url:'../../app/user/savemenu',
+        type:"POST",
+        cache:false,
+        dataType:"json",
+        data:param,
+        success:function(result){  
+		     if(result.IsOk == '1'){  
+		         $.messager.alert("提示信息",result.ErrMessage,'info', function () {
+		        	 $("#indx").textbox('setValue',result.indx);
+			 	     parent.$('#Pop_Ship').window('close');
+                     parent.$('#dg').treegrid('reload');
+                     
+                     window.parent.$('#menu ul').find('iframeHright')[0].contentWindow.$('#dg').treegrid('reload');
+                     parent.document.getElementById('iframeHright').contentWindow.$('#dg').datagrid('reload');
+	             });
+		     }else{  
+		         $.messager.alert("提示信息",result.ErrMessage);
+		     }  
+		 }
+    });
+});
+
+
+/*]]>*/
+</script>

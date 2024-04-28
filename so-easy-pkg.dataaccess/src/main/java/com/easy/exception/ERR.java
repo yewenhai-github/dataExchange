@@ -1,0 +1,76 @@
+package com.easy.exception;
+
+/**
+ * so-easy private
+ * 
+ * @author yewenhai 2020-02-16
+ * 
+ * @version 7.0.0
+ * 
+ */
+public interface ERR {
+	/*****************System error code****************************/
+	int SUCCESS = 0;
+	int UNREGISTERED_ERROR = -1; 
+	int SERVICE_NOT_FOUND = -2;
+	int DEFAULT_LOG_CODE = -3;
+	int UNKOWN_ERROR = -4;
+	int RESULT_NOT_FOUND = -5;
+	int UNKOWN_INTERFACE = -6;
+	int FW_INVALID_ERRCODE = -7;
+	int USER_LOGIN_FAILD = -8;
+	int NO_PERMISSION = -9;
+	int GENERIC_ERR =  2007529;
+	int DB_ERROR = 1111;
+	int DB_SAME_PK = 100011;
+	int DB_INVALID_QUERY = 100012;
+	int DB_TOO_LARGE_VALUE = 100013;
+	int DB_SEQUENCE_ERROR = 100014;
+	int DB_TABLENAME_ERROR = 100015;
+	int DB_FOREIGN_KEY_CONSTRAINT = 100016;
+	int DB_SEQUENCE_ERROR_REPLACE = 100017;
+	int DB_INVALID_CONNETION = 100018;
+	int DB_FIELD_NOT_NULL = 100003;
+	int DB_INVALID_SEQUENCE_NAME = 100019;
+	int DB_CNT_OPERATE_RECORD_FEE_ERROR = 10000020;
+	int DB_CNT_OPERATE_RECORD_NO_RULE_ERROR = 10000021;
+	int DB_CNT_OPERATE_RECORD_NO_CUST = 10000022;
+	int ORA_17002 = 17002;
+	int DB_UPDATE_NOT_ALLOWED = 1002;
+	int FW_HASHMAP_TO_ENTITY_ERR = 1003;
+	int FW_REQUEST_XML_PARSE_ERR = 1004;
+	int FW_PARSE_HASHMAP_ERR = 1005;
+	int FW_XML_PARSE_ERR = 1006;
+	int FW_INVOKE_METHOD_ERR = 1007;
+	int SYSM_INIT_MAIL_FAIL = 1008;
+	int ENCRYPT_ERR = 1009;
+	int SYSM_SEND_MAIL_FAIL = 1010;
+	int FIND_USER_ERR = 1011;
+	int ERROR_ALREADYEXIST_WITHOUTOBJNAME = 1012;
+	int SECURITY_NO_RIGHT = 1013;
+	int FW_CAST_ERR = 1014;
+	int DB_SELECT_NOT_ALLOWED = 1015;
+	int DB_DELETE_NOT_ALLOWED = 1016;
+	
+	int NoSuchAlgorithm = 100;
+	int NoSuchPadding = 100;
+	int InvalidKey = 100;
+	int UnsupportedEncoding = 100;
+	int IllegalBlockSize = 100;
+	int BadPadding = 100;
+	public static int GET_MAIL_SESSION_ERR = 10001;// 获取邮件会话时发生错误!
+	public static int MAIL_ADDRESS_NULL = 10002;// 未输入收件人地址
+	public static int CAN_NOT_CREATE_MSG = 10003;// 无法创建信息对象
+	public static int DB_DATA_CONFLICT = 10005; // 数据版本冲突
+	
+	int RULE_INVALID_001 = 10006;
+	int RULE_INVALID_002 = 10007;
+	int RULE_INVALID_003 = 10008;
+	int RULE_INVALID_004 = 10009;
+	int RULE_INVALID_005 = 10010;
+	int RULE_INVALID_006 = 10011;
+	int RULE_INVALID_007 = 10012;
+	int RULE_INVALID_008 = 10013;
+	int NOT_FOUND_FIELD_MAPPING = 10014;
+	int INVALID_RULE_EXPRESS = 10015;
+}

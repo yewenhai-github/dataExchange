@@ -1,0 +1,578 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>DB2AnyXml配置管理</title>
+    <!--[if lt IE 9]>
+    <script src='resources/js/assets/javascripts/html5shiv.js' type='text/javascript'></script>
+    <![endif]-->
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport' />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/bootstrap/bootstrap.css' media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/light-theme.css' id='color-settings-body-color' media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/demo.css' media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/jquery-ui.css' media='screen' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/ui.jqgrid.css' media='screen' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/prettify.css' />
+    <link type='text/css' rel='stylesheet' href='console/css/ystep.css' />
+    <link type='text/css' rel='stylesheet' href='console/css/css.css' media='all' />
+    <script type='text/javascript' src='resources/js/assets/javascripts/jquery/jquery.min.js'></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/jquery.jqGrid.min.js"></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/prettify.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/codetabs.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/themeswitchertool.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/i18n/grid.locale-cn.js'></script>
+    <script type="text/ecmascript" src='resources/js/My97DatePicker/WdatePicker.js'></script>
+    <script type='text/javascript' src='GetJS?button.js'></script>
+    <script type='text/javascript' src="GetJS?messagebox.js"></script>
+    <script type='text/javascript' src='GetJS?combobox.js'></script>
+    <script type='text/javascript' src="GetJS?dataform.js"></script>
+    <script type='text/javascript' src="GetJS?popupwindow.js"></script>
+    <script type='text/javascript' src='GetJS?js/ystep.js'></script>
+    <script type='text/javascript' src='console/js/public.js'></script>
+    <script type='text/javascript' src='GetJS?js/checkradio.js'></script>
+</head>
+<body class="page-space">
+    <div class='row-fluid' id='content-wrapper'>
+        <div class='span12'>
+            <div class='row-fluid'>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" id="iideclShowTable">
+                    <tr>
+                        <td class="formLeft" id="leftBox" style="padding-right: 0px;" valign="top">
+                            <div class="row-fluid">
+                                <div class='span12 box' style='margin-bottom: 0'>
+                                    <div style="margin-left: 10px;">
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <!-- <div class='span12 box'> -->
+                                                    <div class='box-header'>
+                                                        <div class='title'>
+                                                            <div class='icon-edit' style="color: #00F;">
+                                                            </div>
+                                                            <strong>表头信息</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class='box-content'>
+														<table width="100%" border="0" cellspacing="0"
+															cellpadding="0"
+															style="margin-bottom: 10px; border-bottom: 1px solid #114;">
+															<tr>
+																<td
+																	style="text-align: left; padding-right: 10px; padding-left: 10px;">
+																	<button id="btnHistory"
+																		class='btn btn-primary btn-small'
+																		style='padding-left: 10px;'
+																		onclick="javascript:history.go(-1)">
+																		<i class='icon-reply-all'></i>返回
+																	</button>
+																	<button class='btn btn-primary btn-small' id="btnSave"
+																		type="button" commandname="SaveAnyXml2DBByIndx"
+																		commanddatas="FormToData('XmlData')"
+																		commandok="showSuccess">
+																		<i class='icon-save'></i>保 存
+																	</button>
+																	<!-- <button id="btnDel" class='btn btn-primary btn-small'
+																		commandname="DelAnyXml2DBByIndx"
+																		commanddatas="FormToData('XmlData');"
+																		commandok="showSuccess" confirmmessage="您确定要做失效操作吗？"
+																		isvalidate="0">
+																		<i class='icon-remove'></i>作 废
+																	</button> -->
+
+																</td>
+															</tr>
+														</table>
+														<table id="XmlData" width="100%" border="0" cellspacing="0" id="XmlData" class="tdTableBorder"
+                                                            cellpadding="0">
+                                                            <tr>
+																<td style="width: 25%;" class="tdListBorder">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">数据库类型</td>
+																			<td class="tdCss"><select name="select" id="txtDB_TYPE" datafield="XmlData.DB_TYPE" 
+																				style="width: 102%; border-radius: 0PX">
+																					<option value=""></option>
+																					<option value="Oracle">Oracle</option>
+																					<option value="MySql">MySql</option>
+																					<option value="SQLServer">SQLServer</option>
+																			</select></td>
+																		</tr>
+																	</table>
+																</td>
+																<td style="width: 25%;" class="tdListBorder">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">地址</td>
+																			<td class="tdCss">
+																				<input datafield="XmlData.DB_DRIVER_URL" id="txtDB_DRIVER_URL" type='text'  />
+																			</td>
+																		</tr>
+																	</table>
+																</td>
+															</tr>
+															<tr>
+																<td style="width: 25%;" class="tdListBorder">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">用户名</td>
+																			<td class="tdCss"><input
+																				datafield="XmlData.DB_USER"
+																				id="txtPRODUCER_USER" type='text'  /></td>
+																		</tr>
+																	</table>
+																</td>
+																<td style="width: 25%;" class="tdListBorder">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">密码</td>
+																			<td class="tdCss"><input
+																				datafield="XmlData.DB_PASSWORD"
+																				id="txtPRODUCER_PWD" type='text' /></td>
+																		</tr>
+																	</table>
+																</td>
+															</tr>
+                                                            <tr>
+                                                                <td style="width: 25%;" class="tdListBorder">
+                                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                        <tr>
+                                                                            <td class="titleCss100">
+                                                                               	 实例名
+                                                                            </td>
+                                                                            <td class="tdCss">
+                                                                                <input datafield="XmlData.INDX" id="txtIINDX" type='hidden' />
+                                                                                <input datafield="XmlData.QUARTZ_NAME" id="txtQUARTZ_NAME" type='text' ismust="1"
+                                                                                    errormsg="实例名不能为空！" />
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                                <td style="width: 25%;" class="tdListBorder">
+																	<table width="100%" border="0" cellspacing="0"
+																		cellpadding="0">
+																		<tr>
+																			<td class="titleCss100">是否有效</td>
+																			<td class="tdCss"><select name="select" 
+																				id="IS_ENABLED" datafield="XmlData.IS_ENABLED"
+																				style="width: 102%; border-radius: 0PX">
+																					<option value=""></option>
+																					<option value="0">否</option>
+																					<option value="1" selected="true">是</option>
+																			</select></td>
+																			
+																			<select name="select" style="display: none" id="DATA_TYPE" datafield="XmlData.DATA_TYPE" style="width: 102%; border-radius: 0PX">
+																						<option value="EdiTab">EdiTab</option>
+																				</select>
+																		</tr>
+																	</table>
+																</td>
+															</tr>
+															<tr>
+                                                               <td style="width: 25%;" class="tdListBorder">
+                                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                        <tr>
+                                                                            <td class="titleCss100">
+                                                                                	消息类型
+                                                                            </td>
+                                                                            <td class="tdCss">
+                                                                                <input datafield="XmlData.MESSAGE_TYPE" id="txtMESSAGE_TYPE" type='text' ismust="1"
+                                                                                    errormsg="消息类型不能为空！" />
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                                <td style="width: 25%;" class="tdListBorder">
+                                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                        <tr>
+                                                                            <td class="titleCss100">
+                                                                               	 流水号名称
+                                                                            </td>
+                                                                            <td class="tdCss">
+                                                                                <input datafield="XmlData.SERIAL_NAME" id="txtSERIAL_NAME" type='text' ismust="1"
+                                                                                    errormsg="流水号名称不能为空！" />
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td style="width: 25%;" class="tdListBorder">
+                                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                        <tr>
+                                                                            <td class="titleCss100">
+                                                                                	创建时间
+                                                                            </td>
+                                                                            <td class="tdCss">
+                                                                                <input datafield="XmlData.CREATE_TIME" readonly="readonly" id="Text1" type='text' />
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                                <td style="width: 25%;" class="tdListBorder">
+                                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                        <tr>
+                                                                            <td class="titleCss100">
+                                                                                	修改时间
+                                                                            </td>
+                                                                            <td class="tdCss">
+                                                                                <input datafield="XmlData.MODIFY_TIME" readonly="readonly" id="Text2" type='text' />
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+															</tr>
+															<tr>
+                                                                <td style="width: 25%;" class="tdListBorder">
+                                                                    <table width="100%" border="0" cellspacing="0" d cellpadding="0">
+                                                                        <tr>
+                                                                            <td class="titleCss100">
+                                                                                	版本号
+                                                                            </td>
+                                                                            <td class="tdCss">
+                                                                                <input datafield="XmlData.REC_VER" id="txtREC_VER" readonly="readonly" type='text' />
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                    <div class='row-fluid'>
+                                                        <div class='span12 box'>
+                                                            <div class='box-header'>
+                                                                <div class='title'>
+                                                                    <div class='icon-edit' style="color: #00F;">
+                                                                    </div>
+                                                                    <strong>表体信息</strong></div>
+                                                            </div>
+                                                            <div class='responsive-table' id="XmlTableList" style="margin-top: 5px;">
+                                                                <table id="jg">
+                                                                </table>
+                                                                <div id="XmlTablePager" style="height: 62px;">
+                                                                </div>
+                                                            </div>
+                                                          <div class='box-content'>
+                                                            <table width="100%" border="0" cellspacing="0"
+																cellpadding="0"
+																style="margin-bottom: 10px; border-bottom: 1px solid #114;">
+																<tr>
+																	<td
+																		style="text-align: left; padding-right: 10px; padding-left: 10px;">
+																		<button class='btn btn-primary btn-small' id="btnSave"
+																			type="button" commandname="SaveAnyXml2DBByPIndx"
+																			commanddatas="FormToData('AnyXmlData')"
+																			commandok="showSuccessP">
+																			<i class='icon-save'></i>保 存
+																		</button>
+																		<button id="btnDel1" class='btn btn-primary btn-small'
+																		    commandname="DelAnyXml2DBByPIndx" commanddatas="getId('jg')" 
+                                                                            validate="getId('jg')"  enablevalue="1"
+																			commandok="showSuccessGoods" confirmmessage="您确定要做失效操作吗？"
+																			isvalidate="0">
+																			<i class='icon-remove'></i>作 废
+																		</button>
+																	</td>
+																</tr>
+															</table>
+															
+															<table id="XmlData" width="100%" border="0"
+																cellspacing="0" class="tdTableBorder" cellpadding="0">
+																<tr>
+																	<td style="width: 25%;" class="tdListBorder">
+																		<table width="100%" border="0" cellspacing="0"
+																			cellpadding="0">
+																			<tr>
+																				<td class="titleCss100">序号</td>
+																				<td class="tdCss"><input
+																					datafield="AnyXmlData.SEQ_NO" id="txtSEQ_NO"
+																					type='text'  /></td>
+																			</tr>
+																		</table>
+																	</td>
+																	<td style="width: 25%;" class="tdListBorder">
+																		<table width="100%" border="0" cellspacing="0"
+																			cellpadding="0">
+																			<tr>
+																				<td class="titleCss100">表名</td>
+																				<td class="tdCss"><input
+																					datafield="AnyXmlData.TABLE_NAME"
+																					id="txtTABLE_NAME" type='text'/></td>
+																			</tr>
+																		</table>
+																	</td>
+															</tr>
+															<tr>
+																	<td style="width: 25%;" class="tdListBorder">
+																		<table width="100%" border="0" cellspacing="0"
+																			cellpadding="0">
+																			<tr>
+																				<td class="titleCss100">主键名称</td>
+																				<td class="tdCss"><input
+																					datafield="AnyXmlData.INDX" id="txtINDX"
+																					type='hidden' /> <input
+																					datafield="AnyXmlData.P_INDX" id="txtP_INDX"
+																					type='hidden' /> <input
+																					datafield="AnyXmlData.INDX_NAME" id="txtINDX_NAME"
+																					type='text'/></td>
+																			</tr>
+																		</table>
+																	</td>
+																	<td style="width: 25%;" class="tdListBorder">
+																		<table width="100%" border="0" cellspacing="0"
+																			cellpadding="0">
+																			<tr>
+																				<td class="titleCss100">消息节点名</td>
+																				<td class="tdCss"><input
+																					datafield="AnyXmlData.XML_DOCUMENT_NAME"
+																					id="txtPINDX_NAME" type='text'  /></td>
+																			</tr>
+																		</table>
+																	</td>
+																	
+																</tr>
+																<tr>
+																	<td style="width: 100%;" class="tdListBorder" colspan="4">
+																		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+																			<tr>
+																				<td class="titleCss100">字段转换</td>
+																				<td class="tdCss"><textarea style="width: 100%;height: 80px;" datafield="AnyXmlData.XML_COULMN_MAPPING" id="txtXML_PARENT_DOCUMENT"></textarea></td>
+																			</tr>
+																		</table>
+																	</td>
+																</tr>
+															</table>
+															</div>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <!-- </div> -->
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+function InitPage() {
+    //加载表头
+    postData("GetAnyXml2DBByIndx?INDX=" + GetRequestName("INDX"), null, true, callback1, null)
+    document.getElementById("txtP_INDX").value = GetRequestName("INDX");
+    
+    //加载商品表体
+    $("#jg").jqGrid({
+        datatype: "json",
+        url: "GetAnyXml2DBSqlByPindx?INDX=" + GetRequestName("INDX"),
+        colNames: ['序号', '主键', '外键', '消息节点名', '数据库表名', '主键名称',  '是否有效', '创建时间', '修改时间'],
+        colModel: [
+            { name: 'SEQ_NO', index: 'SEQ_NO', width: 60 },
+            { name: 'INDX', index: 'INDX', width: 60, hidden: true },
+            { name: 'P_INDX', index: 'P_INDX', width: 60, hidden: true },
+            { name: 'XML_DOCUMENT_NAME', index: 'XML_DOCUMENT_NAME', width: 228 },
+            { name: 'TABLE_NAME', index: 'TABLE_NAME', width: 228 },
+            { name: 'INDX_NAME', index: 'INDX_NAME', width: 228 },
+            { name: 'IS_ENABLED', index: 'IS_ENABLED', width: 100, formatter: stateShow },
+            { name: 'CREATE_TIME', index: 'CREATE_TIME', width: 200, width: 150, formatter: "date", formatoptions: { srcformat: 'Y-m-d H:i:s', newformat: 'Y-m-d H:i:s'} },
+            { name: 'MODIFY_TIME', index: 'MODIFY_TIME', width: 200, width: 150, formatter: "date", formatoptions: { srcformat: 'Y-m-d H:i:s', newformat: 'Y-m-d H:i:s'} } 
+        ],
+        width: 800,
+        autowidth: true,
+        height: 165,
+        rowNum: 5, //每页显示记录数
+        rowList: [5, 10, 15], //可调整每页显示的记录数
+        rownumbers: true,
+        rownumWidth: 30,
+        viewrecords: true, //是否显示行数 
+        loadui: "none",       //隐藏默认的loading
+        //shrinkToFit: false,  //滚动条
+        pager: "#XmlTablePager", //分页工具栏
+        altRows: true,
+        altclass: 'someClass',
+        sortable: true,
+        shrinkToFit: false,
+        autoScroll: true,
+        onSelectRow: function (rowid, status, e) {
+            DoCommand("GetAnyXml2DBMapSqlByIndx?INDX=" + $("#jg").getRowData(rowid).INDX, "AnyXmlData");
+        },
+        onSortCol: function (colName, Id, sortorder) {
+            $("#jg").jqGrid('setGridParam', {
+                url: "GetAnyXml2DBSqlByPindx?INDX=" + INDX,
+                postData: {
+                    'OrderField': colName,
+                    'Order': sortorder,
+                    'CommandData': FormToData('SearchTable')
+                }, //发送数据 
+                page: 1
+            }).trigger("reloadGrid"); //重新载入 
+        },
+        beforeRequest: function () {
+            if (top.showloading) {
+                top.showloading();
+            }
+        },
+        gridComplete: function () {
+            if (top.hideloading) {
+                top.hideloading();
+            }
+        }
+    });
+}
+
+function stateShow(cellvalue, options, rowObject) {
+    var rt = "";
+    switch (rowObject.IS_ENABLED) {
+        case '0':
+            rt += "否";
+            break;
+        case '1':
+            rt += "是";
+            break;
+    }
+    return rt;
+}
+
+function callback1(s) {
+    var data = eval("(" + s + ")");
+    if (data.ReturnData) {
+        var json = data.ReturnData;
+        json = json.replace(/"([^"]+)":/g, function (v) { return v.toUpperCase(); });
+        var rtdata = eval("(" + json + ")");
+        FormBind(rtdata);
+
+        switch ($("#txtSTATUS").val()) {
+            case '1':
+                $("#txtSTATUS").val("正常");
+                break;
+            case '0':
+                $("#txtSTATUS").val("异常");
+                break;
+        }
+
+        switch ($("#txtIS_ENABLED").val()) {
+            case '1':
+                $("#txtIS_ENABLED").val("是");
+                break;
+            case '0':
+                $("#txtIS_ENABLED").val("否");
+                break;
+        }
+
+    }
+}
+function showSuccess(s) {
+	 var v = eval("(" + s + ")");
+  if (v.IsOk == "1") {
+  	var data = eval("(" + v.ReturnData + ")");
+      if (data != null) {
+      	var json = v.ReturnData.replace(/"([^"]+)":/g, function (val) { return val.toUpperCase(); });
+          var data = eval("(" + json + ")");
+          if (data.XMLDATA[0].INDX != "") {
+              ShowMessages(v.ErrMessage, "友情提示", "msgok", function okFunction() {
+                  DoCommand("GetAnyXml2DBByIndx?INDX=" + data.XMLDATA[0].INDX);
+                  $("#jg").jqGrid('setGridParam', {
+                      url: "GetAnyXml2DBSqlByPindx?INDX=" + data.XMLDATA[0].INDX,
+                      /* postData: {
+                          'OrderField': colName,
+                          'Order': sortorder,
+                          'CommandData': FormToData('SearchTable')
+                      }, //发送数据  */
+                      page: 1
+                  }).trigger("reloadGrid");
+              }, 0);
+          }
+      }
+      else {
+          ShowMessages(v.ErrMessage, "友情提示", "msgok", function okFunction() {
+              window.location.href = "GetHTML?html/02AnyXml2DBList.html";
+          }, 0);
+      }
+  }
+  else
+      ShowMessages(v.ErrMessage, "友情提示", "msgwaring", null, 0);
+}
+
+function showSuccessP(s) {
+	var v = eval("(" + s + ")");
+	if (v.IsOk == "1") {
+		var data = eval("(" + v.ReturnData + ")");
+		if (data != null) {
+			var json = v.ReturnData.replace(/"([^"]+)":/g, function (val) { return val.toUpperCase(); });
+			var data = eval("(" + json + ")");
+			if (data.ANYXMLDATA[0].INDX != "") {
+				ShowMessages(v.ErrMessage, "友情提示", "msgok", function okFunction() {
+					//DoCommand("GetDB2AnyXmlSqlByPindx?INDX=" + data.DB2ANYDATA[0].INDX);
+					if(data.ANYXMLDATA[0].P_INDX!=null){
+						$("#jg").jqGrid('setGridParam', {
+							url: "GetAnyXml2DBSqlByPindx?INDX=" + $("#txtIINDX").val(),
+							page: 1
+						}).trigger("reloadGrid");
+					}
+				}, 0);
+
+			} else {
+				ShowMessages(v.ErrMessage, "友情提示", "msgok", function okFunction() {
+					window.location.href = "GetHTML?html/02AnyXml2DBList.html";
+				}, 0);
+			}
+		}
+	}
+	else
+		ShowMessages(v.ErrMessage, "友情提示", "msgwaring", null, 0);
+}
+//获取所有Id
+function getId(gridId) {
+	var IsAll = 0;
+	if ($("#jg").attr("checked") == true)
+		IsAll = 1;
+	var rowKey = $("#jg").getGridParam("selrow");
+	if (IsAll == 0) {
+		if (!rowKey)
+			ShowMessages("对不起,您没有选中任何记录", "系统提示", "msgwaring", null, 0);
+		else
+			return returnEnd(gridId, IsAll);
+	}
+	else
+		return returnEnd(gridId, IsAll);
+}
+
+function returnEnd(gridId, IsAll) {
+	var selectedIDs = $("#" + gridId + "").getGridParam("selarrrow");
+  var strJson = "";
+  var strJsons = "";
+  var P_INDX="";
+  var jsonArr = new Array();
+  var jsPindx= new Array();
+  for (var i = 0; i < selectedIDs.length; i++) {
+      var rowData = $("#" + gridId + "").jqGrid("getRowData", selectedIDs[i]); //根据上面的id获得本行的所有数据
+      strJson = "{\"INDX\":\"" + rowData.INDX + "\",\"P_INDX\":\"" + rowData.P_INDX + "\"}";
+      jsonArr[i] = strJson;
+  }
+  strJsons = jsonArr.join(',');
+  return "{\"key\":[" + strJsons + "],\"IsAll\":[{\"isall\":\"" + IsAll + "\"}]}";
+}
+
+function showSuccessGoods(s) {
+	var v = eval("(" + s + ")");
+	if (v.IsOk == "1") {
+		
+		ShowMessages(v.ErrMessage, "友情提示", "msgok", function okFunction() {
+			//DoCommand("GetDB2AnyXmlSqlByPindx?INDX=" + data.DB2ANYDATA[0].INDX);
+				$("#jg").jqGrid('setGridParam', {
+					url: "GetAnyXml2DBSqlByPindx?INDX=" + $("#txtIINDX").val(),
+					page: 1
+				}).trigger("reloadGrid");
+		}, 0);
+		
+	}
+	else
+		ShowMessages(v.ErrMessage, "系统提示", "msgwaring", null, 0);
+}
+</script>

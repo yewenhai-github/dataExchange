@@ -1,0 +1,261 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>综合查询</title>
+    <!--[if lt IE 9]>
+    <script src='../resources/js/assets/javascripts/html5shiv.js' type='text/javascript'></script>
+    <![endif]-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/bootstrap/bootstrap.css' media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/light-theme.css' 
+    id='color-settings-body-color' media='all'/>
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/demo.css' media='all'/>
+    <link type="text/css" rel='stylesheet' href="resources/js/jqgrid/css/jquery-ui.css" media="screen" />
+    <link type="text/css" rel='stylesheet' href="resources/js/jqgrid/css/ui.jqgrid.css" media="screen" />
+    <link type="text/css" rel='stylesheet' href="resources/js/jqgrid/css/prettify.css" />
+    <link type='text/css' rel='stylesheet' href='resources/css/ystep.css' />
+    <link type='text/css' rel='stylesheet' href='resources/css/Css.css' media='all'/>
+    <link rel="stylesheet" href="resources/js/assets/layui/css/layui.css"  media="all">
+    <script type='text/javascript' src='resources/js/assets/javascripts/jquery/jquery.min.js' ></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/jquery.jqGrid.min.js"></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/prettify.js"></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/codetabs.js"></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/themeswitchertool.js"></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/i18n/grid.locale-cn.js"></script>
+    <script type="text/javascript" src="resources/js/My97DatePicker/WdatePicker.js"></script>
+    <script src="resources/js/assets/javascripts/jquery/jquery.form.js" type="text/javascript"></script>
+    <script src='resources/js/assets/javascripts/bootstrap/bootstrap.min.js' type='text/javascript'></script>
+    <script type="text/javascript" src="GetJS?messagebox.js"></script>
+    <script type="text/javascript" src="GetJS?combobox.js"></script>
+    <script type="text/javascript" src="GetJS?dataform.js"></script>
+    <script type="text/javascript" src="GetJS?button.js"></script>
+    <script type="text/javascript" src="GetJS?popupwindow.js"></script> 
+    <script type='text/javascript' src='GetJS?js/ystep.js'></script>
+    <script type='text/javascript' src='resources/js/publicOld.js'></script>
+    <script type='text/javascript' src='GetJS?js/checkradio.js'></script>
+    <script type='text/javascript' src='resources/js/assets/layui/layui.js'></script>
+    <script src="resources/js/dispatchCommon.js" type="text/javascript"></script>
+    <script src="resources/forms/mess/ConfigPathsList.js" type="text/javascript"></script>
+</head>
+<body class='contrast-red'>
+    <div class='row-fluid' id='content-wrapper'>
+         <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 10px;
+             border-bottom: 1px solid #eee;">
+             <tr>
+                 <td style="text-align: left; padding-right: 10px; padding-left: 10px;">
+                      <button class='btn btn-primary btn-small' id="btnSoEnt" style='margin-bottom: 5px'>
+                          <i class='icon-search'></i>查 询
+                      </button>
+                      <button class='btn btn-primary btn-small' onclick="ClearAllInput('SearchTable')"
+                          style='margin-bottom: 5px'>
+                          <i class='icon-trash'></i>重 置
+                      </button>
+                      <button id="btnNew" class='btn btn-primary btn-small' style='margin-bottom: 5px'
+                          onclick="newBtn();">
+                          <i class='icon-file'></i>新 建
+                      </button>
+                      <button id="btnDel" class='btn btn-primary btn-small' style='margin-bottom: 5px'
+                          commandname="#DelAll()">
+                          <i class='icon-file'></i>删除
+                      </button>
+                      <button id="btnMapper" class='btn btn-primary btn-small' style='margin-bottom: 5px'
+                          commandname="#ConfigMapper()">
+                                     <i class='icon-file'></i>转换映射
+                                 </button>
+								<div class='btn-group'>
+									<form class="layui-form" action="">
+										<div class="layui-form-item" style="margin-bottom:0px;">
+								<label class="layui-form-label">自动处理</label>
+								<div class="layui-input-block" style="margin-left:75px;">
+										      <input type="checkbox" id="scanna" name="close" lay-skin="switch" lay-filter="switchSacan" lay-text="ON|OFF">
+										    </div>
+									  </div>
+									</form>
+								</div>
+                            </td>
+                        </tr>
+                    </table>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" id="SearchTable">
+                        <tr>
+                            <td style="width: 50%; padding: 2px;">
+                     <table width="100%" border="0" cellspacing="0" cellpadding="0" >
+                         <tr>
+                          <td style="width: 25%; ">
+                       		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+                           	<tr>
+                               <td class="titleCss">
+                                	   配置名称
+                               </td>
+                               <td class="tdCss">
+                                   <input id='CONFIGNAME' type='text'datafield="SearchTable.CONFIGNAME"
+                                      startval="%" endval="%" />
+                              	 </td>
+                          			 </tr>
+                     			  </table>
+                 			 </td>
+                 			 <td style="width: 25%; ">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                           <tr>
+                                <td class="titleCss">
+                                                                                        配置目的
+                                </td>
+                                <td class="tdSelectCss">
+                                         <input id="FUNCTIONTYPE" name="FUNCTIONTYPE" type="combobox" datafield="SearchTable.FUNCTIONTYPE" 
+                                            valuefield="SearchTable.FUNCTIONTYPE"
+                             			checkfield="CODE,NAME" columnheader="编号,名称" columns="CODE,NAME"
+                             			datasourcename="((select 1 as CODE, '转换' as NAME from dual) 
+                             			union all 
+                             			(select 2 as CODE, '发送' as NAME from dual) 
+                             			union all 
+                             			(select 3 as CODE, '转换并发送' as NAME from dual) 
+                             			union all 
+                             			(select 4 as CODE, '合成' as NAME from dual) 
+                             			union all (select 5 as CODE, '合成并发送 ' as NAME from dual) ) " 
+                             			showfields="CODE,NAME" savefield="CODE"
+                            				isshowall="1" errmessage="没有这个功能类型！"/></td>
+                                </td>
+                            </tr>
+                        </table>
+                			   </td>
+                			   <td style="width: 25%; ">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                           <tr>
+                                <td class="titleCss">
+                                                                                       源文件类型
+                                </td>
+                                <td class="tdSelectCss">
+                                	<input id="SOURCEFILETYPE" name="SOURCEFILETYPE" type="combobox" 
+                                				valuefield="SearchTable.SOURCEFILETYPE"
+                                				datafield=""SearchTable.SOURCEFILETYPE"" 
+                         								checkfield="CODE,NAME" columnheader="编号,名称" columns="CODE,NAME"
+                         								datasourcename="((select 1 as CODE, 'XML(zip)' as NAME from dual) 
+                         								union all 
+                         								(select 2 as CODE, 'Excel(zip)' as NAME from dual) 
+                         								union all 
+                         								(select 3 as CODE, 'DB数据库' as NAME from dual) )" showfields="CODE,NAME" savefield="CODE"
+                        								 isshowall="1" errmessage="没有这个源文件类型！"
+                        								 、 />
+                                   </td>
+                                </td>
+                            </tr>
+                        </table>
+                			   </td>
+                			   <td style="width: 25%; ">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                           <tr>
+                                <td class="titleCss">
+                                                                                       目标文件类型
+                                </td>
+                                <td class="tdSelectCss">
+                                      	<input id="TARGETFILETYPE" name="TARGETFILETYPE" type="combobox"  
+                                      			valuefield="SearchTable.TARGETFILETYPE" 
+                                      			datafield="SearchTable.TARGETFILETYPENAME"
+                         								checkfield="CODE,NAME" columnheader="编号,名称" columns="CODE,NAME"
+                         								datasourcename="((select 1 as CODE, 'XML' as NAME from dual) 
+                         								union all 
+                         								(select 2 as CODE, 'Excel' as NAME from dual))" showfields="CODE,NAME" savefield="CODE"
+                        								 isshowall="1" errmessage="没有这个生成目标文件类型！"  />
+                                      </td>
+                                </td>
+                            </tr>
+                        </table>
+                			   </td>
+                         </tr>
+                         <tr>
+                			    <td style="width: 25%; ">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                           <tr>
+                                <td class="titleCss">
+                                                                                      接收类型
+                                </td>
+                                <td class="tdSelectCss">
+                                  <input id="RECEIVETYPE" name="RECEIVETYPE" type="combobox" 
+                                      valuefield="SearchTable.RECEIVETYPE" 
+                                      datafield="SearchTable.RECEIVETYPE" 
+                         								checkfield="CODE,NAME" columnheader="编号,名称" columns="CODE,NAME"
+                         								datasourcename="((select 1 as CODE, 'FTP' as NAME from dual) 
+                         								union all 
+                         								(select 2 as CODE, 'Webservice' as NAME from dual) 
+                         								union all 
+                         								(select 3 as CODE, 'MS MQ' as NAME from dual) 
+                         								union all 
+                         								(select 4 as CODE, 'Active MQ' as NAME from dual) 
+                         								union all 
+                         								(select 5 as CODE, 'IBM MQ' as NAME from dual) 
+                         								union all 
+                         								(select 6 as CODE, '其他' as NAME from dual))" showfields="CODE,NAME" savefield="CODE"
+                        								 isshowall="1" errmessage="没有这个接收类型！"/>
+                                </td>
+                            </tr>
+                        </table>
+                			   </td>
+                			    <td style="width: 25%; ">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                           <tr>
+                                <td class="titleCss">
+                                                                                      发送类型
+                                </td>
+                                <td class="tdSelectCss">
+                                  	 <input id="SENDTYPE" name="SENDTYPE" type="combobox"  
+                                  	 valuefield="SearchTable.SENDTYPE" 
+                                  	 datafield="SearchTable.SENDTYPE"
+                         								checkfield="CODE,NAME" columnheader="编号,名称" columns="CODE,NAME"
+                         								datasourcename="((select 1 as CODE, 'FTP' as NAME from dual) 
+                         								union all 
+                         								(select 2 as CODE, 'Webservice' as NAME from dual)
+                         								 union all
+                         								  (select 3 as CODE, 'MS MQ' as NAME from dual) 
+                         								  union all 
+                         								  (select 4 as CODE, 'Active MQ' as NAME from dual)
+                         								   union all 
+                         								   (select 5 as CODE, 'IBM MQ' as NAME from dual) 
+                         								   UNION ALL
+                         								    (select 6 as CODE, 'sqlserver' as NAME from dual) 
+                         								    UNION ALL 
+                         								    (select 7 as CODE, 'oracle' as NAME from dual) 
+                         								    UNION ALL
+                         								     (select 8 as CODE, 'mysql' as NAME from dual) 
+                         								     union all 
+                         								     (select 9 as CODE, '其他' as NAME from dual))" showfields="CODE,NAME" savefield="CODE"
+                        								 isshowall="1" errmessage="没有这个发送类型！" 
+                        								 />
+                                </td>
+                            </tr>
+                        </table>
+                			   </td>
+                			 </tr>
+                     </table>
+                 </td>
+             </tr>
+         </table>
+         <div class='responsive-table'>
+             <table id="corptable">
+             </table>
+             <div id="jqGridPager">
+             </div>
+         </div>
+     </div>
+</body>
+<script>
+	layui.use(['form', 'layedit', 'laydate'], function(){
+	  var form = layui.form
+	  ,layer = layui.layer
+	  ,layedit = layui.layedit
+	  ,laydate = layui.laydate;
+	  
+	 
+	  //监听指定开关
+	  form.on('switch(switchSacan)', function(data){
+	    layer.tips('温馨提示：ON为开启扫描  OFF为关闭扫描', data.othis)
+	    if(this.checked == true){
+	    	t1 = window.setInterval(scanning,5000); 
+	    }else{
+	    	onoff();
+	    }
+	  });
+	  
+	});
+
+</script>
+</html>

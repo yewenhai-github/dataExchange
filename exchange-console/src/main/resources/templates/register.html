@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <!--[if lt IE 9]>
+    <script src='resources/js/assets/javascripts/html5shiv.js' type='text/javascript'></script>
+    <![endif]-->
+    <title>数据交换平台-注冊</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport' />
+    <link href='resources/js/assets/stylesheets/bootstrap/bootstrap.css' type='text/css' rel='stylesheet' media='all' />
+    <link href='resources/js/assets/stylesheets/bootstrap/bootstrap-responsive.css' media='all' rel='stylesheet' type='text/css' />
+    <link href='resources/js/assets/stylesheets/demo.css' media='all' rel='stylesheet' type='text/css' />
+    <link href='resources/js/assets/stylesheets/light-theme.css' type='text/css' rel='stylesheet' id='color-settings-body-color' media='all' />
+    <link href="resources/js/jqgrid/css/jquery-ui.css" type="text/css" rel='stylesheet' media="screen" />
+    <link href="resources/js/jqgrid/css/ui.jqgrid.css" type="text/css" rel='stylesheet' media="screen" />
+    <link href="resources/js/jqgrid/css/prettify.css" type="text/css" rel='stylesheet' />
+    <link href="console/css/css.css" type="text/css" rel='stylesheet' />
+    <link href='console/css/nav.css' media='all' rel='stylesheet' type='text/css' />
+    <script type='text/javascript' src='resources/js/assets/javascripts/jquery/jquery.min.js'></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/jquery.jqGrid.min.js"></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/prettify.js"></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/codetabs.js"></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/themeswitchertool.js"></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/i18n/grid.locale-cn.js"></script>
+    <script type="text/javascript" src="resources/js/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="resources/js/assets/javascripts/jquery/jquery.form.js"></script>
+    <script type='text/javascript' src='resources/js/assets/javascripts/bootstrap/bootstrap.min.js'></script>
+    <script type="text/javascript" src="console/js/checkradio.js"></script>
+    <script type="text/javascript" src="console/js/public.js"></script>
+	<script type="text/javascript" src="console/js/dispatchCommon.js" ></script>
+    <script type="text/javascript" src="GetJS?messagebox.js"></script>
+    <script type="text/javascript" src="GetJS?combobox.js"></script>
+    <script type="text/javascript" src="GetJS?button.js"></script>
+    <script type="text/javascript" src="GetJS?popupwindow.js"></script>
+    <script type="text/javascript" src="GetJS?dataform.js"></script>
+</head>
+<style type="text/css">
+.regbg
+{
+	width:270px; background: #102442; line-height: 40px; text-align: center; font-size: 16px; color: #fff; border-radius: 4px;
+	height:40px;
+	border:0;
+}
+	#RegisterDataBase span.Identification{ color: #333; font-weight: normal}
+	#RegisterDataBase input[type=text],#RegisterDataBase input[type=password]{ border: #ddd 1px solid;  border-radius: 4px; background: #fff;}
+</style>
+<body style="background-color:#F5F5F5;">
+<br/>
+<br/>
+<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center" style="background-color:#F5F5F5;">
+  <tr style="background-color: #1B3251;height:60px;line-height:60px;margin-top: 20px;padding-top: 20px;" >
+    <td style="padding-left: 20px;">
+    	<span style="color:white;font-size: 20px;">数据交换平台注冊</span>
+    </td>
+    <td align="right" style="line-height: 60px;color: #ffffff; margin-right: 20px;padding-right: 20px;">已注册，<a href="login.html" style=" color: #EA5515">立即登录</a></td>
+  </tr>
+</table>
+<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center" style="background-color:#FFF;">
+  <tr>
+    <td valign="top" style="text-align:left;">
+                <div class='row-fluid' id="Register">
+                   <div style="height: 60px; text-align: center; font-size: 24px; 
+                   line-height: 78px; border-top-left-radius: 5px;border-top-right-radius: 5px; margin-bottom: 10px;">用户注册</div>
+                   <hr/>
+                    <div id="RegisterDataBase" style="margin-bottom:40px;padding-left: 100px;">
+                        <table width="800" border="0" cellspacing="0" cellpadding="0">
+                            <tr><td>&nbsp;</td></tr>
+                            <tr>
+                                <td class="titleCss">
+                                  	  用户名：
+                                </td>
+                                <td class="tdCss">
+                                    <input id='txtUname' datafield="REGISTER.USERNAME" type='text' ismust="1" errormsg="用户名不能为空！" />
+                                </td>
+                                <td style="width: 10px;height:25px;line-height:25px;padding-top:3px;font-size:12px;" valign="top">
+                                    @
+                                </td>
+                                <td class="tdCss" colspan="2">
+                                    <input id='Text1' datafield="REGISTER.ORG_CODE" type='text' placeholder="用户唯一码" />
+                                </td>
+                            </tr>
+                            <tr><td>&nbsp;</td></tr>
+                            <tr>
+                                <td class="titleCss">
+                                    	密码：
+                                </td>
+                                <td class="tdCss" colspan="4">
+                                    <input id='txtPwd' datafield="REGISTER.PASSWORD" type="password"  ismust="1"
+                                        errormsg="密码不能为空！" />
+                                </td>
+                            </tr>
+                            <tr><td>&nbsp;</td></tr>
+							<tr>
+                                <td class="titleCss">
+                                    	确认密码：
+                                </td>
+                                <td class="tdCss" colspan="4">
+                                    <input id='Password1' datafield="REGISTER.PWD" type="password" ismust="1"
+                                        errormsg="确认密码不能为空！" />
+                                </td>
+                            </tr>
+                            <tr><td>&nbsp;</td></tr>
+                            <tr>
+                                <td class="titleCss">
+                                    	企业名称：
+                                </td>
+                                <td class="tdCss" colspan="4">
+                                    <input id='Text2' datafield="REGISTER.COMPANYNAME" type='text' ismust="1" errormsg="企业名称不能为空！" />
+                                </td>
+                            </tr>
+                            <tr><td>&nbsp;</td></tr>
+                            <tr>
+                                <td class="titleCss">
+                                  	  联系人：
+                                </td>
+                                <td class="tdCss" colspan="4">
+                                    <input id='Text3' datafield="REGISTER.LINKMAN" type='text' ismust="1" errormsg="联系人不能为空！" />
+                                </td>
+                            </tr>
+                            <tr><td>&nbsp;</td></tr>
+                            <tr>
+                                <td class="titleCss">
+                                    	电话：
+                                </td>
+                                <td class="tdCss" colspan="4">
+                                    <input id='Text4' datafield="REGISTER.LINKMANTEL" type='text' judge="num" ismust="1" errormsg="电话不能为空！"
+                                        validatorerrormsg="电话格式不正确！" />
+                                </td>
+                            </tr>
+                            <tr><td>&nbsp;</td></tr>
+                            <tr>
+                                <td class="titleCss">
+                                  	  邮箱：
+                                </td>
+                                <td class="tdCss" colspan="4">
+                                    <input id='Text5' datafield="REGISTER.COMPANYEMAIL" type='text' judge="email" ismust="1"
+                                        errormsg="邮箱不能为空！" validatorerrormsg="邮箱格式不正确！" />
+                                </td>
+                            </tr>
+                            <tr><td>&nbsp;</td></tr>
+                            <tr>
+                                <td class="titleCss">
+                                </td>
+                                <td style="text-align: center;padding:20px;" colspan="4">
+                                    <button id="btnSaveData" class='regbg'
+                                        commandname="DoRegister" commanddatas="FormToData('REGISTER');" commandok="showSuccess"
+                                        datacontainer="RegisterDataBase" isvalidate="1">立即注册
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+    </td>
+  </tr>
+</table>
+<div style="line-height: 50px; text-align: center; color: #8e8e8e">（北京）网络科技有限公司 © 版权所有 京ICP备15057941号</div>
+</body>
+</html>
+<script type="text/javascript">
+/*<![CDATA[*/
+    inputForm = "RegisterDataBase";
+    $(function () {
+        //dispathServerAjaxPost("GetRegisterProperties","",FunctionCallBack);
+    }); 
+
+    function FunctionCallBack(data) {
+    	var obj=$.parseJSON(data);
+    	if(obj.IsOk && "1"==obj.IsOk) {
+    		$("#titleimg").attr("src",obj.ErrMessage);
+    	}
+    }
+    
+    //表头处理返回值
+    function showSuccess(s) {
+        var v = eval("(" + s + ")");
+        if (v.IsOk == "1") {
+            var data = eval("(" + v.ReturnData + ")");
+            if (data != null) {
+
+                if (data.INDX != "") {
+                    ShowMessages(v.ErrMessage, "系统提示", "msgok", function okFunction() {
+                    }, 0);
+                }
+            }
+            else {
+                ShowMessages(v.ErrMessage, "系统提示", "msgok", function okFunction() {
+                	//DoCommand("DologinOut");
+                	window.location.href="login.html";
+                }, 0);
+            }
+        }
+        else {
+            DataReturns(s);
+        }
+    }
+    /*]]>*/
+</script>

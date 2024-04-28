@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DB2Xml配置列表管理</title>
+    <!--[if lt IE 9]>
+    <script src='resources/js/assets/javascripts/html5shiv.js' type='text/javascript'></script>
+    <![endif]-->
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
+        name='viewport' />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/bootstrap/bootstrap.css'
+        media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/light-theme.css'
+        id='color-settings-body-color' media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/demo.css'
+        media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/jquery-ui.css'
+        media='screen' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/ui.jqgrid.css'
+        media='screen' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/prettify.css' />
+    <link type='text/css' rel='stylesheet' href='console/css/ystep.css' />
+    <link type='text/css' rel='stylesheet' href='console/css/css.css' media='all' />
+    <script type='text/javascript' src='resources/js/assets/javascripts/jquery/jquery.min.js'></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/jquery.jqGrid.min.js"></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/prettify.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/codetabs.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/themeswitchertool.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/i18n/grid.locale-cn.js'></script>
+    <script type="text/ecmascript" src='resources/js/My97DatePicker/WdatePicker.js'></script>
+    <script type='text/javascript' src='GetJS?button.js'></script>
+    <script type='text/javascript' src="GetJS?messagebox.js"></script>
+    <script type='text/javascript' src='GetJS?combobox.js'></script>
+    <script type='text/javascript' src="GetJS?dataform.js"></script>
+    <script type='text/javascript' src="GetJS?popupwindow.js"></script>
+    <script type='text/javascript' src='GetJS?js/ystep.js'></script>
+    <script type='text/javascript' src='console/js/public.js'></script>
+    <script type='text/javascript' src='GetJS?js/checkradio.js'></script>
+</head>
+<body>
+	<div class='row-fluid' id='content-wrapper'>
+		<div class='span12'>
+			<div class='row-fluid'>
+				<div class='span12 box bordered-box orange-border' style='margin-bottom: 0;'>
+					<div class='row-fluid'>
+						<div class='span12 box'>
+							<div class='box-content'>
+								<table width="100%" border="0" cellspacing="0" cellpadding="0" id="SearchTable">
+									<tr>
+										<td style="width: 25%;">
+											<table width="100%" border="0" cellspacing="10" cellpadding="0">
+												<tr>
+													<td class="titleCss90">
+														实例名
+													</td>
+													<td class="tdCss">
+														<input id='txtBizNo' type='text' style="width: 100%;" datafield="SearchTable.QUARTZ_NAME"
+															  />
+													</td>
+												</tr>
+											</table>
+										</td>
+										
+										<td style="width: 25%;">
+											<table width="100%" border="0" cellspacing="10" cellpadding="0">
+												<tr>
+													<td class="titleCss90">
+														消息类型
+													</td>
+													<td class="tdCss">
+														<input id='txtBizName' type='text' style="width: 100%;" datafield="SearchTable.MESSAGE_TYPE"
+															  />
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+								<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 10px;border-bottom: 1px solid #114;">
+								<tr>
+									<td style="text-align: left; padding-right: 10px; padding-left: 10px;">
+										<button id="btnSearch" class='btn btn-primary btn-small' style='margin-bottom: 5px'>
+											<i class='icon-search'></i>查 询
+										</button>
+										<button id="btnRemove" class='btn btn-primary btn-small' style='margin-bottom: 5px'
+											onclick="ClearAllInput('SearchTable')">
+											<i class='icon-trash'></i>重 置
+										</button>
+									<!--  
+										<button class='btn btn-primary btn-small'  style='margin-bottom: 5px' id="btnNew" onclick="location.href='GetHTML?html/02DB2XmlEdit.html';">
+                                            <i class='icon-file'></i>新 建
+                                        </button>
+                                        -->
+                                        <button class='btn btn-primary btn-small'  style='margin-bottom: 5px' id="btnDelete" commandname="GetDB2XmlDelete" 
+											commanddatas="getId('jg')" commandok="showSuccess" validate="getId('jg')" confirmmessage="确认删除吗？">
+	                                            <i class='icon-file'></i>删 除
+	                                    </button>
+									</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+					<div class='responsive-table' id="grdTable">
+						<table id="jg">
+						</table>
+						<div id="jqGridPager">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+//加载下拉数据源
+function getConditon() {
+    return "{\"SearchTable\":[{\"TYPE\":\"=COMMON\"}]}";
+}
+$(document).ready(function () {
+	window.onresize = function () {
+		setGridSize("#jg",168);
+    }
+    var defaultWhere = "{\"SearchTable\":[{\"IS_ENABLED\":\"1\"}]}"
+    $("#jg").jqGrid({
+        datatype: "json",
+        url: "GetDB2XmlList",
+        postData: {
+            'CommandData': defaultWhere
+        }, //发送数据 
+        colNames: [ '状态', 'INDX', '实例名*', '消息类型*', '源路径*', '业务节点集合*', '数据库表集合*', '业务根节点*', '业务头节点*', '流水号名称*', '主键名称*', '外键名称*', 'BLOB处理类型', '文件名规则', '编码格式', '密钥', '入口类嵌入', '主表类嵌入', '子表类嵌入', '是否有效*', '创建时间', '修改时间', '版本号','XML_INDX'],
+        colModel: [
+		           	    
+		           	    { name: 'STATUS', index: 'STATUS', width: 50, formatter: stateShow },
+				        { name: 'INDX', index: 'INDX', width: 50, hidden: true },
+				        { name: 'QUARTZ_NAME', index: 'QUARTZ_NAME', width: 100 },
+				        { name: 'MESSAGE_TYPE', index: 'MESSAGE_TYPE', width: 80, formatter: urlCode },
+				        { name: 'SOURCE_PATH', index: 'SOURCE_PATH', width: 250 },
+				        { name: 'ROOT_NAMES', index: 'ROOT_NAMES', width: 250 },
+						{ name: 'DB_TABLE_NAMES', index: 'DB_TABLE_NAMES', width: 250 },
+						{ name: 'XML_DOCUMENT', index: 'XML_DOCUMENT', width: 150 },
+						{ name: 'XML_HEAD', index: 'XML_HEAD', width: 150 },
+						{ name: 'SERIAL_NAME', index: 'SERIAL_NAME', width: 100 },
+						{ name: 'INDX_NAME', index: 'INDX_NAME', width: 100 },
+						{ name: 'PINDX_NAME', index: 'PINDX_NAME', width: 100 },
+						{ name: 'BLOB_PROCESS', index: 'BLOB_PROCESS', width: 100 },
+						{ name: 'FILE_NAME_REG', index: 'FILE_NAME_REG', width: 250 },
+						{ name: 'ENCODING', index: 'ENCODING', width: 100 },
+						{ name: 'AES_KEY', index: 'AES_KEY', width: 100 },
+						{ name: 'CLASS_INVOKE', index: 'CLASS_INVOKE', width: 250 },
+						{ name: 'ROOT_METHOD_INVOKE', index: 'ROOT_METHOD_INVOKE', width: 250 },
+				        { name: 'CHILD_METHOD_INVOKE', index: 'CHILD_METHOD_INVOKE', width: 250 },
+						{ name: 'IS_ENABLED', index: 'IS_ENABLED', width: 60, align: "center" },
+						{ name: 'CREATE_TIME', index: 'CREATE_TIME', width: 150, formatter: "date", formatoptions: { srcformat: 'Y-m-d H:i:s', newformat: 'Y-m-d H:i:s'} },
+						{ name: 'MODIFY_TIME', index: 'MODIFY_TIME', width: 150, formatter: "date", formatoptions: { srcformat: 'Y-m-d H:i:s', newformat: 'Y-m-d H:i:s'} },
+						{ name: 'REC_VER', index: 'REC_VER', width: 50 },
+						{ name: 'XML_INDX', index: 'XML_INDX', width: 50,hidden:true }
+        	        ],
+        viewrecords: true,
+        height: 700,
+        rowNum: 15, //每页显示记录数
+        //datatype: 'local',
+        rowList: [15, 50, 100], //可调整每页显示的记录数
+        rownumbers: true,
+        rownumWidth: 25,
+        multiselect: true, //是否支持多选 
+        multiselectWidth: 35, //是否支持多选 
+        viewrecords: true, //是否显示行数 
+        //shrinkToFit: false, //
+        pager: "#jqGridPager", //分页工具栏
+        altRows: true,
+        altclass: 'someClass',
+        // loadonce : true,
+        //caption: "**Data",
+        sortable: true,
+        //水平滚动条
+        loadui: "none",
+        shrinkToFit: false,
+        autoScroll: true,
+        //排序开始
+        onSortCol: function (colName, Id, sortorder) {
+            //colName   排序字段
+            //Id   第几列
+            //sortorder  排序  desc 倒序  asc 正序
+            $("#jg").jqGrid('setGridParam', {
+                url: "GetDB2XmlList",
+                postData: {
+                    'OrderField': colName,
+                    'Order': sortorder
+                }, //发送数据 
+                page: 1
+            }).trigger("reloadGrid"); //重新载入 
+        },
+        loadComplete: function () {
+            var rowNum = $("#jg").jqGrid('getGridParam', 'records');
+            if (rowNum <= 0) {
+                if ($("#norecords").html() == null)
+                    $("#jg").parent().append("<div id=\"norecords\" class=\"norecords\">暂无数据！</div>");
+                $("#norecords").show();
+            }
+            else {//如果存在记录，则隐藏提示信息。
+                $("#norecords").hide();
+            }
+        },
+        beforeRequest: function () {
+            if (top.showloading) {
+                top.showloading();
+            }
+        },
+        gridComplete: function () {
+            if (top.hideloading) {
+                top.hideloading();
+            }
+        }
+    });
+
+    setGridSize("#jg",168);
+    //显示某一列
+    //$("#jg").setGridParam().showCol("colname").trigger("reloadGrid");
+    //隐藏某一列
+    //$("#jg").setGridParam().hideCol("INDX").trigger("reloadGrid");
+    //查询
+    $("#btnSearch").click(function () {
+        $("#jg").jqGrid('setGridParam', {
+            url: "GetDB2XmlList",
+            postData: {
+                'CommandData': FormToData('SearchTable')
+            }, //发送数据 
+            page: 1
+        }).trigger("reloadGrid"); //重新载入 
+
+    })
+});
+function urlCode(cellvalue, options, rowObject) {
+	var detail_uri = "GetHTML?html/02DB2XmlEdit.html";
+	return "<a href="+detail_uri+"?INDX="+rowObject.INDX + "&CELLVALUE=" + cellvalue+"'><span style='color:#00acec'>" + cellvalue + "</a>";
+}
+function openUpdate() {
+    var ids = $('#jg').jqGrid('getGridParam', 'selarrrow');
+    if (ids != null && ids.length != 0) {
+        if (ids.length == 1) {
+            for (var i = 0; i < ids.length; i++) {
+                var id = ids[i];
+                var row = $("#jg").jqGrid("getRowData", id);
+                var INDX = $.trim(row.INDX);
+                location.href = 'GetHTML?02DB2XmlEdit.html?INDX=' + INDX;
+            }
+        } else {
+            alert("只能修改一条数据");
+        }
+    } else {
+        alert("请先勾选一条需要修改的单号");
+    }
+}
+function openChange(type) {
+    var ids = $('#jg').jqGrid('getGridParam', 'selarrrow');
+    var action = '';
+    var text = '';
+    if (type == 'btnDle') {
+        action = 'btnDle';
+        text = '失效';
+    } else if (type == "btnRecovery") {
+        action = 'btnRecovery';
+        text = '恢复';
+    }
+    var jsonArr = new Array();
+    if (ids != null && ids.length != 0) {
+        var r = confirm("确认" + text + "吗？");
+        if (r != true) {
+            return;
+        }
+        //var indxs = [];
+        for (var i = 0; i < ids.length; i++) {
+            //var id = ids[i];
+            //var decl = $("#jg").jqGrid('getCell',id,"INDX");
+            var rowData = $("#jg").jqGrid("getRowData", ids[i]); //根据上面的id获得本行的所有数据
+            jsonArr[i] = rowData.INDX;
+            //indxs.push(decl);
+        }
+        var Indxs = jsonArr.join(',');
+        $.ajax({
+            type: "post",
+            async: false, //控制同步
+            url: "ChangeDB2XmlList",
+            data: {
+                Indxs: Indxs,
+                action: action
+            },
+            //dataType: "json",
+            cache: false,
+            success: function (data) {
+                var v = eval("(" + data + ")");
+                ShowMessages(v.ErrMessage, "友情提示", "msgok", null, 0);
+                callbackfunction();
+            },
+            Error: function (err) {
+                ShowMessages(err, "友情提示", "msgwaring", null, 0);
+            }
+        });
+
+    } else {
+        ShowMessages("对不起,您没有选中任何记录", "友情提示", "msgwaring", null, 0);
+        return;
+    }
+}
+function stateShow(cellvalue, options, rowObject) {
+    var rt = "";
+    switch (rowObject.STATUS) {
+        case '0':
+            rt += "<span class=\"label label-warning\">异常</span>";
+            break;
+        case '1':
+            rt += "<span class=\"label label-success\">正常</span>";
+            break;
+    }
+    return rt;
+}
+function callbackfunction() {
+    $("#jg").trigger("reloadGrid");
+}
+
+//获取所有Id
+function getId(gridId) {
+	var IsAll = 0;
+	if ($("#txtSelectAll").attr("checked") == true)
+		IsAll = 1;
+	var rowKey = $("#jg").getGridParam("selrow");
+	if (IsAll == 0) {
+		if (!rowKey)
+			ShowMessages("对不起,您没有选中任何记录", "系统提示", "msgwaring", null, 0);
+		else
+			return returnEnd(gridId, IsAll);
+	}
+	else
+		return returnEnd(gridId, IsAll);
+}
+
+function returnEnd(gridId, IsAll) {
+	var selectedIDs = $("#" + gridId + "").getGridParam("selarrrow");
+var strJson = "";
+var strJsons = "";
+var jsonArr = new Array();
+for (var i = 0; i < selectedIDs.length; i++) {
+    var rowData = $("#" + gridId + "").jqGrid("getRowData", selectedIDs[i]); //根据上面的id获得本行的所有数据
+    strJson = "{\"INDX\":\"" + rowData.XML_INDX + "\"}";
+    jsonArr[i] = strJson;
+}
+strJsons = jsonArr.join(',');
+return "{\"key\":[" + strJsons + "],\"IsAll\":[{\"isall\":\"" + IsAll + "\"}]}";
+}
+//处理返回值
+function showSuccess(s) {
+	var v = eval("(" + s + ")");
+	if (v.IsOk == "1") {
+		ShowMessages(v.ErrMessage, "系统提示", "msgok", function okFunction() {
+			$("#jg").trigger("reloadGrid");
+		}, 0);
+
+	}
+	else
+		ShowMessages(v.ErrMessage, "系统提示", "msgwaring", null, 0);
+}
+</script>

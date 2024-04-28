@@ -1,0 +1,268 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>首页</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport' />
+    <!-- <link href="static/css/page/backend/assets.css" rel="stylesheet"></head> -->
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/jquery-ui.css' media='screen' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/ui.jqgrid.css' media='screen' />
+	<script type="text/javascript" src="resources/js/echarts-all.js"></script>
+	<script type='text/javascript' src='resources/js/assets/javascripts/jquery/jquery.min.js'></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/jquery.jqGrid.min.js"></script>
+	<script type="text/javascript" src="GetJS?messagebox.js"></script>
+	<script type="text/javascript" src="GetJS?dataform.js"></script>
+	<script type="text/javascript" src="GetJS?button.js"></script>
+	<script type="text/javascript" src="GetJS?popupwindow.js"></script>
+	<style type="text/css">
+	html, body {
+		background-color: #F4F4F4;
+        overflow-y: hidden;
+        font-size: 14px;
+        color: #ccd;
+    }
+    a, div {
+    	color: #ccd;
+    }
+    .item-label {
+		width: 66px;
+		height: 20px;
+		line-height: 20px;
+		color: #ccd;
+		font-size: 12px;
+		text-align: center
+	}
+	</style>
+</head>
+<body>
+		<div class="bd-content-wrap">
+            <div class="bd-content">
+               <div class="lf-rt clearfix">
+            	  <div class="lf" style="width:33%; background-color: #F4F4F4;color: #F4F4F4;">
+            	  		<div style="height: 300px;margin-top:10px;margin-right:10px;border-right: 0px solid #114;border-bottom: 1px solid #114">
+		                  	<div id="chart1" style="height: 300px;border: 0px;"></div>
+		               </div>
+            	  </div>
+               	  <div class="lf" style="width:33%; background-color: #F4F4F4;color: #F4F4F4;">
+	            	   <div style="height: 300px;margin-top:10px;margin-right:10px;border-right: 0px solid #114;border-bottom: 1px solid #114">
+		                  	<div id="chart2" style="height: 300px;border: 0px;"></div>
+		               </div>
+            	  </div>
+            	  <div class="lf" style="width:33%; background-color: #F4F4F4;color: #F4F4F4;">
+            	  		<div style="height: 300px;margin-top:10px;margin-right:10px;border-right: 0px solid #114;border-bottom: 1px solid #114">
+		                  	<div id="chart3" style="height: 300px;border: 0px;"></div>
+		               </div>
+            	  </div>
+               </div>
+               <div class="lf-rt clearfix">
+               	  <div class="lf" style="width:33%;height: 600px; background-color: #F4F4F4;color: #F4F4F4;">
+	            	   <table id="gridlist1" style="height: 100%"></table>
+            	  </div>
+            	  <div class="lf" style="width:33%;height: 600px;  background-color: #F4F4F4;color: #F4F4F4;">
+            	  		<table id="gridlist2" style="height: 100%"></table>
+            	  </div>
+            	  <div class="lf" style="width:33%;height: 600px;  background-color: #F4F4F4;color: #F4F4F4;">
+            	  		<table id="gridlist3" style="height: 100%"></table>
+            	  </div>
+               </div>
+            </div>
+         </div>
+</body>
+</html>
+<script type="text/javascript">
+$(function () {
+    $("#gridlist1").jqGrid({
+		datatype: "json",
+		url: "GetMainWarn",
+		colNames: ['事件名称','正常','未运行','处理建议'],
+		colModel: [
+						{ name:  index:  width: 120},
+			            { name: 'ENENT_NAME', index: 'ENENT_NAME', width: 100,align:"center"},
+				        { name: 'SUCCESS', index: 'SUCCESS', width: 60, align:"center" },
+				        { name: 'FAIL', index: 'FAIL', width: 80,align:"center", formatter: failShow},
+				        { name: 'URI', index: 'URI', width: 160 ,formatter:  viewDetail,align:"center"}
+        	        ],
+		rowNum: 100, //每页显示记录数
+		rownumbers: true,
+		altclass: 'someClass'
+	});
+    $("#gridlist2").jqGrid({
+    	datatype: "json",
+		url: "GetMainMonitor",
+		colNames: ['事件名称','正常','异常','处理建议'],
+		colModel: [
+						{ name:  index:  width: 120},
+			            { name: 'ENENT_NAME', index: 'ENENT_NAME', width: 100,align:"center"},
+				        { name: 'SUCCESS', index: 'SUCCESS', width: 60, align:"center" },
+				        { name: 'FAIL', index: 'FAIL', width: 80,align:"center", formatter: failShow},
+				        { name: 'URI', index: 'URI', width: 160 ,formatter:  viewDetail,align:"center"}
+        	        ],
+		rowNum: 100, //每页显示记录数
+		rownumbers: true,
+		altclass: 'someClass'
+	});
+    $("#gridlist3").jqGrid({
+    	datatype: "json",
+		url: "GetMainConfig",
+		colNames: ['事件名称','正常','未运行','处理建议'],
+		colModel: [
+						{ name:  index:  width: 120},
+			            { name: 'ENENT_NAME', index: 'ENENT_NAME', width: 100,align:"center"},
+				        { name: 'SUCCESS', index: 'SUCCESS', width: 60, align:"center" },
+				        { name: 'FAIL', index: 'FAIL', width: 80,align:"center", formatter: failShow},
+				        { name: 'URI', index: 'URI', width: 160 ,formatter:  viewDetail,align:"center"}
+        	        ],
+		rowNum: 100, //每页显示记录数
+		rownumbers: true,
+		altclass: 'someClass'
+	});
+	$("#gridlist1").setGridHeight($(window).height()-400);	
+	$("#gridlist2").setGridHeight($(window).height()-400);	
+	$("#gridlist3").setGridHeight($(window).height()-400);	
+});
+
+var ecolor = "#ccd";
+$.post("GetMainCount", function (data) {
+	var Data=eval("(" + data + ")"); 
+	option1 = {
+		    title : {
+		        text: '预警告警',
+		        x:'center',
+		        textStyle:{
+		        	color:ecolor
+                }
+		    },
+		    tooltip : {
+		        trigger: 'item',
+		        formatter: "{a} <br/>{b} : {c} ({d}%)"
+		    },
+		    legend: {
+		    	show : false,
+		        x : 'center',
+		        y : 'bottom',
+		        data:['正常','未运行'],
+		        textStyle:{
+		            color:ecolor,
+		            fontSize:16
+		        }
+		    },
+		    calculable : true,
+		    series : [
+		        {
+		            name:'面积模式',
+		            type:'pie',
+		            radius : [20, 80],
+		            center : ['50%', 130],
+		            roseType : 'area',
+		            x: '50%',               // for funnel
+		            max: 40,                // for funnel
+		            sort : 'ascending',     // for funnel
+		            data:[
+		                {value:Data.WARN_FAIL, name:'未运行'},
+		                {value:Data.WARN_SUCCESS, name:'正常'}
+		            ]
+		        }
+		    ]
+		};
+	echarts.init(document.getElementById('chart1')).setOption(option1);
+	
+	option2 = {
+		    title : {
+		        text: '监控预防',
+		        x:'center',
+		        textStyle:{
+		        	color:ecolor
+                }
+		    },
+		    tooltip : {
+		        trigger: 'item',
+		        formatter: "{a} <br/>{b} : {c} ({d}%)"
+		    },
+		    legend: {
+		    	show : false,
+		        x : 'center',
+		        y : 'bottom',
+		        data:['正常','异常'],
+		        textStyle:{
+		            color:ecolor,
+		            fontSize:16
+		        }
+		    },
+		    calculable : true,
+		    series : [
+		        {
+		            name:'面积模式',
+		            type:'pie',
+		            radius : [20, 80],
+		            center : ['50%', 130],
+		            roseType : 'area',
+		            x: '50%',               // for funnel
+		            max: 40,                // for funnel
+		            sort : 'ascending',     // for funnel
+		            data:[
+		                {value:Data.MONITOR_FAIL, name:'异常'},
+		                {value:Data.MONITOR_SUCCESS, name:'正常'}
+		            ]
+		        }
+		    ]
+		};
+	echarts.init(document.getElementById('chart2')).setOption(option2);
+	
+	option3 = {
+		    title : {
+		        text: '配置管理监控',
+		        x:'center',
+		        textStyle:{
+		        	color:ecolor
+                }
+		    },
+		    tooltip : {
+		        trigger: 'item',
+		        formatter: "{a} <br/>{b} : {c} ({d}%)"
+		    },
+		    legend: {
+		    	show : false,
+		        x : 'center',
+		        y : 'bottom',
+		        data:['正常','未运行'],
+		        textStyle:{
+		            color:ecolor,
+		            fontSize:16
+		        }
+		    },
+		    calculable : true,
+		    series : [
+		        {
+		            name:'面积模式',
+		            type:'pie',
+		            radius : [20, 80],
+		            center : ['50%', 130],
+		            roseType : 'area',
+		            x: '50%',               // for funnel
+		            max: 40,                // for funnel
+		            sort : 'ascending',     // for funnel
+		            data:[
+		                {value:Data.CONFIG_FAIL, name:'未运行'},
+		                {value:Data.CONFIG_SUCCESS, name:'正常'}
+		            ]
+		        }
+		    ]
+		};
+	echarts.init(document.getElementById('chart3')).setOption(option3);
+});
+
+function failShow(cellvalue, options, rowObject) {
+	var rt = "";
+	if(rowObject.FAIL != '0'){
+		rt += "<span style=\"color: red;\">"+rowObject.FAIL+"</span>";
+	}else{
+		rt += rowObject.FAIL;
+	}
+	return rt;
+}
+
+function viewDetail(cellvalue, options, rowObject) {
+	return '<div><a style=\"color: #ccd;\" href=\"'+rowObject.URI+'\">跳转</a></div>';
+}
+
+</script>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+<title>DB</title>
+<link rel="stylesheet" href="resources/js/assets/layui/css/layui.css" media="all">
+<script type='text/javascript'
+	src='resources/js/assets/javascripts/jquery/jquery.min.js'></script>
+<script type="text/ecmascript"
+	src="resources/js/jqgrid/js/jquery.jqGrid.min.js"></script>
+<script type="text/ecmascript"
+	src='resources/js/jqgrid/js/prettify.js'></script>
+<script type="text/ecmascript"
+	src='resources/js/jqgrid/js/codetabs.js'></script>
+<script type="text/ecmascript"
+	src='resources/js/jqgrid/js/themeswitchertool.js'></script>
+<script type="text/ecmascript"
+	src='resources/js/jqgrid/js/i18n/grid.locale-cn.js'></script>
+<script type="text/ecmascript"
+	src='resources/js/My97DatePicker/WdatePicker.js'></script>
+<script type='text/javascript' src='resources/js/assets/layer/layer.js'></script>
+<script type='text/javascript' src='resources/js/assets/layui/layui.all.js'></script>
+<script src="resources/js/dispatchCommon.js" type="text/javascript"></script>
+</head>
+<body>
+<div class="site-text site-block">
+	<form class="layui-form" action="SaveDbData">
+	 
+	  <div class="layui-form-item">
+	    <label class="layui-form-label">源表名</label>
+	    <div class="layui-input-block">
+	      <select name="TABLE" id="TABLE" lay-verify="required" lay-filter="TableFilter">
+	      </select>
+	    </div>
+	  </div>
+	  
+	   <div class="layui-form-item">
+	    <label class="layui-form-label">字段名</label>
+	    <div class="layui-input-block">
+	      <select name="COL" id="COL" lay-verify="required">
+	      </select>
+	    </div>
+	  </div>
+	  
+	 
+	 
+	  <div class="layui-form-item layui-form-text">
+	    <label class="layui-form-label">发送值</label>
+	    <div class="layui-input-block">
+	      <input class="layui-input" id="INDX"  type="hidden" name="INDX">
+	      <textarea name="SENDVALUE" placeholder="请输入内容" class="layui-textarea" id="SendValue" lay-verify="required"></textarea>
+	    </div>
+	  </div>
+	  <div class="layui-form-item">
+	    <div class="layui-input-block">
+	      <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+	      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+	    </div>
+	  </div>
+</form>
+</div>
+<script>
+
+var load;
+window.onload=function(){
+	 load = layer.msg('加载中,请稍等', {
+		   icon: 16,
+		   shade: 0.5,
+		   time: 200000000000000//事件
+	});
+	 renderForm();  
+	var INDX = GetRequestName("INDX");
+	$("#INDX").val(INDX);
+	dispathServerAjaxPost("GetTableList?INDX="+INDX,"" ,success);
+	layer.close(load);
+}
+
+function success(r){
+	
+	var v = eval("(" + r + ")");
+	    if (v.IsOk == "1") {
+	    	v =  eval("(" + v.ReturnData + ")");
+	    	$("#TABLE").append('<option value=""></option>');
+	    	for (var item in v) {
+	    		  $("#TABLE").append('<option value="'+ v[item].TABLENAME +'">' + v[item].TABLENAME + '</option>');
+	    	}
+	    	renderForm();
+	    }else{
+	    	layer.msg(v.ErrMessage, {icon: 5});
+	    }
+}
+
+layui.form.on('select(TableFilter)', function(data){
+	$("#COL").empty();
+	var opt=$("#TABLE").val();
+	var INDX = GetRequestName("INDX");
+	dispathServerAjaxPost("GetTableList?INDX="+INDX+"&TABLE="+opt,"" ,successTable);
+});
+
+//获取url地址里的参数
+function GetRequestName(urlPara, requestName) {
+    var parm = (requestName) ? requestName : urlPara;
+    var url = (requestName) ? urlPara : location;
+    var reg = new RegExp("[&|?]" + parm + "=([^&$]*)", "gi");
+    var a = reg.test(url);
+    return a ? RegExp.$1 : "";
+}
+
+
+function successTable(r){
+		var v = eval("(" + r + ")");
+		console.log(v);
+ 	    if (v.IsOk == "1") {
+ 	    	v =  eval("(" + v.ReturnData + ")");
+ 	    	$("#COL").append('<option value=""></option>');
+ 	    	for (var item in v) {
+ 	    		  $("#COL").append('<option value="'+ v[item].COLUMNNAME +'">' + v[item].COLUMNNAME + '</option>');
+ 	    	}
+ 	    	renderForm();
+ 	    }else{
+ 	    	layer.msg(v.ErrMessage, {icon: 5});
+ 	    }
+  	}
+
+//重新渲染表单
+function renderForm(){
+  layui.use('form', function(){
+   var form = layui.form;//高版本建议把括号去掉，有的低版本，需要加()
+   form.render();
+  });
+ }
+ 
+ 
+/* $("#helpButton").click(function(){
+	if(Verification()){
+		var INDX = GetRequestName("INDX");
+		var table =$("#TABLE").val();
+		var col = $("#COL").val();
+		var SendValue = $("#SendValue").val();
+		dispathServerAjaxPost("SaveDbData?TABLE="+table+"&COL="+col+"&VALUE="+SendValue+"&INDX="+INDX,"" ,successDb);
+	}
+}) */
+
+</script>
+ 
+</body>
+</html>

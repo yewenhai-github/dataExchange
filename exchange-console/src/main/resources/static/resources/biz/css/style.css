@@ -1,0 +1,35 @@
+/*上传附件样式*/
+/*.uploader{position:relative;display:inline-block;overflow:hidden;cursor:default;padding:0;margin:0;width:100%}
+.filename{float:left;display:inline-block;outline:0 none;height:25px;width:100%;margin:0;padding:8px 10px;overflow:hidden;cursor:default;border:1px solid #A9A9A9;border-right:0;font:9pt/100% Arial,Helvetica,sans-serif;color:#777;text-shadow:1px 1px 0 #fff;text-overflow:ellipsis;white-space:nowrap;background:#FFF}
+.button{float:left;height:25px;display:inline-block;outline:0 none;padding:8px 12px;position:absolute;right:0;top:0;margin:0;cursor:pointer;border:1px solid;z-index:9;font:700 9pt/100% Arial,Helvetica,sans-serif}
+.uploader input[type=file]{position:absolute;top:0;right:0;bottom:0;border:0;padding:0;margin:0;height:25px;cursor:pointer;filter:alpha(opacity=0);-moz-opacity:0;-khtml-opacity:0;opacity:0}
+input[type=button]::-moz-focus-inner{padding:0;border:0 none;-moz-box-sizing:content-box}
+input[type=button]::-webkit-focus-inner{padding:0;border:0 none;-webkit-box-sizing:content-box}
+input[type=text]::-moz-focus-inner{padding:0;border:0 none;-moz-box-sizing:content-box}
+input[type=text]::-webkit-focus-inner{padding:0;border:0 none;-webkit-box-sizing:content-box}
+.white .button{color:#555;text-shadow:1px 1px 0 #fff;background:#ddd;background:-moz-linear-gradient(top,#eee 0,#ddd 100%);background:-webkit-gradient(linear,left top,left bottom,color-stop(0,#eee),color-stop(100%,#ddd));filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#dddddd', GradientType=0);border-color:#ccc}
+.white:hover .button{background:#eee;background:-moz-linear-gradient(top,#ddd 0,#eee 100%);background:-webkit-gradient(linear,left top,left bottom,color-stop(0,#ddd),color-stop(100%,#eee));filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dddddd', endColorstr='#eeeeee', GradientType=0)}
+.datagrid-view .datagrid-editable-input{height:25px;line-height:25px;border:1px solid #DBDBDB}
+.datagrid-row-selected{background:#e6e6e6}*/
+/*查询样式*/
+.seachboeder{border: 1px solid #CACACA; margin: 0; padding:0 10px}
+.seachboeder .lbl-text{ text-indent: 8px;
+    font-family: "Microsoft YaHei";
+    white-space: nowrap;
+    display: inline-block; font-weight: normal; color: #000}
+.searPading{ padding-bottom: 8px; padding-top: 8px;}
+.searPading a{ margin-left: 8px;}
+.mp0{ margin: 0; padding: 0}
+.mplrb0{ margin: 0; margin-top: 5px;}
+
+input:disabled{
+    border:1px solid #D3D0CB;
+    background-color:#EDEDED;
+}
+input:read-only
+{
+    background-color: #EDEDED;
+}
+
+.textbox .textbox-text{ font-size: 12px; color: #444; float: left}
+#modifyDate,#createDate,#reviewerDate{text-indent: 10px;}

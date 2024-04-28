@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<SqlMap>
+	<select id="getmenulist">
+		<![CDATA[
+		select t.indx,
+		       t.parentid,
+		       t.top_menu_id,
+		       t.menu_text,
+		       t.icon,
+		       t.url,
+		       t.order_num,
+		       t.create_time,
+		       t.parentid _parentId
+		  from s_auth_menu t
+		 where t.is_enabled = '1'
+		 order by t.parentid, t.order_num
+		]]>
+	</select>
+	<select id="getlevelmenulist">
+		<![CDATA[
+        select s.indx,s.parentid,s.menu_text,s.icon,s.url,s.tlevel,s.order_num
+          from s_auth_menu s
+           where s.is_enabled = '1' 
+             and tlevel = #{tlevel}
+           <<and 'true' = #isroot# or (s.indx in(select permid from s_auth_perm_role where roleid in(select roleid from s_auth_user_role where userid = #{userid}))) >>
+           order by s.parentid,s.order_num
+		]]>
+    </select>
+	<select id="getsysmenulist">
+		<![CDATA[
+        select s.top_menu_id indx, s.menu_text, s.icon menu_icon
+          from s_auth_menu s
+          where s.is_enabled = '1' and s.tlevel = 0
+            <if test="isroot != true">
+                and s.indx in(select permid from s_auth_perm_role where roleid in(select roleid from s_auth_user_role where userid = #{userid}))
+            </if>
+           order by s.order_num
+		]]>
+    </select>
+    
+    
+    <select id="getorglist">
+		<![CDATA[
+		select t.indx,
+		       t.org_id,
+		       t.org_name,
+		       t.parentid,
+		       t.create_time,
+		       t.order_num,
+		       t.type,
+		       t.creator,
+		       t.parentid _parentId
+		  from s_auth_organization t
+		 where t.is_enabled = 1
+		]]>
+    </select>
+    
+    <select id="getsysrole">
+		<![CDATA[
+		select r.indx "id", 
+		       r.role_name "text",
+		       r.indx, 
+		       r.role_name, 
+		       r.role_desc, 
+		       r.org_id, 
+		       (select a.org_name from s_auth_organization a where r.org_id = a.org_id limit 1) org_name
+		  from s_auth_role r
+		 where r.is_enabled = '1'
+		 order by create_time
+		]]>
+    </select>
+    <select id="getsysrolecheck">
+		<![CDATA[
+    	select permid 
+    	  from s_auth_perm_role
+    	 where roleid = #roleid#
+    	 order by indx
+		]]>
+    </select>
+    
+    <select id="getrolelist">
+		<![CDATA[
+		 select r.indx, 
+				r.role_name, 
+				r.role_desc, 
+				r.org_id, 
+				(select org_name from s_auth_organization a where r.org_id = a.org_id limit 1) org_name
+		   from s_auth_role r
+		  where r.is_enabled = '1'
+		]]>
+    </select>
+    
+    <select id="getuserlist">
+		<![CDATA[
+          select u.*,
+		         (select role_name from s_auth_role r where r.indx=u.role_id limit 1) role_name,
+		         (select a.org_name from s_auth_organization a where a.org_id = u.user_dept_id limit 1) user_dept_name,
+		         (select b.org_name from s_auth_organization b where b.org_id = u.org_id limit 1) org_name
+		    from s_auth_user u
+		   where u.is_enabled = '1'
+		  << and u.username = #username# >>
+		  << and u.user_real_name = #userRealName# >>
+		  << and u.role_id = #roleId# >>
+		  << and u.audit_status = #auditStatus# >>
+		]]>
+    </select>
+    
+	<!-- combobox area -->
+	<select id="getcomboboxmenulist">
+		<![CDATA[
+    	select indx "id",
+		       menu_text "text",
+		       (case when sign(0-indx) = -1 then indx+100 else 0 end) "group_indx",
+		       (case when sign(0-ifnull(parentid,0)) = -1 then ifnull(parentid,0)+100 else 0 end) "group_parentid"
+		  from s_auth_menu t
+		 where is_enabled = '1'
+		 order by ifnull(parentid,0), order_num
+		]]>
+    </select>
+	<select id="getcomboboxorglist">
+		<![CDATA[
+    	select indx "id",
+		       org_name "text",
+		       (case when sign(0-indx) = -1 then indx+100 else 0 end) "group_indx",
+		       (case when sign(0-ifnull(parentid,0)) = -1 then ifnull(parentid,0)+100 else 0 end) "group_parentid"
+		  from s_auth_organization
+		 where is_enabled = '1'
+		]]>
+    </select>
+	<select id="getcomboboxorglist2">
+		<![CDATA[
+    	select  org_id "id",
+                org_name "text",
+                (case when sign(0-indx) = -1 then indx+100 else 0 end) "group_indx",
+		        (case when sign(0-ifnull(parentid,0)) = -1 then ifnull(parentid,0)+100 else 0 end) "group_parentid",
+                (select org_id from s_auth_organization where indx = s.parentid limit 1) parentid
+		  from s_auth_organization s
+		 where is_enabled = 1
+		]]>
+    </select>
+	<select id="getcomboboxorg">
+		<![CDATA[
+    	select  org_id "id",
+                org_name "text",
+                (case when sign(0-indx) = -1 then indx+100 else 0 end) "group_indx",
+		        (case when sign(0-ifnull(parentid,0)) = -1 then ifnull(parentid,0)+100 else 0 end) "group_parentid",
+                (select org_id from s_auth_organization where indx = s.parentid limit 1) parentid
+		  from s_auth_organization s
+		 where is_enabled = 1
+		   and type = 0
+		]]>
+    </select>
+    <select id="getcomboboxdept">
+		<![CDATA[
+    	select  org_id "id",
+                org_name "text",
+                (select org_id from s_auth_organization where indx = s.parentid limit 1) parentid
+		  from s_auth_organization s
+		 where is_enabled = 1
+		   and type = 1
+		   and exists(select 0 from s_auth_organization a where a.indx = s.parentid and a.org_id = #orgId#) 
+		]]>
+    </select>
+    
+    <!-- login area -->
+    
+    
+</SqlMap>

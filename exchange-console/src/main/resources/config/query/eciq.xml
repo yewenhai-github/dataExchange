@@ -1,0 +1,1407 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<SqlMap>
+	<select id="GetExportCustomsCheckByIndx">
+		<![CDATA[
+	       SELECT * FROM t_worksheet 
+	       where INDX_Z=@INDX_Z 
+		]]>
+	</select>
+	<select id="GetExportInspectionList">
+		<![CDATA[
+		     SELECT D.*,G.DECL_GOODS_CNAME GOODS_CNAME FROM ITF_DCL_IO_DECL D
+	          LEFT JOIN ITF_DCL_IO_DECL_GOODS G ON D.DECL_NO = G.DECL_NO AND G.GOODS_NO=1
+	          WHERE D.IS_DECL_LAW='1' AND D.APL_KIND='O' AND D.part_id = #part_id#
+	     		<< AND D.DECL_NO LIKE #DECL_NO# >>
+	     		<< AND D.CON_INDX LIKE #CON_INDX# >>
+	     		<< AND D.DECL_GET_NO LIKE #DECL_GET_NO# >>
+	     		<< AND D.DECL_STATUS_CODE = #DECL_STATUS_CODE# >>
+	     		<< AND D.CONTRACT_NO LIKE #CONTRACT_NO# >>
+            	<< AND D.CONSIGNOR_CODE LIKE #CONSIGNOR_CODE# >>
+            	<< AND D.CONSIGNOR_CNAME LIKE #CONSIGNOR_CNAME# >>
+	     		<< and D.DECL_DATE >=to_date(#DECL_DATE_FROM#,'yyyy-mm-dd hh24:mi:ss') >>
+            	<< and D.DECL_DATE < to_date(#DECL_DATE_TO#,'yyyy-mm-dd hh24:mi:ss')+1 >>
+            	<< AND D.INPUT_SERIAL LIKE #INPUT_SERIAL# >>
+	     		order by D.CREATE_TIME DESC
+		]]>
+	</select>
+	<select id="GetExportInspById">
+		<![CDATA[
+	     		  SELECT   ITF_DCL_IO_DECL.*,(Select ENT_QUALIF_TYPE_CODE from ITF_DCL_IO_DECL_LIMIT 
+	     		  Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO AND rownum<=1) as EntDeclCODE,
+	     		  (Select ENT_QUALIF_NAME from ITF_DCL_IO_DECL_LIMIT 
+	     		  Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO AND rownum<=1) as EntDeclNAME,
+	     		  (Select DECL_LIMIT_ID from ITF_DCL_IO_DECL_LIMIT 
+	     		  Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO AND rownum<=1) as LIMITID,
+                  ifnull((Select rownum from ITF_DCL_IO_DECL_LIMIT Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO AND rownum<=1),0) as ROW_NUM,  
+                  (Select count(0) from ITF_DCL_IO_DECL_LIMIT Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO) as ROWSCOUNT    
+                  FROM  ITF_DCL_IO_DECL WHERE DECL_NO = @DECL_NO
+		]]>
+	</select>
+	<select id="GetExportInspGoodsByPindx">
+		<![CDATA[
+	        SELECT *
+			  FROM ITF_DCL_IO_DECL_GOODS
+			 WHERE DECL_NO = #DECL_NO#
+			 ORDER BY GOODS_NO asc
+		]]>
+	</select>
+	<select id="GetExportInspGoodJsonById">
+		<![CDATA[
+	        SELECT A.*,
+			 B.ITEM_NAME AS PROD_HS_NAME,(Select sum(PACK_QTY) from ITF_DCL_IO_DECL_GOODS_PACK Where GOODS_ID=A.GOODS_ID)  as PACK_QTY,(Select PACK_CATG_NAME from ITF_DCL_IO_DECL_GOODS_PACK Where GOODS_ID=A.GOODS_ID and rownum<=1) as PACK_CATG,
+			 C.ITEM_NAME AS ORIG_PLACE_NAME,
+			  (Select LICENCE_NO from ITF_DCL_IO_DECL_GOODS_LIMIT Where GOODS_ID=A.GOODS_ID and rownum=1) as UNLIMIT_CODE,
+			 (Select LIC_NAME from ITF_DCL_IO_DECL_GOODS_LIMIT Where GOODS_ID=A.GOODS_ID and rownum=1) as DANGUNLIMIT_NAME,
+			 (Select LIMIT_ID from ITF_DCL_IO_DECL_GOODS_LIMIT Where GOODS_ID=A.GOODS_ID and rownum=1) as UNLIMITID,
+			 (Select rownum from ITF_DCL_IO_DECL_GOODS_LIMIT Where GOODS_ID=A.GOODS_ID and rownum=1) as ROW_NUM,
+			 D.ITEM_NAME AS QTY_MEAS_UNIT_NAME,
+			 STD_WEIGHT as STD_WEIGHTOTHER,STD_QTY as STD_QTYOTHER,
+			 E.ITEM_NAME AS WT_MEAS_UNIT_NAME,
+			 F.ITEM_NAME AS CURRENCY_NAME,
+			 G.ITEM_NAME AS GOODS_ATTR_NAME,
+			 H.ITEM_NAME AS PURPOSE_NAME,
+			 I.ITEM_NAME AS STD_WEIGHT_UNIT_NAME, 
+			 K.NAME AS PACK_TYPE_NAME,(Select ITEM_NAME from S_ECIQ_WEIGHT_UNIT Where item_code=STD_WEIGHT_UNIT_CODE) as STD_WEIGHT_UNIT_NAME,(Select ITEM_NAME from S_ECIQ_QTY_UNIT Where item_code=STD_QTY_UNIT_CODE) as STD_QTY_UNIT_NAME 
+			 FROM ITF_DCL_IO_DECL_GOODS  A
+			 LEFT JOIN S_ECIQ_HSCODE B ON A.PROD_HS_CODE=B.ITEM_CODE
+			 LEFT JOIN S_ECIQ_CHINAADMINAREAS C ON A.ORIG_PLACE_CODE=C.ITEM_CODE           
+			 LEFT JOIN S_ECIQ_QTY_UNIT D ON A.QTY_MEAS_UNIT=D.ITEM_CODE
+			 LEFT JOIN S_ECIQ_WEIGHT_UNIT E ON A.WT_MEAS_UNIT=E.ITEM_CODE
+			 LEFT JOIN S_ECIQ_CURRENCY F ON A.CURRENCY=F.ITEM_CODE
+			 LEFT JOIN S_ECIQ_GOODS_ATTR G ON A.GOODS_ATTR=G.ITEM_CODE
+			 LEFT JOIN S_ECIQ_COMMODITYUSAGE H ON A.PURPOSE=H.ITEM_CODE
+			 LEFT JOIN S_ECIQ_WEIGHT_UNIT I ON A.STD_WEIGHT_UNIT_CODE=I.ITEM_CODE  
+			 LEFT JOIN S_ECIQ_CLASSFY K ON A.PACK_TYPE=K.CODE
+	        	WHERE A.GOODS_ID= @GOODS_ID
+		]]>
+	</select>
+	<select id="GetExportInspContainerByPIndx">
+		<![CDATA[
+			select
+	         *  from Itf_Dcl_Io_Decl_Cont  
+			 where decl_no=#DECL_NO#
+		]]>
+	</select>
+	<select id="GetExportInspContainerInfoById">
+		<![CDATA[
+	       select 
+			A.*, 
+			B.ITEM_NAME AS CNTNR_MODE_NAME
+			 from Itf_Dcl_Io_Decl_Cont A
+			LEFT JOIN S_ECIQ_CONTAINERSPECCODE B ON A.CNTNR_MODE_CODE=B.ITEM_CODE
+			 where CONT_ID=#CONT_ID#
+		]]>
+	</select>
+	<select id="GetImportInspectionList">
+		<![CDATA[
+		     SELECT D.*,G.DECL_GOODS_CNAME GOODS_CNAME FROM ITF_DCL_IO_DECL D
+            LEFT JOIN ITF_DCL_IO_DECL_GOODS G ON D.DECL_NO = G.DECL_NO AND G.GOODS_NO=1
+	          WHERE D.APL_KIND='I'
+	     		<< AND D.CON_INDX LIKE #CON_INDX# >>
+	     		<< AND D.DECL_NO LIKE #DECL_NO# >>
+	     		<< AND D.DECL_GET_NO LIKE #DECL_GET_NO# >>
+	     		<< AND D.CONTRACT_NO LIKE #CONTRACT_NO# >>
+	     		<< AND D.DECL_STATUS_CODE = #DECL_STATUS_CODE# >>
+            	<< AND D.BILL_LAD_NO LIKE #BILL_LAD_NO# >>
+            	<< AND D.CONSIGNEE_CODE LIKE #CONSIGNEE_CODE# >>
+            	<< AND D.CONSIGNEE_CNAME LIKE #CONSIGNEE_CNAME# >>
+	     		<< and D.DECL_DATE >=to_date(#DECL_DATE_FROM#,'yyyy-mm-dd hh24:mi:ss') >>
+            	<< and D.DECL_DATE < to_date(#DECL_DATE_TO#,'yyyy-mm-dd hh24:mi:ss')+1 >>
+	     		order by D.CREATE_TIME DESC 
+		]]>
+	</select>
+	<select id="GetEciqImportInspById">
+		<![CDATA[
+	     		  SELECT   ITF_DCL_IO_DECL.*,(Select ENT_QUALIF_TYPE_CODE from ITF_DCL_IO_DECL_LIMIT Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO AND rownum<=1) as EntDeclCODE,
+	     		  (Select ENT_QUALIF_NAME from ITF_DCL_IO_DECL_LIMIT Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO AND rownum<=1) as EntDeclNAME,
+	     		  (Select DECL_LIMIT_ID from ITF_DCL_IO_DECL_LIMIT Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO AND rownum<=1) as LIMITID,
+                   ifnull((Select rownum from ITF_DCL_IO_DECL_LIMIT Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO AND rownum<=1),0) as ROW_NUM,
+                  (Select count(0) from ITF_DCL_IO_DECL_LIMIT Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO) as ROWSCOUNT
+	     		  FROM  ITF_DCL_IO_DECL  WHERE DECL_NO = @DECL_NO
+		]]>
+	</select>
+	<select id="GetImportInspGoodsByPindx">
+		<![CDATA[
+	        SELECT *
+			  FROM ITF_DCL_IO_DECL_GOODS
+			 WHERE DECL_NO = #DECL_NO#
+			 ORDER BY GOODS_NO asc
+		]]>
+	</select>
+	<select id="GetEciqInspPrintById">
+		<![CDATA[
+			select A_B_C_.*,A_B_.* , C.CONT_NO from 
+			(
+			SELECT A_.DECL_NO,wm_concat(B_.ATT_DOC_NAME) AS ATTA_COLLECT_NAME  FROM 
+			(
+			SELECT ITF_DCL_IO_DECL.*,
+			       (Select ENT_QUALIF_TYPE_CODE
+			          from ITF_DCL_IO_DECL_LIMIT
+			         Where DECL_NO = ITF_DCL_IO_DECL.DECL_NO
+			           AND rownum <= 1) as EntDeclCODE,
+			       (Select ENT_QUALIF_NAME
+			          from ITF_DCL_IO_DECL_LIMIT
+			         Where DECL_NO = ITF_DCL_IO_DECL.DECL_NO
+			           AND rownum <= 1) as EntDeclNAME,
+			       (Select DECL_LIMIT_ID
+			          from ITF_DCL_IO_DECL_LIMIT
+			         Where DECL_NO = ITF_DCL_IO_DECL.DECL_NO
+			           AND rownum <= 1) as LIMITID
+			  FROM ITF_DCL_IO_DECL    
+			 WHERE ITF_DCL_IO_DECL.DECL_NO = @DECL_NO
+			 ) A_
+			 LEFT JOIN ITF_DCL_IO_DECL_ATT B_ ON A_.DECL_NO=B_.DECL_NO
+			 GROUP BY A_.DECL_NO
+			 ) A_B_
+			 left join ITF_DCL_IO_DECL A_B_C_ ON A_B_C_.DECL_NO=A_B_.DECL_NO
+			LEFT JOIN 
+			ITF_DCL_IO_DECL_CONT C ON C.DECL_NO=A_B_C_.DECL_NO
+		]]>
+	</select>
+	<select id="GetImportInspGoodJsonById">
+		<![CDATA[
+			  SELECT A.*,(Select sum(PACK_QTY) from ITF_DCL_IO_DECL_GOODS_PACK Where GOODS_ID=A.GOODS_ID)  as PACK_QTY,(Select PACK_CATG_NAME from ITF_DCL_IO_DECL_GOODS_PACK Where GOODS_ID=A.GOODS_ID and rownum<=1) as PACK_CATG
+			,B.ITEM_NAME AS PROD_HS_NAME,(Select ITEM_NAME from S_ECIQ_WEIGHT_UNIT Where item_code=STD_WEIGHT_UNIT_CODE) as STD_WEIGHT_UNIT_NAME,(Select ITEM_NAME from S_ECIQ_QTY_UNIT Where item_code=STD_QTY_UNIT_CODE) as STD_QTY_UNIT_NAME,
+			 (Select ITEM_NAME from S_ECIQ_COUNTRYCODE Where ITEM_CODE=ORI_CTRY_CODE) as ORI_CTRY_NAME,
+			 (Select LICENCE_NO from ITF_DCL_IO_DECL_GOODS_LIMIT Where GOODS_ID=A.GOODS_ID and rownum=1) as UNLIMIT_CODE,
+			 (Select LIC_NAME from ITF_DCL_IO_DECL_GOODS_LIMIT Where GOODS_ID=A.GOODS_ID and rownum=1) as DANGUNLIMIT_NAME,
+			 (Select LIMIT_ID from ITF_DCL_IO_DECL_GOODS_LIMIT Where GOODS_ID=A.GOODS_ID and rownum=1) as UNLIMITID,
+			 (Select rownum from ITF_DCL_IO_DECL_GOODS_LIMIT Where GOODS_ID=A.GOODS_ID and rownum=1) as ROW_NUM,
+			 STD_WEIGHT as STD_WEIGHTOTHER,STD_QTY as STD_QTYOTHER,
+			 D.ITEM_NAME AS QTY_MEAS_UNIT_NAME,
+			 E.ITEM_NAME AS WT_MEAS_UNIT_NAME,
+			 F.ITEM_NAME AS CURRENCY_NAME,
+			 G.ITEM_NAME AS GOODS_ATTR_NAME,
+			 H.ITEM_NAME AS PURPOSE_NAME,
+			 I.ITEM_NAME AS STD_WEIGHT_UNIT_NAME, 
+			 K.NAME AS PACK_TYPE_NAME
+			 FROM ITF_DCL_IO_DECL_GOODS  A
+			 LEFT JOIN S_ECIQ_HSCODE B ON A.PROD_HS_CODE=B.ITEM_CODE
+			 LEFT JOIN S_ECIQ_CHINAADMINAREAS C ON A.ORIG_PLACE_CODE=C.ITEM_CODE           
+			 LEFT JOIN S_ECIQ_QTY_UNIT D ON A.QTY_MEAS_UNIT=D.ITEM_CODE
+			 LEFT JOIN S_ECIQ_WEIGHT_UNIT E ON A.WT_MEAS_UNIT=E.ITEM_CODE
+			 LEFT JOIN S_ECIQ_CURRENCY F ON A.CURRENCY=F.ITEM_CODE
+			 LEFT JOIN S_ECIQ_GOODS_ATTR G ON A.GOODS_ATTR=G.ITEM_CODE
+			 LEFT JOIN S_ECIQ_COMMODITYUSAGE H ON A.PURPOSE=H.ITEM_CODE
+			 LEFT JOIN S_ECIQ_WEIGHT_UNIT I ON A.STD_WEIGHT_UNIT_CODE=I.ITEM_CODE  
+			 LEFT JOIN S_ECIQ_CLASSFY K ON A.PACK_TYPE=K.CODE
+	        	WHERE A.GOODS_ID= @GOODS_ID
+		]]>
+	</select>
+	<select id="GetImportInspContainerByPIndx">
+		<![CDATA[
+	        SELECT T.*,(SELECT STATE_NAME
+          FROM (SELECT STATE_NAME, CONT_ID
+                  FROM T_CONTCARSTATE
+                 WHERE STATE_CODE  IN ('08','09')
+                 ORDER BY CREATE_TIME) TC
+         WHERE TC.CONT_ID = T.CONT_ID
+           AND ROWNUM = 1) AS QUARANTINESTATE,
+           (SELECT CREATE_USER
+          FROM (SELECT CREATE_USER, CONT_ID
+                  FROM T_CONTCARSTATE
+                 WHERE STATE_CODE  IN ('08','09')
+                 ORDER BY CREATE_TIME) TC
+         WHERE TC.CONT_ID = T.CONT_ID
+           AND ROWNUM = 1) AS QUARANTINEUSER,
+           (SELECT CREATE_TIME
+          FROM (SELECT CREATE_TIME, CONT_ID
+                  FROM T_CONTCARSTATE
+                 WHERE STATE_CODE  IN ('08','09')
+                 ORDER BY CREATE_TIME) TC
+         WHERE TC.CONT_ID = T.CONT_ID
+           AND ROWNUM = 1) AS QUARANTINETIME,
+           (SELECT STATE_NAME
+          FROM (SELECT STATE_NAME, CONT_ID
+                  FROM T_CONTCARSTATE
+                 WHERE STATE_CODE = '08'
+                 ORDER BY CREATE_TIME) TC
+         WHERE TC.CONT_ID = T.CONT_ID
+           AND ROWNUM = 1) AS QUARANTINE,
+       (SELECT STATE_NAME
+          FROM (SELECT STATE_NAME, CONT_ID
+                  FROM T_CONTCARSTATE
+                 WHERE STATE_CODE = '09'
+                 ORDER BY CREATE_TIME) TC
+         WHERE TC.CONT_ID = T.CONT_ID
+           AND ROWNUM = 1) AS QUARANTINE1,
+       (SELECT STATE_NAME
+          FROM (SELECT STATE_NAME, CONT_ID
+                  FROM T_CONTCARSTATE
+                 WHERE STATE_CODE = '10'
+                 ORDER BY CREATE_TIME) TC
+         WHERE TC.CONT_ID = T.CONT_ID
+           AND ROWNUM = 1) AS DECLCHECK,
+       (SELECT STATE_NAME
+          FROM (SELECT STATE_NAME, CONT_ID
+                  FROM T_CONTCARSTATE
+                 WHERE STATE_CODE = '11'
+                 ORDER BY CREATE_TIME) TC
+         WHERE TC.CONT_ID = T.CONT_ID
+           AND ROWNUM = 1) AS DECLCHECK1
+        FROM ITF_DCL_IO_DECL_CONT T
+			 where T.decl_no=#DECL_NO#
+		]]>
+	</select>
+	<select id="GetImportInspContainerInfoById">
+		<![CDATA[
+	          select  * from Itf_Dcl_Io_Decl_Cont  where CONT_ID=@CONT_ID
+		]]>
+	</select>
+	<select id="GetImportInspContainerInfo">
+		<![CDATA[
+	           Select t.*,
+       (Select STATE_NAME
+          FROM T_CONTCARSTATE
+         WHERE STATE_CODE = '08' 
+           AND CONT_ID = t.CONT_ID) AS QUARANTINE,
+           (Select STATE_NAME
+          FROM T_CONTCARSTATE
+         WHERE STATE_CODE = '09' 
+           AND CONT_ID = t.CONT_ID) AS QUARANTINE1,
+       (Select STATE_NAME
+          FROM T_CONTCARSTATE
+         WHERE STATE_CODE = '10' 
+           AND CONT_ID = t.CONT_ID) AS DECLCHECK,
+           (Select STATE_NAME
+          FROM T_CONTCARSTATE
+         WHERE STATE_CODE = '11' 
+           AND CONT_ID = t.CONT_ID) AS DECLCHECK1
+  from ITF_DCL_IO_DECL_CONT t where 1=1
+  << AND T.DECL_NO like #DECL_NO#>>
+  << AND T.CONT_ID like #CONT_ID#>>
+   << AND T.CNTNR_MODE_CODE like #CNTNR_MODE_CODE#>>
+		]]>
+	</select>
+	<select id="GetHsCodeName">
+		<![CDATA[
+		   Select S_ECIQ_HSCODE.*,(Select ITEM_NAME from S_ECIQ_WEIGHT_UNIT Where item_code=STD_MEASURE_CODE) as STD_WEIGHT_UNIT_NAME,(Select ITEM_NAME from S_ECIQ_QTY_UNIT Where item_code=STD_MEASURE_CODE) as STD_QTY_UNIT_NAME  from S_ECIQ_HSCODE Where ITEM_CODE=@ITEM_CODE
+		]]>
+	</select>
+	<select id="GetBgWorkSheetGoodsByPindx">
+		<![CDATA[
+	        SELECT * FROM T_CUST_CARGO t  where t.CON_INDX=#CON_INDX#
+		]]>
+	</select>
+	<select id="GetBjWorkSheetGoodsByPindx">
+		<![CDATA[ 
+	        SELECT * FROM Itf_Dcl_Io_Decl_Goods t  where t.DECL_NO=#DECL_NO#
+		]]>
+	</select>
+	<select id="GetbgGoodJsonByIndx">
+		<![CDATA[
+	        SELECT * FROM T_CUST_CARGO t  where t.indx=@BGGOODSINDX
+		]]>
+	</select>
+	<select id="GetbjGoodJsonByIndx">
+		<![CDATA[
+	        SELECT * FROM Itf_Dcl_Io_Decl_Goods t  where t.GOODS_ID=@BJGOODSINDX 
+		]]>
+	</select>
+	<select id="GetBgWorkSheetContsByPindx">
+		<![CDATA[
+	        SELECT * FROM T_CUST_CONTAINERS t  where t.CON_INDX=#CON_INDX#
+		]]>
+	</select>
+	<select id="GetBjWorkSheetContsByPindx">
+		<![CDATA[
+	        SELECT * FROM ITF_DCL_IO_DECL_CONT t  where t.DECL_NO=#DECL_NO#
+		]]>
+	</select>
+	<select id="GetInspContJsonByIndx">
+		<![CDATA[
+	        SELECT * FROM ITF_DCL_IO_DECL_CONT t  where t.CONT_ID=@BJCONT_ID
+		]]>
+	</select>
+	<select id="GetCustContJsonByIndx">
+		<![CDATA[
+	        SELECT * FROM T_CUST_CONTAINERS t  where t.INDX=@BGCONTINDX
+		]]>
+	</select>
+	<select id="GetcorpListByPindx">
+		<![CDATA[
+	        SELECT * FROM T_CUST_DOCUMENTS t  where t.CON_INDX=#CON_INDX# 
+		]]>
+	</select>
+	<select id="GetCorpJsonByIndx">
+		<![CDATA[
+	        SELECT * FROM T_CUST_DOCUMENTS t  where t.indx=@INDX
+		]]>
+	</select>
+	<select id="GetexchangesListByPindx">
+		<![CDATA[
+	        SELECT * FROM T_DECL_EXCHANGE t  where t.DECL_NO=#CON_INDX# 
+		]]>
+	</select>
+	<select id="GetexchangesByIndx">
+		<![CDATA[
+	        SELECT * FROM T_DECL_EXCHANGE t  where t.INDX=#INDX# 
+		]]>
+	</select>
+	<select id="GetpackListByPindx">
+		<![CDATA[
+	        SELECT * FROM T_DECL_PACK t  where t.DECL_NO=#CON_INDX# 
+		]]>
+	</select>
+	<select id="GetpackInfoByIndx">
+		<![CDATA[
+	        SELECT * FROM T_DECL_PACK t  where t.INDX=#INDX# 
+		]]>
+	</select>
+	<select id="GetLimitListByPindx">
+		<![CDATA[
+	        SELECT * FROM T_DECL_LIMIT t  where t.DECL_NO=#CON_INDX# 
+		]]>
+	</select>
+	<select id="GetLimitInfoByIndx">
+		<![CDATA[
+	        SELECT * FROM T_DECL_LIMIT t  where t.INDX=#INDX# 
+		]]>
+	</select>
+	<select id="GetcommonEntLimitListByPIndx">
+		<![CDATA[
+	        SELECT * FROM ITF_DCL_IO_DECL_LIMIT t  where t.DECL_NO=#DECL_NO# 
+		]]>
+	</select>
+	<select id="GetcommonEntLimitInfoByIndx">
+		<![CDATA[
+	        SELECT * FROM ITF_DCL_IO_DECL_LIMIT t  where t.DECL_LIMIT_ID=@DECL_LIMIT_ID
+		]]>
+	</select>
+	<select id="GetcommonDeclUserListByPIndx">
+		<![CDATA[
+	       SELECT * FROM ITF_DCL_IO_DECL_USER t  where t.DECL_NO=#DECL_NO# 
+		]]>
+	</select>
+	<select id="GetcommonDeclUserInfoByIndx">
+		<![CDATA[
+	        SELECT * FROM ITF_DCL_IO_DECL_USER t  where t.USER_ID=@USER_ID
+		]]>
+	</select>
+	<select id="GetGoodsLimitJsonByIndx">
+		<![CDATA[
+	        SELECT * FROM ITF_DCL_IO_DECL_GOODS_LIMIT t  where t.LIMIT_ID=@LIMIT_ID
+		]]>
+	</select>
+	<select id="GetcommonPackTypeListByPIndx">
+		<![CDATA[
+	       SELECT * FROM ITF_DCL_IO_DECL_GOODS_PACK t  where   DECL_NO=#DECL_NO# << AND ifnull(GOODS_ID,0)=#GOODS_ID# >>
+		]]>
+	</select>
+	<select id="GetcommonPackTypeInfoByIndx">
+		<![CDATA[
+SELECT PACK_ID,
+       GOODS_ID,
+       DECL_NO,
+       GOODS_NO,
+       PACK_LENTH,
+       PACK_HIGH,
+       PACK_WIDE,
+       PACK_TYPE_CODE,
+       PACK_CATG_NAME,
+       PACK_TYPE_SHORT,
+       PACK_QTY,
+       IS_MAIN_PACK,
+       CASE IS_MAIN_PACK WHEN '1' THEN '是' WHEN '0' THEN '否' ELSE '' END AS IS_MAIN_PACK_NAME,
+       MAT_TYPE,
+       PROC_FACTORY,
+       OPER_TIME,
+       FALG_ARCHIVE,
+       MATTING_CODE,
+       ARCHIVE_TIME,
+       TRANS_BATCH,
+       IS_MOVE,
+       WRITE_USEC,
+       PART_ID,
+       CREATOR,
+       CREATE_TIME,
+       MODIFYOR,
+       MODIFY_TIME,
+       REC_VER
+  FROM ITF_DCL_IO_DECL_GOODS_PACK t 
+	        where t.PACK_ID=@PACK_ID
+		]]>
+	</select>
+	<select id="GetcommonGoodsContListByPIndx">
+		<![CDATA[
+	       SELECT * FROM ITF_DCL_IO_DECL_GOODS_CONT t  where   DECL_NO=#DECL_NO# << AND ifnull(GOODS_ID,0)=#GOODS_ID# >> 
+		]]>
+	</select>
+	<select id="GetcommonGoodsContInfoByIndx">
+		<![CDATA[
+	        SELECT * FROM ITF_DCL_IO_DECL_GOODS_CONT t  where t.GOODS_CONT_ID=@GOODS_CONT_ID
+		]]>
+	</select>
+	<select id="GetChooseColumns">
+		<![CDATA[
+	        select * from S_ECIQ_SYSCERT
+		]]>
+	</select>
+	<select id="GetGoodAttrs">
+		<![CDATA[
+	        select * from S_ECIQ_GOODS_ATTR
+		]]>
+	</select>
+	<select id="GetcommonGoodsLimitListByPIndx">
+		<![CDATA[
+	        select * from ITF_DCL_IO_DECL_GOODS_LIMIT  t  where t.GOODS_ID=#GOODS_ID#
+		]]>
+	</select>
+	<select id="GetcommonGoodsLimitInfoByIndx">
+		<![CDATA[
+	        SELECT * FROM ITF_DCL_IO_DECL_GOODS_LIMIT t  where t.LIMIT_ID=@LIMIT_ID
+		]]>
+	</select>
+	<select id="commongoodsATTsByIndx">
+		<![CDATA[
+	       SELECT * FROM ITF_DCL_IO_DECL_ATT 
+	       where ATT_ID=@ATT_ID 
+		]]>
+	</select>
+	<select id="commongoodsATTsList">
+		<![CDATA[
+	       SELECT ITF_DCL_IO_DECL_ATT.*,ROWNUM as ROW_NUM FROM ITF_DCL_IO_DECL_ATT 
+	       where DECL_NO=#DECL_NO#
+		]]>
+	</select>
+	<select id="GetECiqReceipts">
+		<![CDATA[
+	    select s.CREATE_TIME,
+       decode(s.RSP_CODES, '0', '本地系统', '1', '本地系统', 'ECIQ') receipt_type,
+       s.RSP_CODES,
+	   s.RSP_INFO
+	  from ITF_DCL_RECEIPTS s
+	 WHERE s.DECL_NO = #DECL_NO#
+	 ORDER BY s.CREATE_TIME DESC,s.RSP_CODES DESC  
+		]]>
+	</select>
+	<select id="GetImportContDetailsList">
+		<![CDATA[
+	        select t.*,
+			 case t.lcl_flag 
+			    when '0' then '否'
+			    when '1' then '是'
+			  end as lcl_flag_Name
+			  from ITF_DCL_IO_DECL_CONT_DETAIL t
+			  where DECL_NO=#DECL_NO# << AND ifnull(CONT_ID,0)=#CONT_ID# >>
+		]]>
+	</select>
+	<select id="GetCommonContDetailsByIndx">
+		<![CDATA[
+	        select t.*,
+			 case t.lcl_flag 
+			    when '0' then '否'
+			    when '1' then '是'
+			  end as lcl_flag_Name
+			  from ITF_DCL_IO_DECL_CONT_DETAIL t
+			  where CONT_DT_ID=@CONT_DT_ID
+		]]>
+	</select>
+	<select id="commongoodsLimitsList">
+		<![CDATA[
+	       SELECT * FROM ITF_DCL_IO_DECL_GOODS_LIMIT 
+	       where DECL_NO=#DECL_NO# << AND ifnull(GOODS_ID,0)=#GOODS_ID# >>
+		]]>
+	</select>
+	<select id="getMeasurementList">
+		<![CDATA[
+		    select * from T_measurement where 1=1  
+		     <<AND TINE_NO = #TINE_NO#>>
+		]]>
+	</select>
+	<select id="getMeasurementById">
+		<![CDATA[
+		    select * from T_measurement where 1=1  AND INDX=@INDX
+		]]>
+	</select>
+	<select id="getQuarantineById">
+		<![CDATA[
+		     Select t.*,
+		   case  when 
+		       (Select count(*)
+		          FROM T_CONTCARSTATE
+		         WHERE STATE_CODE  in ('08','09') 
+		           AND CONT_ID = t.CONT_ID)>0 then 
+		           1  else 0 END AS CANSAVE
+		  from T_QUARANTINE t
+		   WHERE 1=1
+          AND CONT_ID=@CONT_ID
+		]]>
+	</select>
+	<select id="getQuarantine">
+		<![CDATA[
+		    select * from T_quarantine where 1=1  AND INDX=@INDX
+		]]>
+	</select>
+	<select id="getCheckById">
+		<![CDATA[
+		Select t.*,
+		   case  when 
+		       (Select count(*)
+		          FROM T_CONTCARSTATE
+		         WHERE STATE_CODE  in ('10','11') 
+		           AND CONT_ID = t.CONT_ID)>0 then 
+		           1  else 0 END AS CANSAVE
+		  from t_declcheck t
+		   WHERE 1=1 AND INDX=@INDX
+		]]>
+	</select>
+	<select id="getCheckByCONTID">
+		<![CDATA[
+		    Select t.*,
+		    case  when 
+		       (Select count(*)
+		          FROM T_CONTCARSTATE
+		         WHERE STATE_CODE  in ('10','11') 
+		           AND CONT_ID = t.CONT_ID)>0 then 
+		           1  else 0 END AS CANSAVE
+		   from t_declcheck t
+		   WHERE 1=1  AND CONT_ID=@CONT_ID
+		]]>
+	</select>
+	<select id="GetInspectionList">
+		<![CDATA[
+		     SELECT D.*,G.DECL_GOODS_CNAME GOODS_CNAME FROM ITF_DCL_IO_DECL D
+            LEFT JOIN ITF_DCL_IO_DECL_GOODS G ON D.DECL_NO = G.DECL_NO AND G.GOODS_NO=1
+	          WHERE D.IS_DECL_LAW='1' AND D.APL_KIND= 'I' AND D.part_id = #part_id#
+	     		<< AND D.CON_INDX LIKE #CON_INDX# >>
+	     		<< AND D.DECL_NO LIKE #DECL_NO# >>
+	     		<< AND D.DECL_GET_NO LIKE #DECL_GET_NO# >>
+	     		<< AND D.CONTRACT_NO LIKE #CONTRACT_NO# >>
+	     		<< AND D.DECL_STATUS_CODE = #DECL_STATUS_CODE# >>
+            	<< AND D.BILL_LAD_NO LIKE #BILL_LAD_NO# >>
+            	<< AND D.CONSIGNEE_CODE LIKE #CONSIGNEE_CODE# >>
+            	<< AND D.CONSIGNEE_CNAME LIKE #CONSIGNEE_CNAME# >>
+	     		<< and D.DECL_DATE >=to_date(#DECL_DATE_FROM#,'yyyy-mm-dd hh24:mi:ss') >>
+            	<< and D.DECL_DATE < to_date(#DECL_DATE_TO#,'yyyy-mm-dd hh24:mi:ss')+1 >>
+	     		order by D.CREATE_TIME DESC 
+		]]>
+	</select>
+	<select id="EciqInspDefault">
+	<![CDATA[
+		SELECT
+	    DECL_CODE_I AS DECL_CODE,
+	    DECL_NAME_I AS DECL_NAME,   
+	    CONSIGNOR_CODE_I  as  CONSIGNOR_CODE  ,
+	    CONSIGNOR_CNAME_I  as  CONSIGNOR_CNAME  ,
+	    CONSIGNOR_ENAME_I  as  CONSIGNOR_ENAME  ,
+	    CONSIGNEE_CODE_I  as  CONSIGNEE_CODE  ,
+	    CONSIGNEE_CNAME_I  as  CONSIGNEE_CNAME  ,
+	    CONSIGNEE_ENAME_I  as  CONSIGNEE_ENAME  ,
+	    decl_Reg_No_I  as  DECL_REG_NO  ,
+	    ent_Name_I  as  DECL_REG_NAME  ,
+	    INSP_ORG_CODE_I as INSP_ORG_CODE,
+	    INSP_ORG_NAME_I as INSP_ORG_NAME,
+	    check_org_name_i  as  ORG_NAME  ,
+	    check_org_code_i  as  ORG_CODE  ,
+	    org_Name_I  as  PURP_ORG_NAME  ,
+	    org_Code_I  as  PURP_ORG_CODE  ,
+	    VSA_ORG_NAME_I as VSA_ORG_NAME,
+	    VSA_ORG_CODE_I as VSA_ORG_CODE,
+	    decl_person_code_i  as  DECL_PERSN_CERT_NO  ,
+	    DECL_PERSON_NAME_I as DECL_PERSON_NAME,
+	    ent_contact_i  as	CONTACTPERSON	,
+	    CONTACTPERSON_I AS CONTACTPERSON,
+			ent_tel_i	as	CONT_TEL	,
+	    TRANS_MODE_NAME_I AS TRANS_MODE_NAME,
+	    TRANS_MODE_CODE_I AS TRANS_MODE_CODE,
+	    CONVYNCE_NAME_I AS CONVYNCE_NAME,
+	    TRADE_MODE_NAME_I AS TRADE_MODE_NAME,
+	    TRADE_MODE_CODE_I AS TRADE_MODE_CODE,
+	    DEST_NAME_I AS DEST_NAME,
+	    DEST_CODE_I AS DEST_CODE,
+	    ENTRY_PORT_NAME_I AS ENTY_PORT_NAME,
+	    ENTRY_PORT_CODE_I AS ENTY_PORT_CODE,
+	    GOODS_PLACE_I AS GOODS_PLACE,
+	    SPECIAL_REQUIRE_I AS SPECL_INSP_QURA_RE,
+		Creator	as	CREATOR	,
+		Now()	as	CREATE_TIME	,
+		TO_CHAR(Now(),'yyyyMMddhh24miss')|| SUBSTR(SEQ_COMMON.NEXTVAL,-4,4)	as	CON_INDX	,
+		Now()	as	DECL_DATE
+		from T_DEFAULTVAL
+		where CREATOR = @LoginUser AND APL_KIND_I=@APL_KIND_I
+	]]>
+	</select>
+	<select id="EciqInspDefaultGoods">
+	<![CDATA[
+		SELECT * from T_DEFAULTVAL_GOODS
+		where CREATOR = @LoginUser
+	]]>
+	</select>
+	<select id="GetEciqInspById">
+		<![CDATA[
+	     		  SELECT   ITF_DCL_IO_DECL.*,(Select ENT_QUALIF_TYPE_CODE from ITF_DCL_IO_DECL_LIMIT Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO AND rownum<=1) as EntDeclCODE,
+	     		  (Select ENT_QUALIF_NAME from ITF_DCL_IO_DECL_LIMIT Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO AND rownum<=1) as EntDeclNAME,
+	     		  (Select DECL_LIMIT_ID from ITF_DCL_IO_DECL_LIMIT Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO AND rownum<=1) as LIMITID,
+	     		  ifnull((Select rownum from ITF_DCL_IO_DECL_LIMIT Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO AND rownum<=1),0) as ROW_NUM,
+                   (Select count(0) from ITF_DCL_IO_DECL_LIMIT Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO) as ROWSCOUNT,
+                  case when DECL_STATUS_CODE = '0' then '1' when DECL_STATUS_CODE = '2' then '1' when DECL_STATUS_CODE = '9' then '1' else '0' end as CanSave    
+	     		  FROM  ITF_DCL_IO_DECL  WHERE DECL_NO = @DECL_NO
+		]]>
+	</select>
+	<select id="GetEciqInspByMergeId">
+		<![CDATA[
+	     	SELECT 
+	     	@LoginUser as CREATOR,
+		    Now() as CREATE_TIME,
+		    TO_CHAR(Now(), 'yyyyMMddhh24miss') || SUBSTR(SEQ_COMMON.NEXTVAL, -4, 4) as CON_INDX,
+		    Now() as DECL_DATE,
+			APP_DATE AS DECL_DATE,
+			INSP_ORG_CODE,
+			INSP_ORG_NAME,
+			ORG_CODE,
+			ORG_NAME,
+			CONTACTPERSON,
+			CONT_TEL,
+			SHIPPERCODE AS CONSIGNOR_CODE,
+			SHIPPERCNAME AS CONSIGNOR_CNAME,
+			SHIPPERENAME AS CONSIGNOR_ENAME,
+			CONSIGNEECODE AS CONSIGNEE_CODE,
+			CONSIGNEECNAME AS CONSIGNEE_CNAME,
+			CONSIGNEEENAME AS CONSIGNEE_ENAME,
+			TRANS_MODE_CODE,
+			TRANS_MODE_NAME,
+			CONVYNCE_NAME,
+			TRANS_MEAN_NO,
+			TRADE_MODE_CODE,
+			TRADE_MODE_NAME,
+			DESP_CTRY_CODE,
+			DESP_CTRY_NAME,
+			DEST_CODE,
+			DEST_NAME,
+			ENTY_PORT_CODE,
+			ENTY_PORT_NAME,
+			GOODS_PLACE,IN_DECL_NO 
+			FROM T_DISTRIBUTION F 
+		     WHERE F.INDX = @INDX
+		]]>
+	</select>
+	<select id="GetEciqInspByCopyId">
+		<![CDATA[
+	     		  SELECT    
+			      Now() as CREATE_TIME,
+			      TO_CHAR(Now(), 'yyyyMMddhh24miss') || SUBSTR(SEQ_COMMON.NEXTVAL, -4, 4) as CON_INDX,
+			      Now() as DECL_DATE, 
+			      	 ITF_DCL_IO_DECL.DECL_NO,
+	     		     ITF_DCL_IO_DECL.trade_mode_code,
+					 ITF_DCL_IO_DECL.contract_no,
+					 ITF_DCL_IO_DECL.mark_no,
+					 ITF_DCL_IO_DECL.trade_country_code,
+					 ITF_DCL_IO_DECL.desp_ctry_code,
+					 ITF_DCL_IO_DECL.trans_mode_code,
+					 ITF_DCL_IO_DECL.convynce_name,
+					 ITF_DCL_IO_DECL.trans_mean_no,
+					 ITF_DCL_IO_DECL.desp_port_code,
+					 ITF_DCL_IO_DECL.port_stop_code,
+					 ITF_DCL_IO_DECL.enty_port_code,
+					 ITF_DCL_IO_DECL.gds_arvl_date,
+					 ITF_DCL_IO_DECL.cmpl_dschrg_dt,
+					 ITF_DCL_IO_DECL.goods_place,
+					 ITF_DCL_IO_DECL.dest_code,
+					 ITF_DCL_IO_DECL.counter_claim,
+					 ITF_DCL_IO_DECL.bill_lad_no,
+					 ITF_DCL_IO_DECL.delivery_order,
+					 ITF_DCL_IO_DECL.insp_org_code,
+					 ITF_DCL_IO_DECL.exc_insp_dept_code,
+					 ITF_DCL_IO_DECL.decl_custm,
+					 ITF_DCL_IO_DECL.spec_decl_flag,
+					 ITF_DCL_IO_DECL.purp_org_code,
+					 ITF_DCL_IO_DECL.correlation_decl_no,
+					 ITF_DCL_IO_DECL.correlation_reason_flag,
+					 ITF_DCL_IO_DECL.specl_insp_qura_re,
+					 ITF_DCL_IO_DECL.app_cert_code,
+					 ITF_DCL_IO_DECL.appl_ori,
+					 ITF_DCL_IO_DECL.appl_copy_quan,
+					 ITF_DCL_IO_DECL.custm_reg_no,
+					 ITF_DCL_IO_DECL.decl_persn_cert_no,
+					 ITF_DCL_IO_DECL.decl_person_name,
+					 ITF_DCL_IO_DECL.decl_reg_name,
+					 ITF_DCL_IO_DECL.contactperson,
+					 ITF_DCL_IO_DECL.cont_tel,
+					 ITF_DCL_IO_DECL.consignee_code,
+					 ITF_DCL_IO_DECL.consignee_cname,
+					 ITF_DCL_IO_DECL.consignee_ename,
+					 ITF_DCL_IO_DECL.consignor_cname,
+					 ITF_DCL_IO_DECL.consignor_addr,
+					 ITF_DCL_IO_DECL.decl_code,
+					 ITF_DCL_IO_DECL.decl_date,
+					 ITF_DCL_IO_DECL.decl_get_no,
+					 ITF_DCL_IO_DECL.spec_pass_flag,
+					 ITF_DCL_IO_DECL.desp_date,
+					 ITF_DCL_IO_DECL.arriv_port_code,
+					 ITF_DCL_IO_DECL.consignee_addr,
+					 ITF_DCL_IO_DECL.consignor_code,
+					 ITF_DCL_IO_DECL.atta_collect_name,
+					 ITF_DCL_IO_DECL.is_list_good,
+					 ITF_DCL_IO_DECL.is_cont,
+					 ITF_DCL_IO_DECL.ffj_flag,
+					 ITF_DCL_IO_DECL.ffj_status,
+					 ITF_DCL_IO_DECL.resend_num,
+					 ITF_DCL_IO_DECL.is_draw,
+					 ITF_DCL_IO_DECL.total_val_us,
+					 ITF_DCL_IO_DECL.total_val_cn,
+					 ITF_DCL_IO_DECL.cont_cancel_flag,
+					 ITF_DCL_IO_DECL.fee_handle_state,
+					 ITF_DCL_IO_DECL.rels_state,
+					 ITF_DCL_IO_DECL.flg_port_inland,
+					 ITF_DCL_IO_DECL.enable_trans_flag,
+					 ITF_DCL_IO_DECL.falg_archive,
+					 ITF_DCL_IO_DECL.situation_code,
+					 ITF_DCL_IO_DECL.situation_level,
+					 ITF_DCL_IO_DECL.process_status,
+					 ITF_DCL_IO_DECL.oper_code,
+					 ITF_DCL_IO_DECL.oper_time,
+					 ITF_DCL_IO_DECL.app_cert_name,
+					 ITF_DCL_IO_DECL.ent_decl_no,
+					 ITF_DCL_IO_DECL.process_link,
+					 ITF_DCL_IO_DECL.org_code,
+					 ITF_DCL_IO_DECL.cert_cancel_flag,
+					 ITF_DCL_IO_DECL.consignor_ename,
+					 ITF_DCL_IO_DECL.archive_time,
+					 ITF_DCL_IO_DECL.trans_flag,
+					 ITF_DCL_IO_DECL.trans_batch,
+					 ITF_DCL_IO_DECL.is_move,
+					 ITF_DCL_IO_DECL.split_bill_lad_no,
+					 ITF_DCL_IO_DECL.decl_work_no,
+					 ITF_DCL_IO_DECL.write_usec,
+					 ITF_DCL_IO_DECL.apl_kind,
+					 ITF_DCL_IO_DECL.vsa_org_code,
+					 ITF_DCL_IO_DECL.orig_box_flag,
+					 ITF_DCL_IO_DECL.soft_type,
+					 ITF_DCL_IO_DECL.tech_reg_code,
+					 ITF_DCL_IO_DECL.orig_box_flag_name,
+					 ITF_DCL_IO_DECL.pass_code,
+					 ITF_DCL_IO_DECL.create_time,
+					 ITF_DCL_IO_DECL.spec_pass_flag_name,
+					 ITF_DCL_IO_DECL.spec_decl_flag_name,
+					 ITF_DCL_IO_DECL.app_cert_code_name,
+					 ITF_DCL_IO_DECL.trade_country_name,
+					 ITF_DCL_IO_DECL.desp_ctry_name,
+					 ITF_DCL_IO_DECL.desp_port_name,
+					 ITF_DCL_IO_DECL.enty_port_name,
+					 ITF_DCL_IO_DECL.dest_name,
+					 ITF_DCL_IO_DECL.decl_custm_name,
+					 ITF_DCL_IO_DECL.purp_org_name,
+					 ITF_DCL_IO_DECL.port_stop_name,
+					 ITF_DCL_IO_DECL.input_serial,
+					 ITF_DCL_IO_DECL.decl_name,
+					 ITF_DCL_IO_DECL.apl_kind_name,
+					 ITF_DCL_IO_DECL.trans_mode_name,
+					 ITF_DCL_IO_DECL.arriv_port_name,
+					 ITF_DCL_IO_DECL.trade_mode_name,
+					 ITF_DCL_IO_DECL.insp_org_name,
+					 ITF_DCL_IO_DECL.correlation_reason_flag_name,
+					 ITF_DCL_IO_DECL.job_flag,
+					 ITF_DCL_IO_DECL.org_name,
+					 ITF_DCL_IO_DECL.vsa_org_name,
+					 ITF_DCL_IO_DECL.license_code,
+					 ITF_DCL_IO_DECL.check_org_code,
+					 ITF_DCL_IO_DECL.check_org_name,
+					 ITF_DCL_IO_DECL.eciq_user_name,
+					 ITF_DCL_IO_DECL.eciq_pass_word,
+					 ITF_DCL_IO_DECL.eciq_auth_type,
+					 ITF_DCL_IO_DECL.creator,
+					 ITF_DCL_IO_DECL.modifyor,
+					 ITF_DCL_IO_DECL.modify_time,
+					 ITF_DCL_IO_DECL.rec_ver,
+					 ITF_DCL_IO_DECL.exhibition_hall_code,
+					 ITF_DCL_IO_DECL.exhibition_hall_name,
+					 ITF_DCL_IO_DECL.approvalor,
+					 ITF_DCL_IO_DECL.approval_time,
+					 ITF_DCL_IO_DECL.approval_remark,
+	     		  (Select ENT_QUALIF_TYPE_CODE from ITF_DCL_IO_DECL_LIMIT Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO AND rownum<=1) as EntDeclCODE,
+	     		  (Select ENT_QUALIF_NAME from ITF_DCL_IO_DECL_LIMIT Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO AND rownum<=1) as EntDeclNAME,
+	     		  (Select DECL_LIMIT_ID from ITF_DCL_IO_DECL_LIMIT Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO AND rownum<=1) as LIMITID,
+                  (Select rownum from ITF_DCL_IO_DECL_LIMIT Where DECL_NO=ITF_DCL_IO_DECL.DECL_NO AND rownum<=1) as ROW_NUM,
+                  case when DECL_STATUS_CODE = '0' then '1' when DECL_STATUS_CODE = '2' then '1' when DECL_STATUS_CODE = '9' then '1' else '0' end as CanSave    
+	     		  FROM  ITF_DCL_IO_DECL  WHERE DECL_NO = @DECL_NO
+		]]>
+	</select>
+	<select id="GetInspGoodsList">
+		<![CDATA[
+	        SELECT *
+			  FROM ITF_DCL_IO_DECL_GOODS
+			 WHERE DECL_NO = #DECL_NO#
+			 ORDER BY GOODS_NO asc
+		]]>
+	</select>
+	<select id="GetInspPrintById">
+			<![CDATA[
+				  SELECT ifnull(ITF_DCL_IO_DECL.PASS_CODE,ITF_DCL_IO_DECL.PRE_CUSTOMS_NO) CUSTOMS_NO,ITF_DCL_IO_DECL.TRANS_MODE_NAME || ' ' || ITF_DCL_IO_DECL.CONVYNCE_NAME || ' ' || ITF_DCL_IO_DECL.TRANS_MEAN_NO  AS TRANS_MODE_NAME_3,ITF_DCL_IO_DECL.*,
+				       (SELECT ENT_QUALIF_TYPE_CODE
+				          FROM ITF_DCL_IO_DECL_LIMIT
+				         WHERE DECL_NO = ITF_DCL_IO_DECL.DECL_NO
+				           AND ROWNUM <= 1) AS ENTDECLCODE,
+				       (SELECT ENT_QUALIF_NAME
+				          FROM ITF_DCL_IO_DECL_LIMIT
+				         WHERE DECL_NO = ITF_DCL_IO_DECL.DECL_NO
+				           AND ROWNUM <= 1) AS ENTDECLNAME,
+				       (SELECT LICENCE_NO
+				          FROM ITF_DCL_IO_DECL_GOODS_LIMIT
+				         WHERE DECL_NO = ITF_DCL_IO_DECL.DECL_NO
+	                 AND ROWNUM <= 1) AS ENT_QUALIF_NO,
+	             (SELECT PURPOSE_NAME
+	                FROM ITF_DCL_IO_DECL_GOODS
+	               WHERE DECL_NO = ITF_DCL_IO_DECL.DECL_NO
+	                 AND ROWNUM <= 1) AS PURPOSE_NAME
+	        FROM ITF_DCL_IO_DECL WHERE DECL_NO = @DECL_NO
+	    ]]>
+	  </select>
+	  <select id="GetInspGoodsListPrint">
+	    <![CDATA[
+			SELECT G.DECL_GOODS_CNAME || ' ' || G.DECL_GOODS_ENAME || ' ' || G.GOODS_MODEL || ' ' || G.GOODS_SPEC AS GOODS_NAME,
+			       DECODE(G.MONITOR_CONDITION,'',G.PROD_HS_CODE,G.PROD_HS_CODE || ' (' || G.MONITOR_CONDITION || ')') AS HS_CODE_INSP,
+			       G.QTY || G.QTY_MEAS_UNIT_NAME || CHR(10) || G.WEIGHT ||
+			       G.WT_MEAS_UNIT_NAME AS STD_DISPLAY,
+			       G.GOODS_TOTAL_VAL || ' ' || G.CURRENCN AS TOTALAMOUNT, 
+			       (SELECT replace(wm_concat(P.PACK_QTY || ' ' || P.PACK_CATG_NAME),',',chr(10))  FROM (SELECT * FROM ITF_DCL_IO_DECL_GOODS_PACK ORDER BY is_main_pack DESC)
+ P WHERE P.GOODS_ID=G.GOODS_ID) AS PACK_CATG, 
+			       G.*
+			  FROM ITF_DCL_IO_DECL_GOODS G 
+			 WHERE G.DECL_NO = @DECL_NO
+			 ORDER BY G.GOODS_NO ASC
+	    ]]>
+	 </select>
+	 <select id="GetInspGoodsListPrintAll">
+	    <![CDATA[
+	    	SELECT 
+	      G.GOODS_NO,
+	       G.DECL_GOODS_CNAME || ' ' || G.DECL_GOODS_ENAME || ' ' || G.GOODS_MODEL  || ' ' || G.GOODS_SPEC AS GOODS_NAME,
+	            DECODE(G.MONITOR_CONDITION,'',G.PROD_HS_CODE,G.PROD_HS_CODE || ' (' || G.MONITOR_CONDITION || ')') AS HS_CODE_INSP,
+				G.QTY || G.QTY_MEAS_UNIT_NAME || CHR(10) || G.WEIGHT || G.WT_MEAS_UNIT_NAME AS STD_DISPLAY,
+				       G.GOODS_TOTAL_VAL || ' ' || G.CURRENCN AS TOTALAMOUNT,
+				        (SELECT replace(wm_concat(P.PACK_QTY || ' ' || P.PACK_CATG_NAME),',',chr(10))  FROM (SELECT * FROM ITF_DCL_IO_DECL_GOODS_PACK ORDER BY is_main_pack DESC)
+ P WHERE P.GOODS_ID=G.GOODS_ID) AS PACK_CATG, 
+				       G.*
+				  FROM ITF_DCL_IO_DECL_GOODS G
+			 WHERE G.DECL_NO = @DECL_NO
+			 ORDER BY G.GOODS_NO ASC
+	    ]]>
+	 </select>
+	 <select id="GetInspGoodsListPrintPre">
+	    <![CDATA[
+			 SELECT * FROM (SELECT A.*, ROWNUM RN FROM (
+SELECT  
+      G.GOODS_NO,
+       G.DECL_GOODS_CNAME || ' ' || G.DECL_GOODS_ENAME || ' ' || G.GOODS_MODEL  || ' ' || G.GOODS_SPEC AS GOODS_NAME,
+            DECODE(G.MONITOR_CONDITION,'',G.PROD_HS_CODE,G.PROD_HS_CODE || ' (' || G.MONITOR_CONDITION || ')') AS HS_CODE_INSP,
+      G.QTY || G.QTY_MEAS_UNIT_NAME || CHR(10) || G.WEIGHT || G.WT_MEAS_UNIT_NAME AS STD_DISPLAY,
+             G.GOODS_TOTAL_VAL || ' ' || G.CURRENCN AS TOTALAMOUNT,
+             (SELECT replace(wm_concat(P.PACK_QTY || ' ' || P.PACK_CATG_NAME),',',chr(10))  FROM (SELECT * FROM ITF_DCL_IO_DECL_GOODS_PACK ORDER BY is_main_pack DESC)
+ P WHERE P.GOODS_ID=G.GOODS_ID) AS PACK_CATG, 
+             G.GOODS_ID,
+             G.GOODS_TOTAL_VAL,
+             G.CURRENCN,
+             G.ORI_CTRY_NAME
+        FROM ITF_DCL_IO_DECL_GOODS G 
+			   WHERE G.DECL_NO =@DECL_NO
+			 ORDER BY G.GOODS_NO ASC
+) A WHERE ROWNUM <= (1 * 20 )  ) WHERE RN >= ( (1-1) * 20 + 1)
+	    ]]>
+	 </select>
+	 <select id="GetInspGoodsListPrintNext">
+	    <![CDATA[
+	 SELECT * FROM (SELECT A.*, ROWNUM RN FROM (
+	    SELECT  
+      G.GOODS_NO,
+      G.DECL_GOODS_CNAME || ' ' || G.DECL_GOODS_ENAME || ' ' || G.GOODS_MODEL  || ' ' || G.GOODS_SPEC AS GOODS_NAME,
+            DECODE(G.MONITOR_CONDITION,'',G.PROD_HS_CODE,G.PROD_HS_CODE || ' (' || G.MONITOR_CONDITION || ')') AS HS_CODE_INSP,
+     G.QTY || G.QTY_MEAS_UNIT_NAME || CHR(10) || G.WEIGHT || G.WT_MEAS_UNIT_NAME AS STD_DISPLAY,
+             G.GOODS_TOTAL_VAL || ' ' || G.CURRENCN AS TOTALAMOUNT,
+             (SELECT replace(wm_concat(P.PACK_QTY || ' ' || P.PACK_CATG_NAME),',',chr(10))  FROM (SELECT * FROM ITF_DCL_IO_DECL_GOODS_PACK ORDER BY is_main_pack DESC)
+ P WHERE P.GOODS_ID=G.GOODS_ID) AS PACK_CATG, 
+             G.GOODS_ID,
+             G.GOODS_TOTAL_VAL,
+             G.CURRENCN,
+             G.ORI_CTRY_NAME
+        FROM ITF_DCL_IO_DECL_GOODS G
+			  
+			   WHERE G.DECL_NO = @DECL_NO
+			 ORDER BY G.GOODS_NO ASC
+) A WHERE ROWNUM <= (2 * 20 )  ) WHERE RN >= ( (2-1) * 20 + 1)
+	    ]]>
+	 </select>
+	<select id="InspCheckGoods">
+		<![CDATA[
+	select g.*,
+	case when STD_WEIGHT_UNIT_CODE IS NULL THEN QTY ELSE WEIGHT END AS STD_DISPLAY,PACK_CATG_NAME as PACK_CATG
+	FROM ITF_DCL_IO_DECL_GOODS g 
+	LEFT JOIN ITF_DCL_IO_DECL_GOODS_PACK gp on g.GOODS_ID = gp.GOODS_ID AND IS_MAIN_PACK = 1
+	where g.DECL_NO= @DeclData.DECL_NO  order by g.goods_no 
+		]]>
+	</select>
+	<select id="GetInspGoodsById">
+		<![CDATA[
+			 SELECT A.*,
+			(Select PACK_QTY from ITF_DCL_IO_DECL_GOODS_PACK Where GOODS_ID=A.GOODS_ID and IS_MAIN_PACK = 1)  as PACK_QTY,
+			(Select PACK_CATG_NAME from ITF_DCL_IO_DECL_GOODS_PACK Where GOODS_ID=A.GOODS_ID and IS_MAIN_PACK = 1) as PACK_CATG,
+			(Select LICENCE_NO from ITF_DCL_IO_DECL_GOODS_LIMIT Where GOODS_ID=A.GOODS_ID and rownum=1) as UNLIMIT_CODE,
+			(Select LIC_NAME from ITF_DCL_IO_DECL_GOODS_LIMIT Where GOODS_ID=A.GOODS_ID and rownum=1) as ENTDECLNAME,
+			(Select LIMIT_ID from ITF_DCL_IO_DECL_GOODS_LIMIT Where GOODS_ID=A.GOODS_ID and rownum=1) as LIMITID,
+			ifnull((Select rownum from ITF_DCL_IO_DECL_GOODS_LIMIT Where GOODS_ID=A.GOODS_ID and rownum=1),0) as ROW_NUM,
+			(Select count(0) from ITF_DCL_IO_DECL_GOODS_LIMIT Where GOODS_ID=A.GOODS_ID) as ROWSCOUNT,
+			case when STD_WEIGHT_UNIT_CODE IS NULL THEN 1 ELSE 2 END AS STD_TYPE,
+			case when STD_WEIGHT_UNIT_CODE IS NULL THEN STD_QTY_UNIT_CODE ELSE STD_WEIGHT_UNIT_CODE END AS STD_MEASURE_CODE,
+			case when STD_WEIGHT_UNIT_CODE IS NULL THEN STD_QTY_UNIT_NAME ELSE STD_WEIGHT_UNIT_NAME END AS STD_MEASURE_CODE_NAME,
+			case when STD_WEIGHT_UNIT_CODE IS NULL THEN STD_QTY_UNIT_CODE || '/' || STD_QTY_UNIT_NAME ELSE STD_WEIGHT_UNIT_CODE || '/' || STD_WEIGHT_UNIT_NAME END AS STD_UNIT_DISPLAY,
+			case when STD_WEIGHT_UNIT_CODE IS NULL THEN QTY ELSE WEIGHT END AS STD_DISPLAY
+			FROM ITF_DCL_IO_DECL_GOODS  A
+ 	        	WHERE A.GOODS_ID= @GOODS_ID
+		]]>
+	</select>
+	<select id="GetInspTdisGoodsByIndx">
+		<![CDATA[
+		 SELECT ROWNUM GOODS_NO,AA.* FROM (
+	    SELECT SUM(GOODS_ID) GOODS_ID,PROD_HS_CODE,CIQ_CODE,DECL_GOODS_CNAME,DECL_GOODS_ENAME,ORI_CTRY_CODE,ORI_CTRY_NAME,SUM(QTY) AS QTY,QTY_MEAS_UNIT,QTY_MEAS_UNIT_NAME,SUM(WEIGHT) AS WEIGHT,WT_MEAS_UNIT,WT_MEAS_UNIT_NAME,
+	    PRICE_PER_UNIT,SUM(GOODS_TOTAL_VAL) AS GOODS_TOTAL_VAL,CURRENCY,CURRENCN,GOODS_SPEC,PURPOSE,PURPOSE_NAME,GOODS_BRAND,STD_DISPLAY,STD_MEASURE_CODE,STD_MEASURE_CODE_NAME,
+	    STD_WEIGHT,STD_WEIGHT_UNIT_CODE,STD_WEIGHT_UNIT_NAME,STD_QTY,STD_QTY_UNIT_CODE,STD_QTY_UNIT_NAME FROM 
+	    (
+	    SELECT  
+	         INDX              AS GOODS_ID,         
+	         HS_CODE           AS PROD_HS_CODE,
+	         CIQ_CODE          AS CIQ_CODE,
+	         GOODS_CNAME       AS DECL_GOODS_CNAME,
+	         GOODS_ENAME       AS DECL_GOODS_ENAME,
+	         ORIGIN_PLACE_CODE AS ORI_CTRY_CODE,
+	         ORIGIN_PLACE_NAME AS ORI_CTRY_NAME,
+	         QTY,
+	         QTY_UNIT_CODE     AS QTY_MEAS_UNIT,
+	         QTY_UNIT_NAME     AS QTY_MEAS_UNIT_NAME,
+	         WEIGHT,
+	         WEIGHT_UNIT_CODE  AS WT_MEAS_UNIT,
+	         WEIGHT_UNIT_NAME  AS WT_MEAS_UNIT_NAME,
+	         GOODS_UNIT_PRICE AS PRICE_PER_UNIT,
+	         GOODS_TOTAL_VALUES AS GOODS_TOTAL_VAL,
+	         CURR_UNIT_NAME  AS CURRENCN,
+	         CURR_UNIT  AS CURRENCY,
+	         GOODS_MODEL  AS GOODS_SPEC,
+	         PURPOSE_CODE  AS PURPOSE,
+	         PURPOSE_NAME  AS PURPOSE_NAME,
+	         GOODS_BRAND  AS GOODS_BRAND,
+	         STD_QUANTITY  AS STD_DISPLAY,
+	         STD_UNIT_CODE  AS STD_MEASURE_CODE,
+	         STD_UNIT_NAME  AS STD_MEASURE_CODE_NAME,
+	         STD_WEIGHT  AS STD_WEIGHT,
+	         STD_WEIGHT_UNIT_CODE  AS STD_WEIGHT_UNIT_CODE,
+	         STD_WEIGHT_UNIT_NAME  AS STD_WEIGHT_UNIT_NAME,
+	         STD_QTY  AS STD_QTY,
+	         STD_QTY_UNIT_CODE  AS STD_QTY_UNIT_CODE,
+	         STD_QTY_UNIT_NAME  AS STD_QTY_UNIT_NAME
+	         FROM T_DISTRIBUTION_GOODS F  
+	         WHERE F.P_INDX IN (#PINDX#)
+	    )      
+	         GROUP BY PROD_HS_CODE,CIQ_CODE,DECL_GOODS_CNAME,DECL_GOODS_ENAME,ORI_CTRY_CODE,ORI_CTRY_NAME,QTY_MEAS_UNIT,QTY_MEAS_UNIT_NAME,WT_MEAS_UNIT,WT_MEAS_UNIT_NAME,
+	         PRICE_PER_UNIT,CURRENCY,CURRENCN,GOODS_SPEC,PURPOSE,PURPOSE_NAME,GOODS_BRAND,STD_DISPLAY,STD_MEASURE_CODE,STD_MEASURE_CODE_NAME,
+	         STD_WEIGHT,STD_WEIGHT_UNIT_CODE,STD_WEIGHT_UNIT_NAME,STD_QTY,STD_QTY_UNIT_CODE,STD_QTY_UNIT_NAME
+	    ) AA
+ 	     WHERE AA.GOODS_ID= #GOODS_ID#
+		]]>
+	</select>
+	<select id="GetInspContainerList">
+		<![CDATA[
+	        select
+	        A.* 
+			 from Itf_Dcl_Io_Decl_Cont A
+			 where decl_no= #DECL_NO#
+		]]>
+	</select>
+	<select id="GetInspContainerById">
+		<![CDATA[
+	          select  * from Itf_Dcl_Io_Decl_Cont  where CONT_ID=@CONT_ID
+		]]>
+	</select>
+	<select id="GetEntLimitsList">
+		<![CDATA[
+	        SELECT * FROM ITF_DCL_IO_DECL_LIMIT t  where t.DECL_NO=#DECL_NO# 
+		]]>
+	</select>
+	<select id="GetCheckFilesList">
+		<![CDATA[
+		  SELECT * FROM ITF_DCL_MARK_LOB
+		  WHERE DECL_NO=#P_INDX# 
+		  AND ATTACH_ACTION_NO=#BIZ_TYPE#
+		  ORDER BY MARK_ID DESC
+		]]>
+	</select>
+	<select id="getCheckEditCONTID">
+		<![CDATA[
+			     Select t.*,ifnull(t.CONTAINERQTY,(SELECT COUNT(*) FROM ITF_DCL_IO_DECL_CONT WHERE DECL_NO=T.DECL_NO)) CONTAINERQTY,
+				   case  when 
+				       (Select count(*) FROM T_CONTCARSTATE
+				         WHERE STATE_CODE in ('10','11') 
+				         AND CONT_ID = t.CONT_ID)>0 THEN 1  else 0 END AS CANSAVE,
+				       C.CONT_NO,C.CNTNR_MODE_NAME,G.DECL_GOODS_CNAME,ifnull(G.QTY,0)||'/'||ifnull(G.WEIGHT,0) QTYANDWEIGHT,
+				       D.CONSIGNEE_CNAME,D.DECL_REG_NAME,D.CONSIGNOR_CNAME,D.DESP_CTRY_NAME,D.CONVYNCE_NAME||' '||D.TRANS_MEAN_NO TRANSANDNO,
+				       D.GOODS_PLACE,D.APP_CERT_CODE,
+       (SELECT wm_concat(LICENCE_NO) FROM ITF_DCL_IO_DECL_GOODS_LIMIT WHERE DECL_NO=T.DECL_NO AND GOODS_ID=G.GOODS_ID) LICENCE_NO
+				  from t_declcheck t
+				  LEFT JOIN ITF_DCL_IO_DECL_CONT C ON T.CONT_ID=C.CONT_ID AND T.DECL_NO=C.DECL_NO
+				  LEFT JOIN ITF_DCL_IO_DECL_GOODS G ON T.DECL_NO=G.DECL_NO  
+				  LEFT JOIN ITF_DCL_IO_DECL D ON T.DECL_NO=D.DECL_NO  
+			   WHERE ROWNUM <= 1 AND T.CONT_ID=@CONT_ID
+		]]>
+	</select>
+	<select id="getCheckEditById">
+		<![CDATA[
+			  Select t.*,ifnull(t.CONTAINERQTY,(SELECT COUNT(*) FROM ITF_DCL_IO_DECL_CONT WHERE DECL_NO=T.DECL_NO)) CONTAINERQTY,
+			   case  when 
+			       (Select count(*) FROM T_CONTCARSTATE
+			         WHERE STATE_CODE in ('10','11') 
+			         AND CONT_ID = t.CONT_ID)>0 THEN 1  else 0 END AS CANSAVE,
+			       C.CONT_NO,C.CNTNR_MODE_NAME,G.DECL_GOODS_CNAME,ifnull(G.QTY,0)||'/'||ifnull(G.WEIGHT,0) QTYANDWEIGHT,
+			       D.CONSIGNEE_CNAME,D.DECL_REG_NAME,D.CONSIGNOR_CNAME,D.DESP_CTRY_NAME,D.CONVYNCE_NAME||' '||D.TRANS_MEAN_NO TRANSANDNO,
+			       D.GOODS_PLACE,D.APP_CERT_CODE,
+       (SELECT wm_concat(LICENCE_NO) FROM ITF_DCL_IO_DECL_GOODS_LIMIT WHERE DECL_NO=T.DECL_NO AND GOODS_ID=G.GOODS_ID) LICENCE_NO
+			  from t_declcheck t
+			  LEFT JOIN ITF_DCL_IO_DECL_CONT C ON T.CONT_ID=C.CONT_ID AND T.DECL_NO=C.DECL_NO
+			  LEFT JOIN ITF_DCL_IO_DECL_GOODS G ON T.DECL_NO=G.DECL_NO  
+			  LEFT JOIN ITF_DCL_IO_DECL D ON T.DECL_NO=D.DECL_NO   
+			   WHERE ROWNUM <= 1 AND T.INDX=@INDX
+		]]>
+	</select>
+	<select id="GetCheckPrint">
+			<![CDATA[
+				  Select t.*,ifnull(t.CONTAINERQTY,(SELECT COUNT(*) FROM ITF_DCL_IO_DECL_CONT WHERE DECL_NO=T.DECL_NO)) CONTAINERQTY,
+			   case  when 
+			       (Select count(*) FROM T_CONTCARSTATE
+			         WHERE STATE_CODE in ('10','11') 
+			         AND CONT_ID = t.CONT_ID)>0 THEN 1  else 0 END AS CANSAVE,
+			       C.CONT_NO,C.CNTNR_MODE_NAME,G.DECL_GOODS_CNAME,ifnull(G.QTY,0)||'/'||ifnull(G.WEIGHT,0) QTYANDWEIGHT,
+			       D.CONSIGNEE_CNAME,D.DECL_REG_NAME,D.CONSIGNOR_CNAME,D.DESP_CTRY_NAME,D.CONVYNCE_NAME||' '||D.TRANS_MEAN_NO TRANSANDNO,
+			       D.GOODS_PLACE,D.APP_CERT_CODE,
+       (SELECT wm_concat(LICENCE_NO) FROM ITF_DCL_IO_DECL_GOODS_LIMIT WHERE DECL_NO=T.DECL_NO AND GOODS_ID=G.GOODS_ID) LICENCE_NO
+			  from t_declcheck t
+			  LEFT JOIN ITF_DCL_IO_DECL_CONT C ON T.CONT_ID=C.CONT_ID AND T.DECL_NO=C.DECL_NO
+			  LEFT JOIN ITF_DCL_IO_DECL_GOODS G ON T.DECL_NO=G.DECL_NO  
+			  LEFT JOIN ITF_DCL_IO_DECL D ON T.DECL_NO=D.DECL_NO 
+			   WHERE ROWNUM <= 1 AND T.CONT_ID = @CONT_ID
+	    ]]>
+	  </select>
+	  <select id="GetDistriGoodsByPindxs">
+		<![CDATA[ 
+		SELECT ROWNUM GOODS_NO,AA.* FROM (
+	    SELECT SUM(GOODS_ID) GOODS_ID,PROD_HS_CODE,CIQ_CODE,DECL_GOODS_CNAME,DECL_GOODS_ENAME,ORI_CTRY_CODE,ORI_CTRY_NAME,SUM(QTY) AS QTY,QTY_MEAS_UNIT,QTY_MEAS_UNIT_NAME,SUM(WEIGHT) AS WEIGHT,WT_MEAS_UNIT,WT_MEAS_UNIT_NAME,
+	    PRICE_PER_UNIT,SUM(GOODS_TOTAL_VAL) AS GOODS_TOTAL_VAL,CURRENCY,CURRENCN,GOODS_SPEC,PURPOSE,PURPOSE_NAME,GOODS_BRAND,STD_DISPLAY,STD_MEASURE_CODE,STD_MEASURE_CODE_NAME,
+	    STD_WEIGHT,STD_WEIGHT_UNIT_CODE,STD_WEIGHT_UNIT_NAME,STD_QTY,STD_QTY_UNIT_CODE,STD_QTY_UNIT_NAME FROM 
+	    (
+	    SELECT  
+	         INDX              AS GOODS_ID,         
+	         HS_CODE           AS PROD_HS_CODE,
+	         CIQ_CODE          AS CIQ_CODE,
+	         GOODS_CNAME       AS DECL_GOODS_CNAME,
+	         GOODS_ENAME       AS DECL_GOODS_ENAME,
+	         ORIGIN_PLACE_CODE AS ORI_CTRY_CODE,
+	         ORIGIN_PLACE_NAME AS ORI_CTRY_NAME,
+	         QTY,
+	         QTY_UNIT_CODE     AS QTY_MEAS_UNIT,
+	         QTY_UNIT_NAME     AS QTY_MEAS_UNIT_NAME,
+	         WEIGHT,
+	         WEIGHT_UNIT_CODE  AS WT_MEAS_UNIT,
+	         WEIGHT_UNIT_NAME  AS WT_MEAS_UNIT_NAME,
+	         GOODS_UNIT_PRICE AS PRICE_PER_UNIT,
+	         GOODS_TOTAL_VALUES AS GOODS_TOTAL_VAL,
+	         CURR_UNIT_NAME  AS CURRENCN,
+	         CURR_UNIT  AS CURRENCY,
+	         GOODS_MODEL  AS GOODS_SPEC,
+	         PURPOSE_CODE  AS PURPOSE,
+	         PURPOSE_NAME  AS PURPOSE_NAME,
+	         GOODS_BRAND  AS GOODS_BRAND,
+	         STD_QUANTITY  AS STD_DISPLAY,
+	         STD_UNIT_CODE  AS STD_MEASURE_CODE,
+	         STD_UNIT_NAME  AS STD_MEASURE_CODE_NAME,
+	         STD_WEIGHT  AS STD_WEIGHT,
+	         STD_WEIGHT_UNIT_CODE  AS STD_WEIGHT_UNIT_CODE,
+	         STD_WEIGHT_UNIT_NAME  AS STD_WEIGHT_UNIT_NAME,
+	         STD_QTY  AS STD_QTY,
+	         STD_QTY_UNIT_CODE  AS STD_QTY_UNIT_CODE,
+	         STD_QTY_UNIT_NAME  AS STD_QTY_UNIT_NAME
+	         FROM T_DISTRIBUTION_GOODS F  
+	         WHERE F.P_INDX IN (#PINDX#)
+	    )      
+	         GROUP BY PROD_HS_CODE,CIQ_CODE,DECL_GOODS_CNAME,DECL_GOODS_ENAME,ORI_CTRY_CODE,ORI_CTRY_NAME,QTY_MEAS_UNIT,QTY_MEAS_UNIT_NAME,WT_MEAS_UNIT,WT_MEAS_UNIT_NAME,
+	         PRICE_PER_UNIT,CURRENCY,CURRENCN,GOODS_SPEC,PURPOSE,PURPOSE_NAME,GOODS_BRAND,STD_DISPLAY,STD_MEASURE_CODE,STD_MEASURE_CODE_NAME,
+	         STD_WEIGHT,STD_WEIGHT_UNIT_CODE,STD_WEIGHT_UNIT_NAME,STD_QTY,STD_QTY_UNIT_CODE,STD_QTY_UNIT_NAME
+	    ) AA
+		]]>
+	 </select>
+	<select id="GetGoodsByEditContain">
+		<![CDATA[
+			   SELECT * FROM ITF_DCL_IO_DECL_GOODS A 
+			   	WHERE 1=1 
+			   	AND A.DECL_NO=#DECL_NO#
+				<< AND A.PROD_HS_CODE LIKE #PROD_HS_CODE# >>
+				<< AND A.CIQ_CODE LIKE #CIQ_CODE#>>
+				<< AND A.DECL_GOODS_CNAME LIKE #DECL_GOODS_CNAME#>>
+				order by GOODS_NO 
+		]]>
+	</select>
+    <select id="GetEciqDeclResidueQty">
+		<![CDATA[
+		SELECT I.DECL_NO,I.PROD_HS_CODE,I.DECL_GOODS_CNAME,ifnull(I.STD_DISPLAY,0) AS INQTY,ifnull(O.STD_DISPLAY,0) AS OUTQTY,(ifnull(I.STD_DISPLAY,0)-ifnull(O.STD_DISPLAY,0)) AS RESIDUEQTY FROM 
+	    (SELECT DECL_NO,PROD_HS_CODE,DECL_GOODS_CNAME,SUM(STD_DISPLAY) STD_DISPLAY FROM 
+	    (SELECT B.DECL_NO,B.PROD_HS_CODE,B.DECL_GOODS_CNAME,case when B.STD_WEIGHT_UNIT_CODE IS NULL THEN B.QTY ELSE B.WEIGHT END AS STD_DISPLAY FROM itf_dcl_io_decl_goods b LEFT JOIN itf_dcl_io_decl a ON A.DECL_NO=B.DECL_NO WHERE (A.DECL_STATUS_CODE!='9' OR A.DECL_STATE_CODE!='4') AND b.decl_no in(#DECL_NO#))
+	    GROUP BY DECL_NO,PROD_HS_CODE,DECL_GOODS_CNAME) I
+	    LEFT JOIN (SELECT PROD_HS_CODE,DECL_GOODS_CNAME,SUM(STD_DISPLAY) STD_DISPLAY FROM 
+	    (SELECT DECL_NO,PROD_HS_CODE,DECL_GOODS_CNAME,case when STD_WEIGHT_UNIT_CODE IS NULL THEN QTY ELSE WEIGHT END AS STD_DISPLAY FROM itf_dcl_io_decl_goods 
+	    WHERE decl_no in(SELECT decl_no FROM itf_dcl_io_decl WHERE (DECL_STATUS_CODE!='9' OR DECL_STATE_CODE!='4') AND (#IN_DECL_NO#))
+	    UNION ALL SELECT DECL_NO,HS_CODE PROD_HS_CODE,GOODS_CNAME DECL_GOODS_CNAME,case when STD_WEIGHT_UNIT_CODE IS NULL THEN QTY ELSE WEIGHT END AS STD_DISPLAY FROM t_distribution_goods 
+	    WHERE p_indx IN(SELECT indx FROM t_distribution WHERE DECL_NO IS NULL AND (#IN_DECL_NO#)))
+	    GROUP BY PROD_HS_CODE,DECL_GOODS_CNAME) O
+	    ON I.PROD_HS_CODE=O.PROD_HS_CODE AND I.DECL_GOODS_CNAME=O.DECL_GOODS_CNAME
+	    WHERE I.DECL_NO=## AND I.PROD_HS_CODE=## AND I.DECL_GOODS_CNAME=##
+		]]>
+	</select>	
+    <select id="GetEciqDeclResidueQtyIndx">
+		<![CDATA[
+		SELECT I.DECL_NO,I.PROD_HS_CODE,I.DECL_GOODS_CNAME,ifnull(I.STD_DISPLAY,0) AS INQTY,ifnull(O.STD_DISPLAY,0) AS OUTQTY,(ifnull(I.STD_DISPLAY,0)-ifnull(O.STD_DISPLAY,0)) AS RESIDUEQTY FROM 
+	    (SELECT DECL_NO,PROD_HS_CODE,DECL_GOODS_CNAME,SUM(STD_DISPLAY) STD_DISPLAY FROM 
+	    (SELECT B.DECL_NO,B.PROD_HS_CODE,B.DECL_GOODS_CNAME,case when B.STD_WEIGHT_UNIT_CODE IS NULL THEN B.QTY ELSE B.WEIGHT END AS STD_DISPLAY FROM itf_dcl_io_decl_goods b LEFT JOIN itf_dcl_io_decl a ON A.DECL_NO=B.DECL_NO WHERE (A.DECL_STATUS_CODE!='9' OR A.DECL_STATE_CODE!='4') AND b.decl_no in(#DECL_NO#))
+	    GROUP BY DECL_NO,PROD_HS_CODE,DECL_GOODS_CNAME) I
+	    LEFT JOIN (SELECT PROD_HS_CODE,DECL_GOODS_CNAME,SUM(STD_DISPLAY) STD_DISPLAY FROM 
+	    (SELECT DECL_NO,PROD_HS_CODE,DECL_GOODS_CNAME,case when STD_WEIGHT_UNIT_CODE IS NULL THEN QTY ELSE WEIGHT END AS STD_DISPLAY FROM itf_dcl_io_decl_goods 
+	    WHERE GOODS_ID!=## AND decl_no in(SELECT decl_no FROM itf_dcl_io_decl WHERE (DECL_STATUS_CODE!='9' OR DECL_STATE_CODE!='4') AND (#IN_DECL_NO#))
+	    UNION ALL SELECT DECL_NO,HS_CODE PROD_HS_CODE,GOODS_CNAME DECL_GOODS_CNAME,case when STD_WEIGHT_UNIT_CODE IS NULL THEN QTY ELSE WEIGHT END AS STD_DISPLAY FROM t_distribution_goods 
+	    WHERE p_indx IN(SELECT indx FROM t_distribution WHERE DECL_NO IS NULL AND (#IN_DECL_NO#)))
+	    GROUP BY PROD_HS_CODE,DECL_GOODS_CNAME) O
+	    ON I.PROD_HS_CODE=O.PROD_HS_CODE AND I.DECL_GOODS_CNAME=O.DECL_GOODS_CNAME
+	    WHERE I.DECL_NO=## AND I.PROD_HS_CODE=## AND I.DECL_GOODS_CNAME=##
+		]]>
+	</select>	
+    <select id="GetEciqDeclResidueQtySend">
+		<![CDATA[
+		SELECT I.DECL_NO,I.PROD_HS_CODE,I.DECL_GOODS_CNAME,ifnull(I.STD_DISPLAY,0) AS INQTY,ifnull(O.STD_DISPLAY,0) AS OUTQTY,(ifnull(I.STD_DISPLAY,0)-ifnull(O.STD_DISPLAY,0)) AS RESIDUEQTY FROM 
+		(SELECT DECL_NO,PROD_HS_CODE,DECL_GOODS_CNAME,SUM(STD_DISPLAY) STD_DISPLAY FROM 
+		(SELECT DECL_NO,PROD_HS_CODE,DECL_GOODS_CNAME,case when STD_WEIGHT_UNIT_CODE IS NULL THEN QTY ELSE WEIGHT END AS STD_DISPLAY FROM itf_dcl_io_decl_goods WHERE decl_no in(#DECL_NO#))
+		GROUP BY DECL_NO,PROD_HS_CODE,DECL_GOODS_CNAME) I
+		LEFT JOIN (SELECT PROD_HS_CODE,DECL_GOODS_CNAME,SUM(STD_DISPLAY) STD_DISPLAY FROM 
+		(SELECT DECL_NO,PROD_HS_CODE,DECL_GOODS_CNAME,case when STD_WEIGHT_UNIT_CODE IS NULL THEN QTY ELSE WEIGHT END AS STD_DISPLAY FROM itf_dcl_io_decl_goods 
+		WHERE decl_no in(SELECT decl_no FROM itf_dcl_io_decl WHERE DECL_STATUS_CODE NOT IN(0,2,9) AND (#IN_DECL_NO#))
+		UNION ALL SELECT DECL_NO,HS_CODE PROD_HS_CODE,GOODS_CNAME DECL_GOODS_CNAME,case when STD_WEIGHT_UNIT_CODE IS NULL THEN QTY ELSE WEIGHT END AS STD_DISPLAY FROM t_distribution_goods 
+		WHERE p_indx IN(SELECT indx FROM t_distribution WHERE (DECL_NO IS NULL OR decl_no IN(SELECT decl_no FROM itf_dcl_io_decl WHERE decl_no IN(SELECT decl_no FROM t_distribution WHERE OUT_IN_CODE=2) AND DECL_STATUS_CODE IN(0,2,9)))
+		AND DISTRIBUTIONSTATES='2' AND (#IN_DECL_NO#)))
+		GROUP BY PROD_HS_CODE,DECL_GOODS_CNAME) O
+		ON I.PROD_HS_CODE=O.PROD_HS_CODE AND I.DECL_GOODS_CNAME=O.DECL_GOODS_CNAME
+		]]>
+	</select>	
+    <select id="GetEciqSendQtyDeclNo">
+		<![CDATA[
+		SELECT I.DECL_NO,I.PROD_HS_CODE,I.DECL_GOODS_CNAME,ifnull(I.STD_DISPLAY,0) AS INQTY,ifnull(O.STD_DISPLAY,0) AS OUTQTY,(ifnull(I.STD_DISPLAY,0)-ifnull(O.STD_DISPLAY,0)) AS RESIDUEQTY FROM 
+		(SELECT DECL_NO,PROD_HS_CODE,DECL_GOODS_CNAME,SUM(STD_DISPLAY) STD_DISPLAY FROM 
+		(SELECT DECL_NO,PROD_HS_CODE,DECL_GOODS_CNAME,case when STD_WEIGHT_UNIT_CODE IS NULL THEN QTY ELSE WEIGHT END AS STD_DISPLAY FROM itf_dcl_io_decl_goods WHERE decl_no in(#DECL_NO#))
+		GROUP BY DECL_NO,PROD_HS_CODE,DECL_GOODS_CNAME) I
+		LEFT JOIN (SELECT PROD_HS_CODE,DECL_GOODS_CNAME,SUM(STD_DISPLAY) STD_DISPLAY FROM 
+		(SELECT DECL_NO,PROD_HS_CODE,DECL_GOODS_CNAME,case when STD_WEIGHT_UNIT_CODE IS NULL THEN QTY ELSE WEIGHT END AS STD_DISPLAY FROM itf_dcl_io_decl_goods 
+		WHERE decl_no in(SELECT decl_no FROM itf_dcl_io_decl WHERE DECL_STATUS_CODE NOT IN(0,2,9) AND (#IN_DECL_NO#)) OR decl_no=##
+		UNION ALL SELECT DECL_NO,HS_CODE PROD_HS_CODE,GOODS_CNAME DECL_GOODS_CNAME,case when STD_WEIGHT_UNIT_CODE IS NULL THEN QTY ELSE WEIGHT END AS STD_DISPLAY FROM t_distribution_goods 
+		WHERE p_indx IN(SELECT indx FROM t_distribution WHERE (DECL_NO IS NULL OR decl_no IN(SELECT decl_no FROM itf_dcl_io_decl WHERE decl_no IN(SELECT decl_no FROM t_distribution WHERE OUT_IN_CODE=2) AND DECL_STATUS_CODE IN(0,2,9)))
+		AND DISTRIBUTIONSTATES='2' AND (#IN_DECL_NO#)))
+		GROUP BY PROD_HS_CODE,DECL_GOODS_CNAME) O
+		ON I.PROD_HS_CODE=O.PROD_HS_CODE AND I.DECL_GOODS_CNAME=O.DECL_GOODS_CNAME
+		]]>
+	</select>
+	<select id="GetCommonDeclNo">
+		<![CDATA[
+	        SELECT DECL_NO,DECL_GET_NO,PASS_CODE FROM ITF_DCL_IO_DECL WHERE part_id = #part_id# and DECL_STATUS_CODE IN('8','10') AND OUT_IN_CODE='1'
+		]]>
+	</select>
+	<select id="GetElecDeclList">
+		<![CDATA[
+				select IOdecl.Decl_No,
+				       IOdecl.Decl_Get_No,
+				       IOdecl.decl_status_name,
+				       IOdecl.Decl_Date,
+				       IOdecl.DECL_PERSN_CERT_NO,
+				       src.ORG_CODE,
+				       org.item_name as ORG_NAME,
+				       ATTACH_NAME,
+               		   PAPER_STYLE_NAME,
+                       PAPER_STYLE_CODE,
+				       CERT_NO,
+				       CERT_NO as CERT_NO_VAL,
+				       ATTACH_CODE,
+				       CERT_NAME,
+				       INPUT_USER,
+				       SRC_INPUT_STATUS_NAME,
+				       RECEIVED_RESULT,
+				       RECEIVED_RESULT_DESC,
+				       case
+				         when handle.INDX > 0 then
+				          '已上传'
+				         else
+				          '未上传'
+				       end as SRC_UPLOAD_STATUS_NAME
+				 from ITF_DCL_IO_DECL IOdecl
+				      left join (select distinct t.*,
+			                             m.INPUT_USER,
+			                             case
+			                               when m.INDX > 0 then
+			                                '已提交'
+			                               else
+			                                '未提交'
+			                             end as SRC_INPUT_STATUS_NAME,
+			                             m.RECEIVED_RESULT,
+			                             m.RECEIVED_RESULT_DESC,
+			                             m.ORG_CODE
+						               from ITF_SRC_DECL m,
+						                    (select ltrim(max(sys_connect_by_path(CERT_NO, ',')), ',') CERT_NO,
+						                            ltrim(max(sys_connect_by_path(ATTACH_CODE, ',')),
+						                                  ',') ATTACH_CODE,
+						                            ltrim(max(sys_connect_by_path(CERT_NAME, ',')),
+						                                  ',') CERT_NAME,
+						                            ltrim(max(sys_connect_by_path(ATTACH_NAME, ',')),
+						                                  ',') ATTACH_NAME,
+		                                    max(PAPER_STYLE_NAME) PAPER_STYLE_NAME,
+		                                    max(PAPER_STYLE_CODE) PAPER_STYLE_CODE,
+						                            decl_get_no
+						                       from (select t.*,
+						                                    sheet.ITEM_NAME as ATTACH_NAME,
+						                                    lag(no, 1) over(partition by decl_get_no order by no) pid
+						                               from (select CERT_NO,
+						                                            ATTACH_CODE,
+						                                            CERT_NAME,
+						                                            decl_get_no,
+		                                                    PAPER_STYLE as PAPER_STYLE_CODE,
+		                                                    case PAPER_STYLE
+		                                                       when '1' then
+		                                                        '电子申报'
+		                                                       when '2' then
+		                                                        '企业自存'
+		                                                       else
+		                                                        ''
+		                                                     end as PAPER_STYLE_NAME,
+						                                            rownum as no
+						                                       from ITF_SRC_DECL) t
+						                               left join S_ECIQ_SYSSHEET sheet
+						                                 on t.ATTACH_CODE = sheet.ITEM_CODE)
+						                      start with pid is null
+						                     connect by prior no = pid
+						                      group by decl_get_no) t
+						              where t.decl_get_no = m.decl_get_no) src
+						    on src.decl_get_no = IOdecl.Decl_Get_No
+						  left join S_BBD_ORGANIZE org
+						    on src.ORG_CODE = org.item_code
+						  left join S_ECIQ_SYSSHEET sheet
+						    on src.ATTACH_CODE = sheet.ITEM_CODE
+						  left join EXS_HANDLE_SENDER handle
+						    on src.DECL_GET_NO = handle.MSG_NO
+						 where (IOdecl.decl_status_code = '4' or IOdecl.decl_status_code = '5' or
+		               IOdecl.decl_status_code = '6' or IOdecl.decl_status_code = '7' or
+		               IOdecl.decl_status_code = '8')
+		           and IOdecl.IS_DECL_LAW = '1'
+				   AND IOdecl.APL_KIND = #APL_KIND#
+				   AND IOdecl.part_id = #part_id#
+	     		<< AND PAPER_STYLE_CODE LIKE #PAPER_STYLE_CODE# >>
+	     		<< AND CERT_NO LIKE #CERT_NO# >>
+	     		<< AND IOdecl.DECL_NO LIKE #DECL_NO# >>
+	     		<< AND IOdecl.DECL_GET_NO LIKE #DECL_GET_NO# >>
+	     		<< AND IOdecl.DECL_STATUS_CODE = #DECL_STATUS_CODE# >>
+	     		<< AND IOdecl.DECL_DATE >=to_date(#DECL_DATE_FROM#,'yyyy-mm-dd hh24:mi:ss') >>
+            	<< AND IOdecl.DECL_DATE < to_date(#DECL_DATE_TO#,'yyyy-mm-dd hh24:mi:ss')+1 >>
+	     	order by IOdecl.CREATE_TIME DESC 
+		]]>
+	</select>
+	<select id="GetElecDeclByDeclGetNo">
+		<![CDATA[
+		    select IOdecl.Decl_No,
+			       IOdecl.Decl_Get_No,
+			       IOdecl.decl_status_name,
+			       IOdecl.Decl_Date,
+			       IOdecl.DECL_PERSN_CERT_NO,
+			       IOdecl.CONT_TEL,
+			       case src.DATA_TYPE
+			         when '1' then
+			          '入境报检'
+			         when '2' then
+			          '出境报检'
+			         when '3' then
+			          '包装报检'
+			         when '4' then
+			          '集装箱适载'
+			         else
+			          ''
+			       end as DATA_TYPE_NAME,
+			       src.DATA_TYPE,
+			       src.ATTACH_CODE,
+			       sheet.ITEM_NAME as ATTACH_NAME,
+			       src.CERT_NO,
+			       src.INPUT_ENT,
+			       src.CERT_NAME,
+			       src.ORG_CODE,
+			       org.item_name as ORG_NAME,
+			       src.INPUT_TIME,
+			       src.INPUT_USER,
+			       src.PAPER_STYLE,
+			       src.REMARK,
+			       case src.PAPER_STYLE
+			         when '1' then
+			          '电子申报'
+			         when '2' then
+			          '企业自存'
+			         else
+			          ''
+			       end as PAPER_STYLE_NAME,
+			       case
+			         when src.INDX > 0 then
+			          '已提交'
+			         else
+			          '未提交'
+			       end as SRC_INPUT_STATUS_NAME,
+			       src.RECEIVED_RESULT,
+			       src.RECEIVED_RESULT_DESC,
+			       src.INDX as SRCINDX,
+			       case
+			         when handle.INDX > 0 then
+			          1
+			         else
+			          0
+			       end as SRC_UPLOAD_STATUS_CODE,
+			       case
+			         when handle.INDX > 0 then
+			          '已上传'
+			         else
+			          '未上传'
+			       end as SRC_UPLOAD_STATUS_NAME
+			  from ITF_DCL_IO_DECL IOdecl
+			  left join ITF_SRC_DECL src
+			    on src.decl_get_no = IOdecl.Decl_Get_No
+			  left join S_BBD_ORGANIZE org
+			    on src.ORG_CODE = org.item_code
+			  left join S_ECIQ_SYSSHEET sheet
+			    on src.ATTACH_CODE = sheet.ITEM_CODE
+			  left join EXS_HANDLE_SENDER handle
+			    on src.DECL_GET_NO = handle.MSG_NO
+			 where 1 = 1 
+		]]>
+	</select>
+	<select id="GetAttachedListByDeclGetNo">
+		<![CDATA[
+			select src.*,sheet.ITEM_NAME as ATTACHEDNAME from ITF_SRC_DECL src left join S_ECIQ_SYSSHEET sheet
+		    on src.ATTACH_CODE = sheet.ITEM_CODE where decl_get_no = #DECL_GET_NO#
+		]]>
+	</select>
+	<select id="GetEciqXF">
+		<![CDATA[
+	        SELECT DECL_NO,DECL_GET_NO,CONSIGNEE_CODE,CONSIGNEE_CNAME,CONSIGNOR_CODE,CONSIGNOR_CNAME,DECL_DATE FROM ECIQ_GDATA.ITF_DCL_IO_DECL
+	        WHERE 1=1  AND DECL_NO = #DECL_NO#
+	        << AND DECL_TYPE= #DECL_TYPE# >>
+	        << AND DECL_GET_NO LIKE #DECL_GET_NO#>>
+		]]>
+	</select>
+	<select id="GetILawDeclGoodsSelect">
+		<![CDATA[
+		SELECT * FROM (SELECT A.MONITOR_CONDITION as INSP_MONITOR_COND,A.DECL_GOODS_CNAME as HSNAME,A.DECL_GOODS_ENAME as HSENAME,A.*,
+		 (Select PACK_QTY from ITF_DCL_IO_DECL_GOODS_PACK Where GOODS_ID=A.GOODS_ID and IS_MAIN_PACK = 1)  as PACK_QTY,
+		 (Select PACK_CATG_NAME from ITF_DCL_IO_DECL_GOODS_PACK Where GOODS_ID=A.GOODS_ID and IS_MAIN_PACK = 1) as PACK_CATG,
+		 (Select LICENCE_NO from ITF_DCL_IO_DECL_GOODS_LIMIT Where GOODS_ID=A.GOODS_ID and rownum=1) as UNLIMIT_CODE,
+		 (Select LIC_NAME from ITF_DCL_IO_DECL_GOODS_LIMIT Where GOODS_ID=A.GOODS_ID and rownum=1) as ENTDECLNAME,
+		 (Select LIMIT_ID from ITF_DCL_IO_DECL_GOODS_LIMIT Where GOODS_ID=A.GOODS_ID and rownum=1) as LIMITID,
+		 (Select rownum from ITF_DCL_IO_DECL_GOODS_LIMIT Where GOODS_ID=A.GOODS_ID and rownum=1) as ROW_NUM,
+		 case when STD_WEIGHT_UNIT_CODE IS NULL THEN 1 ELSE 2 END AS MEASURE_TYPE_CODE,
+		 case when STD_WEIGHT_UNIT_CODE IS NULL THEN STD_QTY_UNIT_CODE ELSE STD_WEIGHT_UNIT_CODE END AS STD_MEASURE_CODE,
+		 case when STD_WEIGHT_UNIT_CODE IS NULL THEN STD_QTY_UNIT_NAME ELSE STD_WEIGHT_UNIT_NAME END AS STD_MEASURE_CODE_NAME,
+		 case when STD_WEIGHT_UNIT_CODE IS NULL THEN STD_QTY_UNIT_CODE || '/' || STD_QTY_UNIT_NAME ELSE STD_WEIGHT_UNIT_CODE || '/' || STD_WEIGHT_UNIT_NAME END AS STD_MEASURE_NAME,
+		 case when STD_WEIGHT_UNIT_CODE IS NULL THEN QTY ELSE WEIGHT END AS STD_DISPLAY
+		 FROM ITF_DCL_IO_DECL_GOODS A ORDER BY A.GOODS_NO asc) WHERE ROWNUM<=20
+		]]>
+	</select>
+</SqlMap>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>permrole maneger</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<link href="../../resources/biz/css/reset.css" rel="stylesheet" type="text/css"/>
+    <link href="../../resources/biz/css/pop.css" rel="stylesheet" type="text/css"/>
+    <link href="../../resources/js/easyui1.9.4/themes/metro/easyui.css" rel="stylesheet"/>
+    <link href="../../resources/js/easyui1.9.4/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../resources/js/easyuiext/extend/css/IconExtension.css" rel="stylesheet" type="text/css"/>
+	<link href="../../resources/js/bootstrap/css/bootstrap.css" rel="stylesheet"/>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/jquery.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="../../resources/js/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/dataform.js"></script>
+</head>
+<body class="easyui-layout page-space">
+	<div id="topContainer" data-options="region:'north'" style="height: 40px;">
+	    <a href="javascript:void(0)" class="easyui-linkbutton" id="btnSave" iconcls="icon-save">保存</a>
+	    <input type="hidden" name="indx" id="indx"/>
+	</div>
+	<div id="leftContainer" data-options="region:'west',split:true" style="width: 30%;">
+	    <table id="tree1"></table>
+	</div>
+	<div id="rightContainer" data-options="region:'center'">
+	    <table id="tree2"></table>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+$(function () {
+	$.ajax({
+        url: '../../app/user/getsysrole',
+        type: "POST",
+        dataType: "json",
+        success: function (result) {
+            $('#tree1').tree({
+                data: result,
+                checkbox: false,
+                onClick: function (node) {
+                    document.getElementById("indx").value = node.id;
+                    $.ajax({
+                        url: '../../app/user/getsysrolecheck?node=' + node.id,
+                        type: "POST",
+                        dataType: "json",
+                        success: function (result) {
+                        	var nodes = $('#tree2').tree('getChecked');
+                            for (var i = 0; i < nodes.length; i++) {
+                                $("#tree2").tree('uncheck', nodes[i].target);
+                            }
+                            
+                            for (var i = 0; i < result.length; i++) {
+                                var node = $('#tree2').tree('find', result[i].permid);
+                                if (null != $('#tree2').tree('find', result[i].permid)) {
+                                    $("#tree2").tree('check', node.target);
+                                }
+                            }
+                        }
+                    });
+                },
+                onContextMenu: function (e, node) {
+                    e.preventDefault();
+                    $('#tree1').tree('select', node.target);
+                    $('#mm').menu('show', {
+                        left: e.pageX,
+                        top: e.pageY
+                    });
+                }
+            });
+        }
+    });
+	
+	
+	$.ajax({
+        url: '../../app/user/getsysallmenuselect',
+        type: "POST",
+        dataType: "json",
+        success: function (result) {
+            $('#tree2').tree({
+                data: result,
+                cascadeCheck: false,
+                checkbox: true,
+                onClick: function (node) {
+                },
+                onContextMenu: function (e, node) {
+                    e.preventDefault();
+                    $('#tree2').tree('select', node.target);
+                    $('#mm').menu('show', {
+                        left: e.pageX,
+                        top: e.pageY
+                    });
+                },
+                cascadeCheck: true
+            });
+        }
+    });
+});
+
+$("#btnSave").click(function () {
+    var selectIndxs = "";
+    var nodes = $('#tree2').tree('getChecked', ['checked', 'indeterminate']);
+    $.each(nodes, function () {
+        selectIndxs += this.id + ',';
+    });
+    if (selectIndxs.length <= 0) {
+        $.messager.alert("警告", "您没有选择节点，无法保存", 'error');
+    } else {
+        $.ajax({
+            url: '../../app/user/savepermrole',
+            type: "POST",
+            dataType: "json",
+            data: {roleId: $('#indx').val(), permids: selectIndxs},
+            success: function (result) {
+                if (result.IsOk) {
+                    $.messager.alert("提示信息", "操作成功");
+                } else {
+                    $.messager.alert("提示信息", '操作失败');
+                }
+            }
+        });
+    }
+});
+</script>

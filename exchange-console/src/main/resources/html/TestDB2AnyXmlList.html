@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>文件明细</title>
+    <!--[if lt IE 9]>
+    <script src='resources/js/assets/javascripts/html5shiv.js' type='text/javascript'></script>
+    <![endif]-->
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/bootstrap/bootstrap.css' media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/light-theme.css' id='color-settings-body-color' media='all' />
+    <link type="text/css" rel='stylesheet' href="resources/js/jqgrid/css/jquery-ui.css" media="screen" />
+    <link type="text/css" rel='stylesheet' href="resources/js/jqgrid/css/ui.jqgrid.css" media="screen" />
+    <link type="text/css" rel='stylesheet' href="resources/js/jqgrid/css/prettify.css" />
+    <link type="text/css" rel='stylesheet' href="resources/css/Css.css" />
+    <link type="text/css" rel='stylesheet' href='resources/js/assets/stylesheets/demo.css' media='all'/>
+    <script type='text/javascript' src='resources/js/assets/javascripts/jquery/jquery.min.js' ></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/jquery.jqGrid.min.js"></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/prettify.js"></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/codetabs.js"></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/themeswitchertool.js"></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/i18n/grid.locale-cn.js"></script>
+    <script type="text/javascript" src="resources/js/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="GetJS?js/checkradio.js"></script>
+    <script type="text/javascript" src="console/js/public.js"></script>
+    <script type="text/javascript" src="GetJS?messagebox.js"></script>
+    <script type="text/javascript" src="GetJS?combobox.js"></script>
+    <script type="text/javascript" src="GetJS?dataform.js"></script>
+    <script type="text/javascript" src="GetJS?button.js"></script>
+    <script type="text/javascript" src="GetJS?popupwindow.js"></script>
+</head>
+<body>
+	<div class='row-fluid' id='content-wrapper'>
+		<div class='span12'>
+			<div class='row-fluid'>
+				<div class='span12 box bordered-box orange-border' style='margin-bottom: 0;'>
+					<div class='row-fluid'>
+						<div class='span12 box'>
+							<div class='box-content'> 
+								<table width="100%" border="0" cellspacing="0" cellpadding="0" id="SearchTable">
+									<tr>
+										<td class="bluetitleCss">
+                                              	源目录文件
+                                           </td>
+                                           <td class="tdCss">
+                                               <textarea style="width: 100%;" id="txtBY1" datafield="FileData.SourceData" maxlength="1000"
+                                                disabled="disabled" readonly="readonly">
+                                               </textarea>
+                                           </td>
+									</tr>
+									<tr>
+										<td class="bluetitleCss">
+                                              	备份目录文件
+                                           </td>
+                                           <td class="tdCss">
+                                               <textarea style="width: 100%;" id="txtBY1" datafield="FileData.TargetData" maxlength="1000"
+                                                disabled="disabled" readonly="readonly">
+                                               </textarea>
+                                           </td>
+									</tr>
+									<tr>
+										 <td class="bluetitleCss">
+                                              	错误目录文件
+                                           </td>
+                                           <td class="tdCss">
+                                               <textarea style="width: 100%;" id="txtBY1" datafield="FileData.ErrorData" maxlength="1000"
+                                                disabled="disabled" readonly="readonly">
+                                               </textarea>
+                                           </td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+ 

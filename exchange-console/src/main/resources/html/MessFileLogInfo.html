@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>详细</title>
+<meta
+	content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
+	name='viewport' />
+<meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+<link type='text/css' rel='stylesheet'
+	href='resources/js/assets/stylesheets/bootstrap/bootstrap.css'
+	media='all' />
+<link type='text/css' rel='stylesheet'
+	href='resources/js/assets/stylesheets/light-theme.css'
+	id='color-settings-body-color' media='all' />
+<link type='text/css' rel='stylesheet'
+	href='resources/js/assets/stylesheets/demo.css' media='all' />
+<link type='text/css' rel='stylesheet'
+	href='resources/js/jqgrid/css/jquery-ui.css' media='screen' />
+<link type='text/css' rel='stylesheet'
+	href='resources/js/jqgrid/css/ui.jqgrid.css' media='screen' />
+<link type='text/css' rel='stylesheet'
+	href='resources/js/jqgrid/css/prettify.css' />
+<link type='text/css' rel='stylesheet'
+	href='resources/css/ystep.css' />
+<link type='text/css' rel='stylesheet'
+	href='resources/css/Css.css' media='all' />
+<script type='text/javascript'
+	src='resources/js/assets/javascripts/jquery/jquery.min.js'></script>
+<script type="text/ecmascript"
+	src="resources/js/jqgrid/js/jquery.jqGrid.min.js"></script>
+<script type="text/ecmascript"
+	src='resources/js/jqgrid/js/prettify.js'></script>
+<script type="text/ecmascript"
+	src='resources/js/jqgrid/js/codetabs.js'></script>
+<script type="text/ecmascript"
+	src='resources/js/jqgrid/js/themeswitchertool.js'></script>
+<script type="text/ecmascript"
+	src='resources/js/jqgrid/js/i18n/grid.locale-cn.js'></script>
+<script type="text/ecmascript"
+	src='resources/js/My97DatePicker/WdatePicker.js'></script>
+<script type='text/javascript' src='GetJS?button.js'></script>
+<script type='text/javascript' src='GetJS?messagebox.js'></script>
+<script type='text/javascript' src='GetJS?combobox.js'></script>
+<script type='text/javascript' src='GetJS?dataform.js'></script>
+<script type='text/javascript' src='GetJS?popupwindow.js'></script>
+<script type='text/javascript' src='resources/js/ystep.js'></script>
+<script type='text/javascript' src='resources/js/publicOld.js'></script>
+<script type='text/javascript' src='resources/js/checkradio.js'></script>
+<script src="resources/forms/mess/MessFileLogInfo.js" type="text/javascript"></script>
+</head>
+<body>
+	<div class='row-fluid' id='content-wrapper'>
+		<div class='span12'>
+			<div class='row-fluid'>
+				<table width="100%" border="0" cellspacing="0" cellpadding="0"
+					style="margin-bottom: 10px; margin-top: 10px; border-bottom: 1px solid #eee;">
+					<tr>
+						<td
+							style="text-align: left; padding-right: 10px; padding-left: 10px; width: 100%;">
+							<button class='btn btn-primary btn-small' id="btnSave"
+								style='margin-bottom: 5px' commandname="SaveMessFileLog"
+								commanddatas="FormToData('MessFileLogDATA');" commandok="saveSuccess"
+								isvalidate="1">
+								<i class='icon-save'></i>保 存
+							</button> 
+							  <button id="btnDelete" class="btn btn-primary btn-small" style="margin-bottom: 5px;"
+                                commandname="DeleteMessFileLog" commanddatas="FormToData('MessFileLogDATA');" commandok="DelSuccess"
+                                confirmmessage="您确定要做删除操作吗？"
+                                isvalidate="0">
+                                <i class='icon-remove'></i>删 除</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div id="MessFileLogDATA" class='row-fluid'>
+				<table width="100%" border="0" cellspacing="0" cellpadding="0"
+					id="iideclShowTable">
+					<tr>
+						<td style="padding-right: 10px;" valign="top">
+							<div>
+								<div class='box-content'>
+									<div id="MessFileLogDATABase">
+										<div class='row-fluid'>
+											<div class='span12 box'>
+												<div class='box-header'>
+													<div class='title'>
+														<div class='icon-edit' style="color: #00F;"></div>
+														<strong>配置基本信息</strong>
+													</div>
+												</div>
+												<div class='box-content'>
+													<table width="100%" border="0" cellspacing="0"
+														cellpadding="0">
+														                                  							<tr><td width="25%">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss110">INDX</td>
+																		<td class="tdCss"><input id='INDX'
+																			datafield="MessFileLogDATA.INDX" type='text'
+																			width="100%" /></td>
+																		</td>
+																	</tr>
+																</table>
+															  </td>
+																														
+																																													                                							<td width="25%">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss110">PROCESS_TIME</td>
+																		<td class="tdCss"><input id='PROCESS_TIME'
+																			datafield="MessFileLogDATA.PROCESS_TIME" type='text'
+																			width="100%" /></td>
+																		</td>
+																	</tr>
+																</table>
+															  </td>
+																														
+																																													                                							<td width="25%">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss110">数据源</td>
+																		<td class="tdCss"><input id='DATA_SOURCE'
+																			datafield="MessFileLogDATA.DATA_SOURCE" type='text'
+																			width="100%" /></td>
+																		</td>
+																	</tr>
+																</table>
+															  </td>
+																														
+																																													                                							<td width="25%">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss110">注册号</td>
+																		<td class="tdCss"><input id='SERIAL_NO'
+																			datafield="MessFileLogDATA.SERIAL_NO" type='text'
+																			width="100%" /></td>
+																		</td>
+																	</tr>
+																</table>
+															  </td>
+															</tr>															
+																														<tr>															                                							<td width="25%">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss110">PROGRESS_NAME</td>
+																		<td class="tdCss"><input id='PROGRESS_NAME'
+																			datafield="MessFileLogDATA.PROGRESS_NAME" type='text'
+																			width="100%" /></td>
+																		</td>
+																	</tr>
+																</table>
+															  </td>
+																														
+																																													                                							<td width="25%">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss110">转换后文件存放目录</td>
+																		<td class="tdCss"><input id='FILE_PATH'
+																			datafield="MessFileLogDATA.FILE_PATH" type='text'
+																			width="100%" /></td>
+																		</td>
+																	</tr>
+																</table>
+															  </td>
+																														
+																																													                                							<td width="25%">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss110">处理内容</td>
+																		<td class="tdCss"><input id='PROCESS_MSG'
+																			datafield="MessFileLogDATA.PROCESS_MSG" type='text'
+																			width="100%" /></td>
+																		</td>
+																	</tr>
+																</table>
+															  </td>
+																														
+																																													                                							<td width="25%">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss110">发送时间</td>
+																		<td class="tdCss"><input id='CREATE_TIME'
+																			datafield="MessFileLogDATA.CREATE_TIME" type='text'
+																			width="100%" /></td>
+																		</td>
+																	</tr>
+																</table>
+															  </td>
+															</tr>															
+																														<tr>															                                							<td width="25%">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss110">PROGRESS_CODE</td>
+																		<td class="tdCss"><input id='PROGRESS_CODE'
+																			datafield="MessFileLogDATA.PROGRESS_CODE" type='text'
+																			width="100%" /></td>
+																		</td>
+																	</tr>
+																</table>
+															  </td>
+																														
+																																													                                							<td width="25%">
+																<table width="100%" border="0" cellspacing="0"
+																	cellpadding="0">
+																	<tr>
+																		<td class="titleCss110">文件名称</td>
+																		<td class="tdCss"><input id='FILE_NAME'
+																			datafield="MessFileLogDATA.FILE_NAME" type='text'
+																			width="100%" /></td>
+																		</td>
+																	</tr>
+																</table>
+															  </td>
+																														
+															</tr>																																											</table>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

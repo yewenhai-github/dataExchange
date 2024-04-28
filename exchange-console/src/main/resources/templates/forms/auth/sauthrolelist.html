@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>role manager</title>
+    <meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<link href="../../resources/biz/css/reset.css" rel="stylesheet" type="text/css"/>
+    <link href="../../resources/biz/css/pop.css" rel="stylesheet" type="text/css"/>
+    <link href="../../resources/js/easyui1.9.4/themes/metro/easyui.css" rel="stylesheet"/>
+    <link href="../../resources/js/easyui1.9.4/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../resources/js/easyuiext/extend/css/IconExtension.css" rel="stylesheet" type="text/css"/>
+	<link href="../../resources/js/bootstrap/css/bootstrap.css" rel="stylesheet"/>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/jquery.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="../../resources/js/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/dataform.js"></script>
+</head>
+<body class="page-space" >
+	<table id="dg"></table>
+	<div id="tb">
+		<div>
+			 <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-20130406015709810_easyicon_net_16" onclick="refresh()">刷新</a>
+			 <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-add" onclick="newuser()" plain="true">增加</a>
+			 <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-edit" onclick="edituser()" plain="true">修改</a>
+			 <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-delete" onclick="destroyUser()"  plain="true">删除</a>
+		</div>
+	</div>
+	<div id="dlg" class="easyui-dialog" style="width: 450px; height: 250px; padding: 10px 20px;" closed="true" buttons="#dlg-buttons">  
+	      <div class="container-fluid">
+			<form id="fm2" method="post"> 
+		       <div class="fitem">
+		       	   <div class="container-fluid">
+		      	   		<div class="row p-top5">
+		            		<div class="col-xs-3 lbl-text tip-blue">组织机构：</div>
+		            		<div class="col-xs-8">
+		            			<input name="org_id" id="org_id" class="easyui-combotree" style="height:30px;line-height:30px;width:100%;" 
+		            				   data-options="url:'../../app/user/getcomboboxorglist2'"/>
+		            		</div>
+		            	</div>
+		      	   		<div class="row p-top5">
+		            		<div class="col-xs-3 lbl-text tip-red">角色名称：</div>
+		            		<div class="col-xs-8">
+		            			<input name="role_name" id="role_name" class="easyui-textbox" style="height:30px;line-height:30px;width:100%;" />
+		            		</div>
+		            	</div>
+		            	<div class="row p-top5">
+		            		<div class="col-xs-3 lbl-text tip-blue">角色描述：</div>
+		            		<div class="col-xs-8">
+		            			<input name="role_desc" id="role_desc" class="easyui-textbox" style="height:30px;line-height:30px;width:100%;" />
+		            		</div>
+		            	</div>
+		       	   </div>
+		       	   <div style="display:none">
+						<input class="easyui-textbox" name="indx" id="indx" /> 
+				   </div>
+		       </div> 
+	       </form>
+	      </div>
+	   </div>
+	   <div id="dlg-buttons"> 
+	       <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-save" id="btnSave">保存</a> 
+	       <a href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">取消</a> 
+	   </div> 
+</body>
+</html>
+<script type="text/javascript">
+$(function() {
+	//$('#org_id').combotree({url:"../../app/user/getcomboboxorglist2",valueField:"id",textField:'text'});
+	
+    $("#dg").datagrid({
+        url:'../../app/user/getrolelist',
+        height:500,
+        striped:true,
+        singleSelect: true,
+        fit : true,
+        fitColumns:true,
+        rownumbers:true,
+        remoteSort:true,
+        frozenColumns:[[
+        	{field:'indx', hidden: true},
+            {field:'role_name',title: '角色名称',width:200,sortable:true},
+            {field:'org_id',title: '机构编码',width:200,sortable:true},
+            {field:'org_name',title: '机构名称',width:200,sortable:true},
+            {field:'role_desc',title: '备注',width:200,sortable:true}
+        ]
+        ],
+        onLoadSuccess:function(data){  
+            $('.editcls').linkbutton({text:"修改",plain:true,iconCls:'icon-edit'});    
+        },
+        toolbar:"#tb",   
+        loadMsg:'LOADING...',
+        showHeader:true,
+        showFooter:true
+    });
+});
+
+function refresh() {
+	$('#dg').datagrid('reload');
+}
+function newuser() {
+	$("#dlg").dialog("open").dialog('setTitle', '信息新增'); 
+	$('#fm2').form('clear');  
+}
+function edituser() {
+	var row = $('#dg').treegrid('getSelections');
+	var row = $('#dg').datagrid('getSelected');  
+	if (row){
+		$("#indx").textbox('setValue', row.indx);
+		$("#org_id").combotree('setValue', row.org_id);
+		$("#role_name").textbox('setValue', row.role_name);
+		$("#role_desc").textbox('setValue', row.role_desc);
+		
+		$("#dlg").dialog("open").dialog('setTitle', '信息编辑','info');
+	}
+}
+function destroyUser() {
+	var row = $('#dg').datagrid('getSelections');
+	if (row.length>0) {
+	    $.messager.confirm("提示信息", '您确定要删除这条记录?', function (r) {
+	      if (r) {
+	          $.post('../../app/user/delrole', {indx: row[0].indx }, function (result) {
+	        	  $.messager.show({title: "提示信息",msg: result.ErrMessage});
+        	      $('#dg').datagrid('reload');
+	          }, 'json');
+	      	}
+	    });
+	}else{
+		$.messager.alert("提示信息", "请您选择需删除的数据",'warning');
+	}
+}
+
+$("#btnSave").click(function(){
+	if($("#role_name").val()==null||$("#role_name").val()==""){
+		$.messager.alert("警告", "角色名不能为空");
+		return;
+	}
+	var param = $.getformElementParams($('#fm2'));
+    $.ajax({
+        url:'../../app/user/saverole',
+        type:"POST",
+        dataType:"json",
+        data:param,
+        success:function(result){  
+		     if(result.IsOk){  
+		         $.messager.alert("提示信息","操作成功");
+		         $('#dg').datagrid('reload');  
+		         $("#fm2").form("clear");  
+		         $("#dlg").dialog("close");
+		     }else{  
+		         $.messager.alert("提示信息",'操作失败');
+		         $('#dg').datagrid('reload');  
+		     }  
+		}
+    });
+});
+
+function showSuccess(data) {
+	var v = eval("(" + data + ")");
+	if (v.IsOk == "1") {
+		$.messager.alert("提示信息", "操作成功",'info');
+	    $("#dlg").dialog("close");
+	    $("#dg").datagrid("load");
+	} else{
+		$.messager.show({title: 'Error',msg: result.ErrMessage});
+	}
+}
+</script>

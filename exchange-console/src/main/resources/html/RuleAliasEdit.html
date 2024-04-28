@@ -1,0 +1,320 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>别名设置详情</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'  name='viewport' />
+    <link href='resources/js/assets/stylesheets/bootstrap/bootstrap.css' media='all' rel='stylesheet' type='text/css' id="bootstrap-settings" />
+    <link href='console/css/light-theme.css' id='color-settings-body-color'  media='all' rel='stylesheet' type='text/css' />
+    <link href='resources/js/assets/stylesheets/demo.css' media='all' rel='stylesheet' type='text/css' />
+    <script src='resources/js/assets/javascripts/jquery/jquery.min.js' type='text/javascript'></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="resources/js/jqgrid/css/jquery-ui.css"  id="jqgridJqguery" />
+    <link rel="stylesheet" type="text/css" media="screen" href="resources/js/jqgrid/css/ui.jqgrid.css"  id="jqgridCss" />
+    <link rel="stylesheet" href="resources/js/jqgrid/css/prettify.css" />
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/jquery.jqGrid.min.js"></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/prettify.js"></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/codetabs.js"></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/themeswitchertool.js"></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/i18n/grid.locale-cn.js"></script>
+    <script src="resources/js/jqgrid/js/grid.custom.js" type="text/javascript"></script>
+    <link href="resources/js/ztree/zTreeStyle/zTreeStyle.css" rel="stylesheet"  type="text/css">
+    <script src="resources/js/ztree/jquery.ztree.core-3.5.js" type="text/javascript"></script>
+    <script src="resources/js/ztree/jquery.ztree.excheck-3.5.js" type="text/javascript"></script>
+    <script src="resources/js/ztree/jquery.ztree.exedit-3.5.js" type="text/javascript"></script>
+    <script src="GetJS?button.js" type="text/javascript"></script>
+    <script src="GetJS?tree.js" type="text/javascript"></script>
+    <script src="GetJS?dataform.js" type="text/javascript"></script>
+    <script src="GetJS?messagebox.js" type="text/javascript"></script>
+    <link href="resources/css/Css.css" rel="stylesheet" />
+    <link href="console/FormCss.css" rel="stylesheet" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+	    *{margin: 0;padding: 0;}
+	    #container {overflow: hidden;}
+	    #sidebar { float:left; width:260px; margin-top: 5px; margin-left: 0px;}
+	    #content1 { margin-left: 265px; margin-top: 5px;width:80%;}
+	    #sidebar,#content {min-height: 300px;height: auto !important;height: 1000px;}
+    </style>
+    <script src="GetJS?rule/RuleAliasEdit.js" type="text/javascript"></script>
+    <style>
+        .stred
+        {
+            background-color: Red;
+        }
+        .stblue
+        {
+            background-color: Blue;
+        }
+        .input-uploadfile
+        {
+            display: inline-block;
+            width: 109px;
+            height: 26px;
+            overflow: hidden;
+            position: relative;
+            background-image: url(resources/images/ImportExcel.png);
+            background-repeat: no-repeat;
+        }
+        .input-uploadfile:hover
+        {
+            width: 109px;
+            height: 26px;
+            background-image: url(resources/images/selImportExcel.png);
+            background-repeat: no-repeat;
+        }
+        .input-uploadfile input
+        {
+            opacity: 0;
+            filter: alpha(opacity=0);
+            font-size: 100px;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+    </style>
+    <script type="text/javascript">
+        //用于使提示显示在当前页面
+        function dataloaded() {
+            this.showUploadSuccess(event.srcElement.contentDocument.documentElement.innerText);
+        }
+        function showUploadSuccess(s) {
+            if (s != "" && s != null) {
+                var v = eval("(" + s + ")");
+                if (v.IsOk == "1") {
+                    ShowMessages(v.ErrMessage, "系统提示", "msgok", function okFunction() {
+                    	 roaldAliasTempJqGrid();
+                        $("#uploadfile").val("");
+                    }, 0);
+                   
+                }
+                else
+                    ShowMessages(v.ErrMessage, "系统提示", "msgwaring", function okFunction() {
+                        $("#uploadfile").val("");
+                    }, 0);
+            }
+            if (top.hideloading) {
+                top.hideloading();
+            }
+        }
+        function uploadfile() {
+            var uf = document.getElementById("uploadfile");
+            var filepath = uf.value; //文件路径
+            if (filepath) {
+                if (filepath.substring(filepath.indexOf(".")) == ".xls"||filepath.substring(filepath.indexOf(".")) ==".xlsx") {
+                    var form = document.getElementById("files");
+                    form.action = "ImportAliaNews";
+                    if (top.showloading) {
+                        top.showloading();
+                    }
+                    form.submit();
+                }
+                else {
+                    ShowMessages("只能选择.xls和.xlsx格式的文件", "系统提示", "msgwaring", function okFunction() {
+                        $("#uploadfile").val("");
+                    }, 0);
+                }
+            }
+            else {
+                ShowMessages("请选择文件", "友情提示", "msgwaring", null, 0);
+            }
+        }
+    </script>
+    
+</head>
+<body>
+    <input id="txtAllJson" type="hidden" value="" />
+    <div class='row-fluid' id='content-wrapper'>
+        <div class='span12'>
+            <div id="EntDetailData" class='row-fluid'>
+                <div>
+                    <ul class='breadcrumb' style="margin-bottom: 0px;">
+		                                <li><i class='icon-bar-chart'></i></li>
+		                                <li class='separator'><i class='icon-angle-right'></i></li>
+		                                <li>电子审单规则管理</li>
+		                                <li class='separator'><i class='icon-angle-right'></i></li>
+		                                <li>别名组设置详情</li>
+		                            </ul>
+                </div>
+                <div id="container">
+                <div id="sidebar">
+                    <div class='box-content'>
+                        <div class='row-fluid'>
+                            <div class='span12 box'>
+                                <div class='box-content' id="DataSource">
+                                    <table width="99%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td style="width: 100%;" class="tdListBorder">
+                                                <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                                    <tr>
+                                                        <td class="titleCss">
+                                                            别名名称
+                                                        </td>
+                                                        <td class="tdCss">
+				                                            <input id="txtId" type="hidden" value="0" datafield="Role.tableId" />
+				                                            <input type="hidden" datafield="Role.INDX" id="INDX" />
+				                                            <input type="hidden" datafield="Role.TABLE_NAME" id="TABLE_NAME" />
+                                                            <input type="text" datafield="Role.PROCESS_NAME" id="PROCESS_NAME" id="PROCESS_NAME"
+                                                                ismust="1" errormsg="别名名称不能为空！" />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 100%;" class="tdListBorder">
+                                                <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                                    <tr>
+                                                        <td class="titleCss">
+                                                            描述
+                                                        </td>
+                                                        <td class="tdInfoCss">
+                                                            <textarea rows="2" id='REMARK' style="width: 86%; height: 40px;margin-left: 3px;" datafield="Role.REMARK"
+                                                                ismust="1" errormsg="描述不能为空！" isinfo="1"></textarea>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class='box-content' style="margin-top: 0px;">
+                                    <div style="background-color: #FBFBFB;border-bottom: 1px dashed #ccc; height: 30px; width: 98%; margin-bottom: 10px;
+                                        line-height: 30px;margin-left: 5px;margin-right: 5px;">
+                                        表名</div>
+                                    <div>
+                                        <ul id="ruleAliastTree" class="ztree" style="overflow: auto; height: 595px;">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="content1">
+                    <div class='row-fluid'>
+                        <div class='span12 box' style="min-width: 100%">
+                            <div class="box-content">
+                                <div style="margin-top: 0px;">
+                                    <div style="background-color: #FBFBFB;border-bottom: 0px dashed #ccc; height: 16px; width: 98%; 
+                                        line-height: 16px;margin-left: 5px;margin-right: 5px;padding-bottom: 5px;padding-top: 5px;">
+                                        范围插入</div>
+                                    <table id="tableRowList">
+                                        <tr>
+                                            <td>
+                                                暂无数据
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div id="rowPager">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='box-content' style="margin-top: 10px;">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="font-size: 12px;margin-left: 5px;"
+                                    id="tableNews">
+                                    <tr>
+                                        <td style="width: 33%;">
+                                        	<table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                                            <tr>
+                                                                <td style="width:80px;text-align: right;">
+                                                                <input name="txtRule" id="txtLike" type="radio" value="1" disabled="disabled" onclick="rbtLike()" />相似于：
+                                                                </td>
+                                                                <td class="tdCss">
+                                                                    <input type="text" id="txtKeyWord" 
+                                                                    isnospan="1" disabled="disabled" isdel="0"/>
+                                                                </td>
+                                                            </tr>
+                                             </table>
+                                        </td>
+                                        <td colspan="2" style="width: 66%;">
+                                            <input name="txtRule" id="txtSel" type="radio" value="1" checked="checked" disabled="disabled" />选中
+                                           <input name="txtRule" id="txtAll" type="radio" value="1" disabled="disabled" />全部
+                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 33%;">
+                                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                                            <tr>
+                                                                <td style="width:80px;text-align: right;">
+                                                                <input name="txtRule" id="txtFaiWei" type="radio" value="1" disabled="disabled" onclick="rbtFaiWei()" />范围：
+                                                                </td>
+                                                                <td class="tdCss">
+                                                                    <input type="text" id="txtStartNum" 
+                                               			  isnospan="1" disabled="disabled" />
+                                                                </td>
+                                                            </tr>
+                                             </table>
+                                        </td>
+                                        <td style="width: 33%;">
+                                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                                            <tr>
+                                                                <td style="width:80px;text-align: right;">
+                                                                至
+                                                                </td>
+                                                                <td class="tdCss">
+                                                                    <input type="text" id="txtEndNum" 
+																	 isnospan="1" disabled="disabled" />
+                                                                </td>
+                                                            </tr>
+                                             </table>
+                                        </td>
+                                        <td style="width: 33%;">
+                                        	<button class='btn btn-primary btn-small' id="btnNew" disabled="disabled" onclick="rbtbtnNew()">
+                                                <i class='icon-file'></i>插入选择项</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td  style="width: 33%;">
+                                             <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                                            <tr>
+                                                                <td style="width:80px;text-align: right;">
+                                                                代码选项值
+                                                                </td>
+                                                                <td class="tdCss">
+                                                                    <input type="text" id="txtValue" isnospan="1" maxlength="50" />
+                                                                </td>
+                                                            </tr>
+                                             </table>
+                                        </td>
+                                        <td  style="width: 33%;">
+                                             <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                                            <tr>
+                                                                <td style="width:80px;text-align: right;">
+                                                                描述参考值
+                                                                </td>
+                                                                <td class="tdCss">
+                                                                    <input type="text" id="txtText" isnospan="1" maxlength="50" />
+                                                                </td>
+                                                            </tr>
+                                             </table>
+                                        </td>
+                                        <td  style="width: 33%;">
+                                        	<button class='btn btn-primary btn-small' id="btnAddNew" onclick="rbtbtnAddNew()">
+                                                <i class='icon-file'></i>手动新增代码</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div style="margin-top: 10px;">
+                                <table id="tableSessionList">
+                                </table>
+                                <div id="rowSessionPager">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+    $("#uploadfile").change(function () {
+    	uploadfile();
+    })
+    $("#btnDown").click(function () {
+        window.location.href = "../../resources/template/Goods_Temp.xls";
+    })
+</script>
+

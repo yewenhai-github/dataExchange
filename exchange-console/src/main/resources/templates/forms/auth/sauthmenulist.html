@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>menu manager</title>
+    <meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<link href="../../resources/biz/css/reset.css" rel="stylesheet" type="text/css"/>
+    <link href="../../resources/biz/css/pop.css" rel="stylesheet" type="text/css"/>
+    <link href="../../resources/js/easyui1.9.4/themes/metro/easyui.css" rel="stylesheet"/>
+    <link href="../../resources/js/easyui1.9.4/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../resources/js/easyuiext/extend/css/IconExtension.css" rel="stylesheet" type="text/css"/>
+	<link href="../../resources/js/bootstrap/css/bootstrap.css" rel="stylesheet"/>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/jquery.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="../../resources/js/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/dataform.js"></script>
+</head>
+<body class="easyui-layout page-space">
+	<table id="dg" class="easyui-treegrid" style="width:1000px;height:800px"/>
+</body>
+</html>
+<script type="text/javascript">
+$(function() {
+	$('#dg').treegrid({
+		idField:'indx',
+        treeField:'menu_text',
+        fit : true,
+        url:'../../app/user/getmenulist',
+        method: 'post',
+        rownumbers: true,
+        pagination: false,
+        columns: [
+      	  [
+        		{field: 'menu_text', title: '菜单名称',  width: 240},
+            	{field: 'icon', title: '菜单图标',  width: 140},
+            	{field: 'url', title: '菜单链接',  width: 300},
+            	{field: 'order_num', title: '菜单顺序',align: "center",  width: 160},
+            	{field: 'createTime', title: '创建时间',  width: 150},
+            	{field: 'creator', title: '创建人',  width: 100}
+        ]
+     ],
+	 toolbar : [
+                 {text : "刷新",iconCls : "icon-20130406015709810_easyicon_net_16",handler : function() {
+                	 $('#dg').treegrid('reload');
+                 }},
+                 {text : "增加",iconCls : "icon-add",handler : function() {
+                	 parent.popShipWin('pages/auth/sauthmenuedit.html',"菜单新增");
+                 }},
+                 {text : "修改",iconCls : "icon-edit",
+                     handler : function() {
+                 		var row = $('#dg').treegrid('getSelections');
+                 		if (row.length==1) {
+                 			var send=row[0].parentid+","+
+                 			         row[0].order_num+","+
+                 			         encodeURI(encodeURI(row[0].menu_text))+","+
+                 			         row[0].icon+","+
+                 			         row[0].url+","+
+                 			         row[0].indx;
+                 			parent.popShipWin('pages/auth/sauthmenuedit.html?ValueId=' + send ,"菜单编辑");
+                 		}else{
+                 		    $.messager.alert("提示信息", "请选择需修改的一行！",'warning');
+                 		}
+                  }},
+                  {text : "删除",iconCls : "icon-delete",
+                     handler : function() {
+                         var rows = $('#dg').treegrid('getSelections');
+                         if (rows.length <= 0) {
+                             $.messager.alert("警告", "请您选择需删除的数据", 'warning');
+                         } else if (rows.length > 1) {
+                             $.messager.alert("警告", "不允许批量删除", 'error');
+                         } else {
+                        	 $.messager.confirm("提示信息", "您确定要删除这条记录?", function(r) {
+                     			if (r) {
+                     					$.post('../../app/user/delmenu', {
+                     						indx : rows[0].indx
+                     					}, function(result) {
+                     						$.messager.show({title : '提示信息',msg : result.ErrMessage});
+                     						$('#dg').treegrid('reload');
+                     					}, 'json');
+                     				}
+                     		});
+                         }
+                     }
+              }]
+	});
+});
+</script>

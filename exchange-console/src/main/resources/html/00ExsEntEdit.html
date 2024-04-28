@@ -1,0 +1,610 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>企业备案详细</title>
+   <!--[if lt IE 9]>
+    <script src='../../resources/js/assets/javascripts/html5shiv.js' type='text/javascript'></script>
+    <![endif]-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport' />
+    <link type='text/css' rel='stylesheet' href='../resources/js/assets/stylesheets/bootstrap/bootstrap.css' media='all' />
+    <link type='text/css' rel='stylesheet' href='console/css/light-theme.css' id='color-settings-body-color' media='all'/>
+    <link type='text/css' rel='stylesheet' href='../resources/js/assets/stylesheets/demo.css' media='all'/>
+    <link type="text/css" rel='stylesheet' href="../resources/js/jqgrid/css/jquery-ui.css" media="screen" />
+    <link type="text/css" rel='stylesheet' href="../resources/js/jqgrid/css/ui.jqgrid.css" media="screen" />
+    <link type="text/css" rel='stylesheet' href="../resources/js/jqgrid/css/prettify.css" />
+    <link type='text/css' rel='stylesheet' href='../resources/css/ystep.css' />
+    <link type='text/css' rel='stylesheet' href='../resources/css/Css.css' media='all'/>
+    <script type='text/javascript' src='../resources/js/assets/javascripts/jquery/jquery.min.js' ></script>
+    <script type="text/ecmascript" src="../resources/js/jqgrid/js/jquery.jqGrid.min.js"></script>
+    <script type="text/ecmascript" src="../resources/js/jqgrid/js/prettify.js"></script>
+    <script type="text/ecmascript" src="../resources/js/jqgrid/js/codetabs.js"></script>
+    <script type="text/ecmascript" src="../resources/js/jqgrid/js/themeswitchertool.js"></script>
+    <script type="text/ecmascript" src="../resources/js/jqgrid/js/i18n/grid.locale-cn.js"></script>
+    <script type="text/javascript" src="../resources/js/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="../resources/js/checkradio.js"></script>
+    <script type="text/javascript" src="../resources/js/public.js"></script>
+    <script type='text/javascript' src='../resources/js/ystep.js'></script>
+    <script src="../resources/js/assets/javascripts/jquery/jquery.form.js" type="text/javascript"></script>
+    <script src='../resources/js/assets/javascripts/bootstrap/bootstrap.min.js' type='text/javascript'></script>
+    <script type='text/javascript' src='GetJS?messagebox.js'></script>
+    <script type='text/javascript' src='GetJS?combobox.js'></script>
+    <script type='text/javascript' src='GetJS?button.js'></script>
+    <script type='text/javascript' src='GetJS?popupwindow.js'></script>
+    <script type='text/javascript' src='GetJS?dataform.js'></script>
+</head>
+<body>
+    <div class='row-fluid' id='content-wrapper'>
+        <div class='span12'>
+            <div class='row-fluid'>
+                <!-- <div class='span12'>
+                    <div class='page-header'>
+                        <h1 class='pull-left'>
+                            <i class='icon-list-ul'></i><span id="spanT">企业管理</span>
+                        </h1>
+                        <div class='pull-right'>
+                            <ul class='breadcrumb'>
+                                <li><i class='icon-bar-chart'></i></li>
+                                <li class='separator'><i class='icon-angle-right'></i></li>
+                                <li class='separator'>系统管理</li>
+                                <li class='separator'><i class='icon-angle-right'></i></li>
+                                <li class='separator'>企业管理</li>
+                                <li class='separator'><i class='icon-angle-right'></i></li>
+                                <li class='separator' id="spanTl">企业管理详细</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div> -->
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 10px;margin-top: 10px;
+                    border-bottom: 1px solid #114;">
+                    <tr>
+                        <td style="text-align: left; padding-right: 10px; padding-left: 10px; width: 100%;">
+                        	<button id="btnHistory" class='btn btn-primary btn-small' style='padding-left: 10px;' onclick="javascript:history.go(-1)"><i class='icon-reply-all'></i>返回</button>
+                            <button class='btn btn-primary btn-small' id="btnSave" style='margin-bottom: 5px'
+                                commandname="../EdsAuth.SaveEnt" commanddatas="FormToData('EntData');" commandok="showEntSuccess"  isvalidate="1">
+                                <i class='icon-save'></i>保 存
+                            </button>
+                            <button id="btnDelete" class="btn btn-primary btn-small" style="margin-bottom: 5px;"
+                                commandname="../EdsAuth.DeleteEnt" commanddatas="FormToData('EntData');" commandok="showDeclSuccess"
+                                confirmmessage="您确定要做删除操作吗？"
+                                isvalidate="0">
+                                <i class='icon-remove'></i>删 除</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div id="EntData" class='row-fluid'>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0" id="iideclShowTable">
+                    <tr>
+                        <td style="padding-right: 10px;" valign="top">
+                            <div>
+                                <div class='box-content'>
+                                    <div id="EntDataBase">
+                                        <div class='row-fluid'>
+                                            <div class='span12 box'>
+                                                <div class='box-header'>
+                                                    <div class='title'>
+                                                        <div class='icon-edit' style="color: #00F;">
+                                                        </div>
+                                                        <strong>企业基本信息</strong></div>
+                                                </div>
+                                                <div class='box-content'>
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                        <tr>
+                                                            <td width="25%">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="5">
+                                                                    <tr>
+                                                                        <td class="titleCss130">
+                                                                            企业名称中文
+                                                                            <input datafield="ENTDATA.INDX" id="txtEntINDX" type='hidden' />
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text29' datafield="ENTDATA.COMPANYNAME" type='text' width="100%" ismust="1"
+                                                                                errormsg="企业名称中文不能为空！" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            企业名称英文
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text1' datafield="ENTDATA.COMPANYENAME" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                              <input id='txtIsRoot' type="hidden" style="width: 100%;" datafield="IsRootData.Is_Root"/>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            企业简称
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text30' datafield="ENTDATA.COMPANYSNAME" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            平台编号
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text31' datafield="ENTDATA.PID" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="5">
+                                                                    <tr>
+                                                                        <td class="titleCss130">
+                                                                        	    组织机构代码
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text32' datafield="ENTDATA.ORGCODE" type='text' width="100%" ismust="1"
+                                                                                errormsg="组织机构代码不能为空！" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            	公司传真
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='SAMPLING_PERCENT' type='text' datafield="ENTDATA.COMPANYFAX" width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            报检注册号
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='txtAPPROVALER' type='text' datafield="ENTDATA.INSPREGNUMBER" width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            报检类别
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='txtAPPROVAL_TIME' datafield="ENTDATA.INSPECTIONTYPE" width="100%" type='text' />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss130">
+                                                                            	归属地
+                                                                        </td>
+                                                                        <td class="tdSelectCss">
+                                                                            <input type='combobox' id='SUBORG'  datafield="ENTDATA.SUBORGNAME"  valuefield="ENTDATA.SUBORGCODE"  checkfield="ORG_CODE,ORG_NAME_C"
+                                                                                columnheader="代码,名称" columns="ORG_CODE,ORG_NAME_C" datasourcename="B_BBD_SYS_ORGANIZE"
+                                                                                showfields="ORG_NAME_C" savefield="ORG_CODE" errmessage="没有这个归属地！" ismust="1"
+																				errormsg="归属地不能为空！" width="100%"/>
+                                                                            
+                                                                            
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                           	 主管检验检疫机构
+                                                                        </td>
+                                                                        <td class="tdSelectCss">
+                                                                                <input type='combobox' id='INSTITUTIONS'  datafield="ENTDATA.INSTITUTIONS_NAME"  valuefield="ENTDATA.INSTITUTIONS_CODE"  checkfield="ORG_CODE,ORG_NAME_C"
+                                                                                columnheader="代码,名称" columns="ORG_CODE,ORG_NAME_C" datasourcename="B_BBD_SYS_ORGANIZE"
+                                                                                showfields="ORG_NAME_C" savefield="ORG_CODE" errmessage="没有这个主管检验检疫机构！" 
+																				errormsg="主管检验检疫机构不能为空！"  ismust="1"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <!-- <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            所属机构名称
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text3' datafield="ENTDATA.SUBORGNAME" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td> -->
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            工商营业执照号码
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text4' datafield="ENTDATA.LICENSENUMBER" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            工商注册日期
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='dateRECORDDATE' datafield="ENTDATA.RECORDDATE" class="Wdate" type='text'
+                                                                                style="width: 100%;" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" judge="date"
+                                                                                timeformat="YYYY-MM-DD" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss130">
+                                                                            	注册资金(RMB/万元)
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text6' datafield="ENTDATA.RECORMONEY" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                           	 产地证注册号
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text7' datafield="ENTDATA.ORIGINNUMER" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            产地证类别
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text8' datafield="ENTDATA.ORIGINTYPE" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            企业性质
+                                                                        </td>
+                                                                        <td class="tdSelectCss">
+                                                                        <input id="txtCOMPANYTYPE" type="combobox" datafield="ENTDATA.COMPANYTYPENAME"
+                                                                            valuefield="ENTDATA.COMPANYTYPE" checkfield="ITEM_CODE,ITEM_NAME"
+                                                                            columnheader="编号,名称" columns="ITEM_CODE,ITEM_NAME" datasourcename="S_BBD_PROPERTY"
+                                                                            showfields="ITEM_NAME" savefield="ITEM_CODE" isshowall="0" errmessage="没有这个企业性质！"
+                                                                            errormsg="企业性质不能为空！" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss130">
+                                                                            e-CIQ用户名
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text10' datafield="ENTDATA.ECIQ_USER_NAME" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 50%;" colspan="2">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            e-CIQ密码
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text11' datafield="ENTDATA.ECIQ_PASS_WORD" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            企业邮箱
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text12' datafield="ENTDATA.COMPANYEMAIL" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="5">
+                                                                    <tr>
+                                                                        <td class="titleCss130">
+                                                                            法人
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text13' datafield="ENTDATA.LEGALPERSON" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            法人电话
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text14' datafield="ENTDATA.LEGALPERSONTEL" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            联系人
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text15' datafield="ENTDATA.LINKMAN" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            联系人手机号码
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text16' datafield="ENTDATA.LINKMANTEL" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss130">
+                                                                            是否转发报检回执(DDS)
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text17' datafield="ENTDATA.ISFORWARDDDS" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            注册时间
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='dateREGDATE' datafield="ENTDATA.REGDATE" class="Wdate" type='text' style="width: 100%;"
+                                                                                onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" judge="date" timeformat="YYYY-MM-DD"
+                                                                               />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            所属行业
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text19' datafield="ENTDATA.BELONGINDUSTRY" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            经办人姓名
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text20' datafield="ENTDATA.AGENTNAME" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="1">
+                                                                    <tr>
+                                                                        <td class="titleCss130">
+                                                                            	企业地址
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text21' datafield="ENTDATA.ENTADDRESS" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            	经办人身份证号
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text22' datafield="ENTDATA.AGENTIDCARD" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            海关注册代码
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text23' datafield="ENTDATA.CUSTOMSREGCODE" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            业务类型
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text24' datafield="ENTDATA.BUSINESSTYPE" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="width: 25%;">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss130">
+                                                                            外网IP固定地址
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text25' datafield="ENTDATA.WEBIP" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 75%;" colspan="3">
+                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                    <tr>
+                                                                        <td class="titleCss110">
+                                                                            	备注
+                                                                        </td>
+                                                                        <td class="tdCss">
+                                                                            <input id='Text27' datafield="ENTDATA.REMARK" type='text' width="100%" />
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript">
+
+function callbackfunction(INDX) {
+    DoCommand("../EdsAuth.GetEntListById?INDX=" + INDX);
+    document.getElementById("txtEntINDX").value = INDX;
+    $("#ENTDATA").trigger("reloadGrid");
+} 
+function showEntSuccess(s) {
+         var v = eval("(" + s + ")");
+         var data = eval("(" + v.ReturnData + ")");
+         if (v.IsOk == "1") {
+             ShowMessages(v.ErrMessage, "系统提示", "msgok", function okFunction() {
+                 callbackfunction(data.INDX);
+             }, 0);
+         }
+         else
+             ShowMessages(v.ErrMessage, "系统提示", "msgwaring", null, 0);
+     }
+ //表头删除 
+ function showDeclSuccess(s) {
+     var v = eval("(" + s + ")");
+     if (v.IsOk == "1") {
+         ShowMessages(v.ErrMessage, "系统提示", "msgok", function okFunction() {
+             //window.location.href = "EntList.html";
+ 			 parent.NavaddTab('系统管理','GetHTML?auth/EdsEntList.html','企业管理');
+         }, 0);
+     }
+     else
+         ShowMessages(v.ErrMessage, "系统提示", "msgwaring", null, 0);
+ }
+$(document).ready(function () { 
+	 var INDX = GetRequestName("INDX");
+     DoCommand("../EdsAuth.GetEntListById?INDX=" + INDX);
+ });
+
+function InitPage() {
+	if (GetRequestName("INDX") != "") {
+		DoCommand("../EdsAuth.GetEntListById?INDX=" + GetRequestName("INDX"));
+	}
+	 /* DoCommand("../EdsAuth.GetIsRoot");*/
+	/*postData("../EdsAuth.GetIsRoot" ,null,true, callback1, null)	*/
+      /*var IsRoot=$("#txtIsRoot").val();
+      if(IsRoot!="Y"){
+    	    document.getElementById("Text32").disabled = true;
+    	 // $("#Text32").attr("readonly","readonly");
+      }*/
+} 		
+/*function callback1(s){
+	var data = eval("(" + s + ")");
+	var IsRoot=data.ReturnData;
+	   if(IsRoot=="Y"){
+		   $("#btnDelete").hide();
+	   document.getElementById("Text32").disabled = true;
+	    $("#Text32").attr("readonly","readonly");
+	      }
+}*/
+</script>

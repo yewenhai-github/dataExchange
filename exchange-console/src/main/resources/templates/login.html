@@ -1,0 +1,170 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+	<title>数据交换平台-登录</title>
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/light-theme.css'
+          id='color-settings-body-color' media='all' />
+	<link href="login/css/style.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="login/css/login.css"/>
+	<script src='resources/js/assets/javascripts/jquery/jquery.min.js' type='text/javascript'></script>
+	<script src="GetJS?button.js" type="text/javascript"></script>
+	<script src="GetJS?dataform.js" type="text/javascript"></script>
+	<script src="GetJS?messagebox.js" type="text/javascript"></script>
+</head>
+<body onLoad="sendRequest()" >
+
+<div class="videozz"></div>
+    
+<div class="box">
+	<div class="box-a">
+    <div class="m-2">
+          <div class="m-2-1">
+            <form class="login-form">
+            <div class="login-logo">用户登录</div>
+            <div class="login_input"><input type="text" placeholder="用户名" id="username" name="username" datafield="User.USERNAME" /></div>
+            <div class="login_input login_psw"><input type="password" placeholder="密码" id="password" name="password" datafield="User.PASSWORD" /></div>
+            <input type="text" placeholder="请输入验证码" id="code" name="code" datafield="User.CODE" />
+           <!--  <div class="useyzm"><input placeholder="请输入验证码" type="text" name="verifyCode" datafield="User.CODE"/></div> -->
+            <img class="yzmimg" id="imgObj" src="code"  onclick="changeImg()" />
+            <label>
+                <!-- <input type="checkbox" name="remember_me" id="cbkcookie">10天内自动登录 -->
+                <a style="float:left" href="register.html" class="f-r">免费注册</a>
+                <a href="#" class="f-r">忘记密码</a>
+            </label>
+            <input name="IsRights" type="hidden" value="Y" />
+            <input type="button" value="登录" id="loginC" commandname="DoLogin" commanddatas="FormToData('login');" commandok="DataReturnsLogin"/>
+        </form>
+          </div>
+    </div>
+    <div class="m-5"> 
+    <div id="m-5-id-1"> 
+    <div id="m-5-2"> 
+    <div id="m-5-id-2">  
+    </div> 
+    <div id="m-5-id-3"></div> 
+    </div> 
+    </div> 
+    </div>   
+    <div class="m-10"></div>
+    <div class="m-xz7"></div>
+    <div class="m-xz8 xzleft"></div>
+    <div class="m-xz9"></div>
+    <div class="m-xz9-1"></div>
+    <!-- <div class="m-x10"></div>
+    <div class="m-x11"></div>
+    <div class="m-x12 xzleft"></div>
+    <div class="m-x13"></div>
+    <div class="m-x14 xzleft"></div>
+    <div class="m-x15"></div>
+    <div class="m-x16 xzleft"></div>-->
+    <div class="m-x17 xzleft"></div>
+    <div class="m-x18"></div>
+    <div class="m-x19 xzleft"></div>
+    <div class="m-x20"></div>  
+    <div class="m-8"></div>
+    <div class="m-9"><div class="masked1" id="sx8">数据交换平台</div></div>
+    <div class="m-11">
+    	<div class="m-k-1"><div class="t1"></div></div>
+        <div class="m-k-2"><div class="t2"></div></div>
+        <div class="m-k-3"><div class="t3"></div></div>
+        <div class="m-k-4"><div class="t4"></div></div>
+        <div class="m-k-5"><div class="t5"></div></div>
+        <div class="m-k-6"><div class="t6"></div></div>
+        <div class="m-k-7"><div class="t7"></div></div>
+    </div>   
+    <div class="m-14"><div class="ss"></div></div>
+    <div class="m-15-a">
+    <div class="m-15-k">
+    	<div class="m-15xz1">
+            <div class="m-15-dd2"></div>
+        </div>
+    </div>
+    </div>
+    <div class="m-16"></div>
+    <div class="m-17"></div>
+    <div class="m-18 xzleft"></div>
+    <div class="m-19"></div>
+    <div class="m-20 xzleft"></div>
+    <div class="m-21"></div>
+    <div class="m-22"></div>
+    <div class="m-23 xzleft"></div>
+    <div class="m-24" id="localtime"></div>
+    </div>
+</div>
+</body>
+</html>
+<script src="login/js/common.min.js"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+$(function () {
+	$("#username").val('admin');
+	$("#password").val('admin');
+});
+    
+//增加回车登录事件
+document.onkeydown=function(event){
+          var e = event || window.event || arguments.callee.caller.arguments[0];
+          if(e && e.keyCode==13){ // enter 键
+          	$("#loginC").click();
+          }
+      }; 
+
+function setCookie(name, value, hours) {
+	var d = new Date();
+	d.setTime(d.getTime() + hours * 3600 * 1000);
+	document.cookie = name + '=' + value + '; expires=' + d.toGMTString();
+}
+function getCookie(name) {
+	var arr = document.cookie.split('; ');
+	for (var i = 0; i < arr.length; i++) {
+		var temp = arr[i].split('=');
+		if (temp[0] == name) {
+			return temp[1];
+		}
+	}
+	return '';
+}
+function removeCookie(name) {
+	var d = new Date();
+	d.setTime(d.getTime() - 10000);
+	document.cookie = name + '=1; expires=' + d.toGMTString();
+}
+function DataReturnsLogin(parameters) {
+	//window.location.href = 'index.html';
+	var data = $.parseJSON(parameters);
+	if (data.IsOk == "1") {
+	    if ($("#cbkcookie").attr("checked") == "checked") {
+	        setCookie("username", $("#username").val(), 300);
+	    }
+	    if (data.ReturnAddress)
+	       window.location.href = data.ReturnAddress;
+	} else {
+		 if (data.ErrMessage.indexOf('登录信息') < 0)
+                ShowMessages(data.ErrMessage, "系统提示", "msgwaring", null, 0);
+		     if(data.ErrMessage=="用户名不能为空"||data.ErrMessage=="密码不能为空"||data.ErrMessage=="用户名密码错误"){
+		    	 loadimage();
+		     }
+	}
+}
+window.onload = function() {
+	$("#username").val(getCookie("username"));
+	
+};
+function changeImg() {
+     var imgSrc = $("#imgObj");
+     var src = imgSrc.attr("src");
+     imgSrc.attr("src", chgUrl(src));
+  }
+
+  function chgUrl(url) {
+    var timestamp = (new Date()).valueOf();
+    url+= "?timestamp=" + timestamp;
+    return url;
+  }
+  function loadimage(){
+     $("#imgObj").attr("src", "code?"+Math.random());
+  }
+/*]]>*/
+</script>

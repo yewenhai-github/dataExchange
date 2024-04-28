@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>organization detail</title>
+    <meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<link href="../../resources/biz/css/reset.css" rel="stylesheet" type="text/css"/>
+    <link href="../../resources/biz/css/pop.css" rel="stylesheet" type="text/css"/>
+    <link href="../../resources/js/easyui1.9.4/themes/metro/easyui.css" rel="stylesheet"/>
+    <link href="../../resources/js/easyui1.9.4/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../resources/js/easyuiext/extend/css/IconExtension.css" rel="stylesheet" type="text/css"/>
+	<link href="../../resources/js/bootstrap/css/bootstrap.css" rel="stylesheet"/>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/jquery.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="../../resources/js/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/dataform.js"></script>
+</head>
+<style>
+
+</style>
+<body class="page-space">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xs-12 toolbar" id="topnav">
+				<a href="javascript:void(0)" class="easyui-linkbutton" id="btnSave" iconcls="icon-save">保存</a> 
+			</div>
+		</div>
+		<form id="fm2" method="post">
+			<div class="row  p-top5" id="checkorder">
+				<div class="col-xs-6">
+					<div class="lbl-text tip-blue">上级菜单</div>
+				</div>
+				<div class="col-xs-6">
+					<input name="parentid" id="parentid" editable="true" class="easyui-combotree" style="height:30px;width: 100%" />
+				</div>
+			</div>
+			<div class="row  p-top5">
+				<div class="col-xs-6">
+					<div class="lbl-text tip-red">组织机构代码</div>
+				</div>
+				<div class="col-xs-6">
+					<input name="org_id" id="org_id" class="easyui-textbox" style="height:26px;width: 100%"/>
+				</div>
+			</div>
+			<div class="row  p-top5">
+				<div class="col-xs-6">
+					<div class="lbl-text tip-red">组织机构名称</div>
+				</div>
+				<div class="col-xs-6">
+					<input name="org_name" id="org_name" class="easyui-textbox" style="height:26px;width: 100%"/>
+				</div>
+			</div>
+			<div class="row  p-top5">
+				<div class="col-xs-6">
+					<div class="lbl-text tip-red">组织机构序号</div>
+				</div>
+				<div class="col-xs-6">
+					<input name="order_num" id="order_num" class="easyui-numberbox" style="height:26px;width: 100%"/>
+				</div>
+			</div>
+			<div class="row  p-top5">
+				<div class="col-xs-6">
+					<div class="lbl-text tip-red">类型</div>
+				</div>
+				<div class="col-xs-6">
+					<select id="type" name="type" class="easyui-combobox" style="height:26px;width: 100%" disabled="disabled">
+						 <option value="0" selected="true">公司</option>
+						 <option value="1">部门</option>
+					</select>
+				</div>
+			</div>
+			<div id="selectindx" style="display:none">
+					<input class="easyui-textbox" name="indx" id="indx" /> 
+			</div>
+		</form>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+/*<![CDATA[*/
+$(function() {
+	$('#parentid').combotree({url: '../../app/user/getcomboboxorglist'});
+	
+	if (getRequestName("ValueId") != "") {
+		  var result = getRequestName("ValueId").split(",");
+		  
+		  var result0 = ('null'!= result[0]?result[0]:"");
+		  var result1 = ('null'!= result[1]?result[1]:"");
+	      var result2 = decodeURI(decodeURI(('null'!= result[2]?result[2]:"")));
+		  var result3 = decodeURI(decodeURI(('null'!= result[3]?result[3]:"")));
+		  var result4 = decodeURI(decodeURI(('null'!= result[4]?result[4]:"")));
+		  var result5 = ('null'!= result[5]?result[5]:"");
+		  
+		  $("#parentid").combotree('setValue', result0);
+		  $("#org_id").textbox('setValue', result1);
+		  $("#org_name").textbox('setValue', result2);
+		  $("#order_num").textbox('setValue', result3);
+		  $("#indx").textbox('setValue', result4);
+		  $('#type').combobox('setValues', result5);
+	  }else{
+		  $('#type').combobox('enable');
+	  }
+	
+});
+
+$("#btnSave").click(function(){
+	if(Trim($("#order_num").val())==""||$("#order_num").val()==null){
+		$.messager.alert("警告", "组织机构序号不能为空");
+		return;
+	}
+	if(Trim($("#org_name").val())==""||$("#org_name").val()==null){
+		$.messager.alert("警告", "组织机构名称不能为空");
+		return;
+	}
+	if(Trim($("#org_id").val())==""||$("#org_id").val()==null){
+		$.messager.alert("警告", "组织机构代码不能为空");
+		return;
+	}
+	if(Trim($("#type").combobox('getValue'))==""||$("#type").combobox('getValue')==null){
+		$.messager.alert("警告", "类型不能为空");
+		return;
+	}
+	
+	var param = $.getformElementParams($('#fm2'));
+    $.ajax({
+        url:'../../app/user/saveorg',
+        type:"POST",
+        dataType:"json",
+        data:param,
+        success:function(result){  
+        	 if(result.IsOk == '1'){
+		         $.messager.alert("提示信息",result.ErrMessage,'info', function () {
+		        	 $("#indx").textbox('setValue',result.indx);
+		        	 parent.$('#dg').treegrid('reload');
+		        	 parent.$('#Pop_Ship').window('close');
+	             });
+		     }else{  
+		         $.messager.alert("提示信息",'操作失败'+result.ErrMessage);
+		     }  
+		 }
+    });
+ });
+ 
+function Trim(str){
+	return str.replace(/(^\s*)|(\s*$)/g, "");		   
+}
+/*]]>*/
+</script>

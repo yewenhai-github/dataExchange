@@ -1,0 +1,52 @@
+/* @version 1.0 | 20171019
+ * @author yewh
+ * @license: none (public login)
+ */
+@charset "utf-8";
+/* CSS Document */
+html, body, div, p, span, object, iframe, h1, h2, h3, h4, h5, h6, blockquote, q, pre, a, abbr, acronym, address, cite, del, em, img, strong, sub, sub, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, nav, output, ruby, section, summary, time, mark, audio, video { margin:0; padding:0; border:0; font-size:100%; font:inherit; vertical-align:top; }
+/* for html5 */
+article, aside, details, figrue, figcaption, footer, header, hgroup, nav, section { display:block; }
+ol, ul { list-style:none; }
+blockquote, q { quotes:none; }
+blockquote:before, blockquote:after, q:before, q:after { content:''; content:none; }
+table { border-collapse:collapse; border-spacing:0; }
+address, caption, cite, th { font-style:normal; } 
+sup { vertical-align:text-top; }
+sub { vertical-align:text-bottom; }
+input, textarea, select { font-family:inherit; font-size:inherit; font-weight:inherit; *font-size:100%; }
+del { text-decoration:line-through; }
+button { border:0; background:none; cursor: pointer; }
+:focus { outline:0; }
+
+.fl { float:left; _display:inline; }
+.fr { float:right; _display:inline; }
+.cl { clear:both; }
+
+.w { width:100%; }
+.wHalf { width:50%; }
+.h { height:100%; }
+.hHalf { height:50%; }
+.oh { overflow:hidden; }
+
+.dib-wrap {
+font-size:0;/* 所有浏览器 */
+*word-spacing:-1px;/* IE6、7 */
+}
+.dib-wrap .dib{
+font-size: 12px;
+letter-spacing: normal;
+word-spacing: normal;
+vertical-align:top;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0){
+/* firefox 中 letter-spacing 会导致脱离普通流的元素水平位移 */
+.dib-wrap{
+letter-spacing:-5px;/* Safari 等不支持字体大小为 0 的浏览器, N 根据父级字体调节*/
+}
+}
+.dib {
+display: inline-block;
+*display:inline;
+*zoom:1;
+}

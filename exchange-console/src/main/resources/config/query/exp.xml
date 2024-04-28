@@ -1,0 +1,1169 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<SqlMap>
+    <select id="GetQuartzConfigList">
+		<![CDATA[
+		  SELECT A.*,A.INDX AS CON_INDX
+		    FROM exs_quartz_config A
+		   WHERE 1 = 1 
+		  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		  << AND NAME = #NAME# >>
+		  << AND IP_ADDRESS = #IP_ADDRESS# >>
+		  << AND CLIENT_IP_ADDRESS = #CLIENT_IP_ADDRESS# >>
+		  << AND APP_CONTEXT = #APP_CONTEXT# >>
+           ORDER BY (INDX+0)
+		]]>
+	</select>
+	<select id="GetQuoteConfigList">
+		<![CDATA[
+		  SELECT A.*,A.INDX AS CON_INDX
+		    FROM exs_quote_config A
+		   WHERE 1 = 1 
+		     AND CATEGORY = #CATEGORY#
+		  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		  << AND SOFTWARE_TYPE = #SOFTWARE_TYPE# >>
+           ORDER BY (INDX+0)
+		]]>
+	</select>
+	<select id="GetQuartzConfigClusterList">
+		<![CDATA[
+		  SELECT CASE WHEN Now() - 1/48 < MODIFY_TIME
+		             THEN '1'
+		            ELSE 
+		              '0'
+		              END
+		         AS STATUS,
+		         A.*,A.INDX AS CON_INDX
+		    FROM exs_quartz_config_CLUSTER A
+		   WHERE 1 = 1 
+		   AND ifnull(IS_ENABLED,'1') = '1'
+		  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		  << AND NAME = #NAME# >>
+		  << AND IP_ADDRESS = #IP_ADDRESS# >>
+		  << AND CLIENT_IP_ADDRESS = #CLIENT_IP_ADDRESS# >>
+		  << AND APP_CONTEXT = #APP_CONTEXT# >>
+		  << AND MODIFY_TIME < to_date(#EXCEPTIONS#,'yyyy-mm-dd hh24:mi:ss') - 1/48>>
+           ORDER BY INDX
+		]]>
+	</select>
+	<select id="GetLogList">
+		<![CDATA[
+			SELECT T.*,T.INDX AS LOG_INDX
+			  FROM EXS_HANDLE_LOG T
+			   WHERE 1 = 1 
+			  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+			  << AND T.MSG_NAME = #MSG_NAME# >>
+			  << AND T.MSG_NO = #MSG_NO# >>
+			  << AND T.MSG_STATUS = #MSG_STATUS# >>
+			  << AND T.CREATE_TIME >=to_date(#CREATE_TIME_FROM#,'yyyy-mm-dd hh24:mi:ss') >>
+			  << AND T.CREATE_TIME < to_date(#CREATE_TIME_TO#,'yyyy-mm-dd hh24:mi:ss')+1  >>
+			  order by msg_name,create_time
+		]]>
+	</select>
+	<select id="GetLogListCount">
+		<![CDATA[
+			SELECT count(1) as count
+			  FROM EXS_HANDLE_LOG
+		]]>
+	</select>
+	<select id="GetLogListUsage">
+		<![CDATA[
+			SELECT count(1) as count
+			  FROM EXS_HANDLE_LOG T
+			   WHERE 1 = 1
+			  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+			  << AND T.MSG_NAME = #MSG_NAME# >>
+			  << AND T.MSG_NO = #MSG_NO# >>
+			  << AND T.MSG_STATUS = #MSG_STATUS# >>
+			  << AND T.CREATE_TIME >=to_date(#CREATE_TIME_FROM#,'yyyy-mm-dd hh24:mi:ss') >>
+			  << AND T.CREATE_TIME < to_date(#CREATE_TIME_TO#,'yyyy-mm-dd hh24:mi:ss')+1  >>
+			  order by msg_name,create_time
+		]]>
+	</select>
+	<select id="GetXml2MqList">
+		<![CDATA[
+		   SELECT CASE WHEN Now() - 1/48 < MODIFY_TIME
+		             THEN '1'
+		            ELSE 
+		              '0'
+		              END
+		         AS STATUS,A.*,A.INDX AS XML_INDX
+		   FROM exs_config_xmltomq A
+		   WHERE 1=1
+		     AND IS_ENABLED = '1'
+		     AND SOURCE_PATH is not null
+		  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		  << AND QUARTZ_NAME = #QUARTZ_NAME# >>
+		  << AND MESSAGE_TYPE = #MESSAGE_TYPE# >>
+		  << AND MODIFY_TIME < to_date(#EXCEPTIONS#,'yyyy-mm-dd hh24:mi:ss') - 1/48>>
+		]]>
+	</select>
+	<select id="GetExchangNodeManageList">
+		<![CDATA[
+		  SELECT CASE
+           WHEN Now() - 1 / 48 < MODIFY_TIME
+               THEN '1'
+           ELSE
+               '0'
+           END
+              AS STATUS,
+					   A.INDX,
+					   A.INDX AS XML_INDX,
+					   A.AUDIT_FLAG,
+					   A.QUARTZ_NAME,
+					   A.MQ_TYPE,
+					   A.TARGET_MQ,
+					   A.ACTIVEMQ_MODE,
+					   A.PRODUCER_URL,
+					   A.PRODUCER_USER,
+					   A.PRODUCER_PWD,
+					   A.SOURCE_PATH,
+					   A.THREAD_COUNT,
+					   A.ENCODING,
+					   A.AES_KEY,
+					   A.TARGET_PATH,
+					   A.ERROR_PATH,
+					   A.IS_ENABLED,
+					   A.CREATE_TIME,
+					   A.REC_VER
+				FROM exs_config_xmltomq A
+				WHERE 1 = 1
+			 AND IS_ENABLED = '1'
+			 AND SOURCE_PATH is not null
+		  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		  << AND QUARTZ_NAME = #QUARTZ_NAME# >>
+		  << AND MODIFY_TIME < to_date(#EXCEPTIONS#,'yyyy-mm-dd hh24:mi:ss') - 1/48>>
+		 UNION ALL
+          SELECT CASE
+           WHEN Now() - 1 / 48 < MODIFY_TIME
+               THEN '1'
+           ELSE
+               '0'
+           END
+                       AS STATUS,
+                       A.INDX,
+		   A.INDX          AS XML_INDX,
+		   A.AUDIT_FLAG,
+		   A.QUARTZ_NAME,
+		   A.MQ_TYPE,
+		   A.SOURCE_MQ     as TARGET_MQ,
+		   ''              as ACTIVEMQ_MODE,
+		   A.CONSUMER_URL  as PRODUCER_URL,
+		   A.CONSUMER_USER as PRODUCER_USER,
+		   A.CONSUMER_PWD  as PRODUCER_PWD,
+		   A.SOURCE_PATH,
+		   A.THREAD_COUNT,
+		   A.ENCODING,
+		   A.AES_KEY,
+		   ''              as TARGET_PATH,
+		   ''              as ERROR_PATH,
+		   A.IS_ENABLED,
+		   A.CREATE_TIME,
+		   A.REC_VER
+		FROM exs_config_mqtoxml A
+		WHERE 1 = 1
+	  		AND IS_ENABLED = '1'
+	  		AND SOURCE_PATH is not null
+	    << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+	    << AND QUARTZ_NAME = #QUARTZ_NAME# >>
+		<< AND MODIFY_TIME < to_date(#EXCEPTIONS#,'yyyy-mm-dd hh24:mi:ss') - 1/48>>
+		]]>
+	</select>
+	<select id="GetbreakPointList">
+		<![CDATA[
+		  SELECT CASE
+           WHEN Now() - 1 / 48 < MODIFY_TIME
+               THEN '1'
+           ELSE
+               '0'
+           END
+              AS STATUS,
+					   A.INDX,
+					   A.INDX AS XML_INDX,
+					   A.AUDIT_FLAG,
+					   A.QUARTZ_NAME,
+					   A.MQ_TYPE,
+					   A.TARGET_MQ,
+					   A.ACTIVEMQ_MODE,
+					   A.PRODUCER_URL,
+					   A.PRODUCER_USER,
+					   A.PRODUCER_PWD,
+					   A.SOURCE_PATH,
+					   A.THREAD_COUNT,
+					   A.ENCODING,
+					   A.AES_KEY,
+					   A.TARGET_PATH,
+					   A.ERROR_PATH,
+					   A.IS_ENABLED,
+					   A.CREATE_TIME,
+					   A.REC_VER,
+					 A.IS_BREAKPOINT
+				FROM exs_config_xmltomq A
+				WHERE 1 = 1
+			 AND IS_ENABLED = '1'
+			 AND SOURCE_PATH is not null
+			 AND A.MQ_TYPE = 'FTP'
+		  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		  << AND QUARTZ_NAME = #QUARTZ_NAME# >>
+		  << AND MODIFY_TIME < to_date(#EXCEPTIONS#,'yyyy-mm-dd hh24:mi:ss') - 1/48>>
+		 UNION ALL
+          SELECT CASE
+           WHEN Now() - 1 / 48 < MODIFY_TIME
+               THEN '1'
+           ELSE
+               '0'
+           END
+                       AS STATUS,
+                       A.INDX,
+		   A.INDX          AS XML_INDX,
+		   A.AUDIT_FLAG,
+		   A.QUARTZ_NAME,
+		   A.MQ_TYPE,
+		   A.SOURCE_MQ     as TARGET_MQ,
+		   ''              as ACTIVEMQ_MODE,
+		   A.CONSUMER_URL  as PRODUCER_URL,
+		   A.CONSUMER_USER as PRODUCER_USER,
+		   A.CONSUMER_PWD  as PRODUCER_PWD,
+		   A.SOURCE_PATH,
+		   A.THREAD_COUNT,
+		   A.ENCODING,
+		   A.AES_KEY,
+		   ''              as TARGET_PATH,
+		   ''              as ERROR_PATH,
+		   A.IS_ENABLED,
+		   A.CREATE_TIME,
+		   A.REC_VER,
+		    A.IS_BREAKPOINT
+		FROM exs_config_mqtoxml A
+		WHERE 1 = 1
+	  		AND IS_ENABLED = '1'
+	  		AND SOURCE_PATH is not null
+	  	AND A.MQ_TYPE = 'FTP'
+	    << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+	    << AND QUARTZ_NAME = #QUARTZ_NAME# >>
+		<< AND MODIFY_TIME < to_date(#EXCEPTIONS#,'yyyy-mm-dd hh24:mi:ss') - 1/48>>
+		]]>
+	</select>
+	<select id="GetXml2MqLyByIndx">
+		<![CDATA[
+		   SELECT A.*
+		   FROM exs_config_xmltomq A
+		   WHERE A.INDX = @INDX
+		]]>
+	</select>
+	<select id="GetXml2MqByIndx">
+		<![CDATA[
+		    SELECT A.*
+		    FROM exs_config_xmltomq A
+		    WHERE A.INDX = @INDX
+		]]>
+	</select>
+	<select id="GetMq2XmlList">
+		<![CDATA[
+		   SELECT CASE WHEN Now() - 1/48 < MODIFY_TIME
+		             THEN '1'
+		            ELSE 
+		              '0'
+		              END
+		         AS STATUS,A.*,A.INDX AS XML_INDX
+		   FROM exs_config_mqtoxml A
+		   WHERE 1=1
+		     AND IS_ENABLED = '1'
+		     AND SOURCE_PATH is not null
+		  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		  << AND QUARTZ_NAME = #QUARTZ_NAME# >>
+		  << AND MESSAGE_TYPE = #MESSAGE_TYPE# >>
+		  << AND MODIFY_TIME < to_date(#EXCEPTIONS#,'yyyy-mm-dd hh24:mi:ss') - 1/48>>
+		]]>
+	</select>
+	<select id="GetXml2MqJXByIndx">
+		<![CDATA[
+		   SELECT A.*
+		   FROM exs_config_mqtoxml A
+		   WHERE  A.INDX = @INDX
+		]]>
+	</select>
+	
+	<select id="GetMq2XmlByIndx">
+		<![CDATA[
+		    SELECT A.*
+		    FROM exs_config_mqtoxml A
+		    WHERE A.INDX = @INDX
+		]]>
+	</select>
+	<select id="GetDB2XmlList">
+		<![CDATA[
+		   SELECT A.*,A.INDX AS XML_INDX
+		   FROM exs_config_dbtoxml A
+		   WHERE 1=1
+		     AND IS_ENABLED = '1'
+		     AND ifnull(DATA_TYPE,'ComXml') = 'ComXml'
+		  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		  << AND QUARTZ_NAME = #QUARTZ_NAME# >>
+		  << AND MESSAGE_TYPE = #MESSAGE_TYPE# >>
+		  ORDER BY A.INDX
+		]]>
+	</select>
+	<select id="GetDB2XmlByIndx">
+		<![CDATA[
+		   SELECT A.*,
+		   case
+			         when INDX is null then
+			          '0'
+			         when INDX = '' then
+			          '0' 
+			         else
+			          '1'
+			       end as BTNSHOW,
+		   CASE IS_ENABLED
+		         WHEN '0' THEN
+		          '否'
+		         WHEN '1' THEN
+		          '是'
+		   		END AS IS_ENABLED_NAME
+		   FROM exs_config_dbtoxml A
+		   WHERE A.INDX = @INDX
+		]]>
+	</select>
+	<select id="GetDB2XmlSqlByPindx">
+		<![CDATA[
+		   SELECT A.*,
+		   CASE IS_ENABLED
+		         WHEN '0' THEN
+		          '否'
+		         WHEN '1' THEN
+		          '是'
+		   		END AS IS_ENABLED_NAME
+		   FROM exs_config_dbtoxml_SQL A
+		   WHERE A.P_INDX = #P_INDX#  AND IS_ENABLED = '1'
+		   ORDER BY A.SEQ_NO
+		]]>
+	</select>
+	<select id="GetDB2XmlSqlByIndx">
+		<![CDATA[
+		   SELECT A.*,
+		   CASE IS_ENABLED
+		         WHEN '0' THEN
+		          '否'
+		         WHEN '1' THEN
+		          '是'
+		   		END AS IS_ENABLED_NAME
+		   FROM exs_config_dbtoxml_SQL A
+		   WHERE A.INDX = @INDX
+		]]>
+	</select>
+	<select id="GetXml2DBList">
+		<![CDATA[
+		   SELECT A.*,A.INDX AS XML_INDX
+		   FROM EXS_CONFIG_XMLTODB A
+		   WHERE 1=1
+		     AND IS_ENABLED = '1'
+		     AND ifnull(DATA_TYPE,'ComXml') = 'ComXml'
+		  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		  << AND QUARTZ_NAME = #QUARTZ_NAME# >>
+		  << AND MESSAGE_TYPE = #MESSAGE_TYPE# >>
+		]]>
+	</select>
+	
+	<select id="GetXml2DBByIndx">
+		<![CDATA[
+		    SELECT A.*
+		    FROM EXS_CONFIG_XMLTODB A
+		    WHERE A.INDX = @INDX
+		]]>
+	</select>
+	<select id="GetQuartzConfigByIndx">
+		<![CDATA[
+		    SELECT A.*
+		    FROM exs_quartz_config A
+		    WHERE A.INDX = @INDX
+		]]>
+	</select>
+	<select id="GetQuoteConfigByIndx">
+		<![CDATA[
+		    SELECT A.*
+		    FROM exs_quote_config A
+		    WHERE A.INDX = @INDX
+		]]>
+	</select>
+	<select id="GetExsSenderByIndx">
+		<![CDATA[
+		    SELECT A.*
+		    FROM EXS_HANDLE_SENDER A
+		    WHERE A.INDX = @INDX
+		]]>
+	</select>
+	
+	<select id="GetAccessCustomerByIndx">
+		<![CDATA[
+		    SELECT A.*
+		    FROM EXS_ACCESS_CUSTOMER A
+		    WHERE A.INDX = @INDX
+		]]>
+	</select>
+	
+	<!-- DB2AnyXml -->
+	<select id="GetDB2AnyXmlList">
+		<![CDATA[
+		   SELECT CASE WHEN Now() - 1/48 < MODIFY_TIME
+		             THEN '1'
+		            ELSE 
+		              '0'
+		              END
+		         AS STATUS,A.*,A.INDX AS XML_INDX
+		   FROM exs_config_dbtoxml A
+		   WHERE 1=1
+		     AND IS_ENABLED = '1'
+		  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		  << AND ifnull(SOURCE_PATH,'0') <> #SOURCE_PATH# >>
+		  << AND ifnull(PRODUCER_URL,'0') <> #PRODUCER_URL# >>
+		  << AND QUARTZ_NAME = #QUARTZ_NAME# >>
+		  << AND MESSAGE_TYPE = #MESSAGE_TYPE# >>
+		  << AND DATA_TYPE in (#DATA_TYPE#) >>
+		  << AND MODIFY_TIME < to_date(#EXCEPTIONS#,'yyyy-mm-dd hh24:mi:ss') - 1/48>>
+		  ORDER BY A.INDX
+		]]>
+	</select>
+	<select id="GetDB2AnyXmlByIndx">
+		<![CDATA[
+		   SELECT A.*,
+		   case
+			         when INDX is null then
+			          '0'
+			         when INDX = '' then
+			          '0' 
+			         else
+			          '1'
+			       end as BTNSHOW,
+		   CASE IS_ENABLED
+		         WHEN '0' THEN
+		          '否'
+		         WHEN '1' THEN
+		          '是'
+		   		END AS IS_ENABLED_NAME
+		   FROM exs_config_dbtoxml A
+		   WHERE A.INDX = @INDX
+		]]>
+	</select>
+	<select id="GetDB2AnyXmlSqlByPindx">
+		<![CDATA[
+		   SELECT A.*
+		   FROM exs_config_dbtoxml_SQL A
+		   WHERE A.P_INDX = #P_INDX#
+		   ORDER BY A.SEQ_NO
+		]]>
+	</select>
+	<select id="GetDB2AnyXmlMapSqlByIndx">
+		<![CDATA[
+		   SELECT A.*
+		   FROM exs_config_dbtoxml_SQL A
+		   WHERE A.INDX = @INDX
+		]]>
+	</select>
+	
+	<select id="GetDB2ComXmlSqlByIndx">
+		<![CDATA[
+		   SELECT A.*
+		   FROM exs_config_dbtoxml_SQL A
+		   WHERE A.INDX = @INDX
+		]]>
+	</select>
+	
+	<select id="GetAnyXml2DBMapSqlByIndx">
+		<![CDATA[
+		   SELECT A.*
+		   FROM EXS_CONFIG_XMLTODB_MAP A 
+		   WHERE A.INDX = @INDX
+		]]>
+	</select>
+	
+	<select id="GetXml2MergeList">
+		<![CDATA[
+		   SELECT A.*,A.INDX AS XML_INDX
+		   FROM exs_config_xmltomerge A
+		   WHERE 1=1
+		     AND IS_ENABLED = '1'
+		  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		  << AND QUARTZ_NAME = #QUARTZ_NAME# >>
+		  << AND MESSAGE_TYPE = #MESSAGE_TYPE# >>
+		]]>
+	</select>
+	
+	
+	<select id="GetMq2XmlMergeByIndx">
+		<![CDATA[
+		   SELECT A.*
+		   FROM exs_config_xmltomerge A
+		   WHERE A.INDX = @INDX
+		]]>
+	</select>
+	
+	<select id="GetXml2SplitLList">
+		<![CDATA[
+		   SELECT A.*,A.INDX AS XML_INDX
+		   FROM exs_config_xmltosplit A
+		   WHERE 1=1
+		     AND IS_ENABLED = '1'
+		   << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		   << AND QUARTZ_NAME = #QUARTZ_NAME# >>
+		   << AND MESSAGE_TYPE = #MESSAGE_TYPE# >>
+		]]>
+	</select>
+	
+	<select id="GetXml2SplitByIndx">
+		<![CDATA[
+		   SELECT A.*
+		   FROM exs_config_xmltosplit A
+		   WHERE INDX=@INDX
+		]]>
+	</select>
+	
+	<select id="GetAccessCustomerList">
+		<![CDATA[
+		   SELECT A.*,A.INDX AS CUS_INDX
+		   FROM exs_access_customer A
+		   WHERE 1=1
+		     AND IS_ENABLED = '1'
+		  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		  << AND MESSAGE_SOURCE = #MESSAGE_SOURCE# >>
+		  << AND MESSAGE_TYPE = #MESSAGE_TYPE# >>
+		]]>
+	</select>
+	
+	<select id="GetAccessPassList">
+		<![CDATA[
+		   SELECT A.*
+		   FROM EXS_ACCESS_PASS A
+		   WHERE 1=1
+		     AND IS_ENABLED = '1'
+		  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		  << AND ACCESS_NAME = #ACCESS_NAME# >>
+		  << AND MESSAGE_TYPE = #MESSAGE_TYPE# >>
+		]]>
+	</select>
+	
+		<select id="GetApi2ClientQuartzList">
+		<![CDATA[
+		   SELECT A.*
+		   FROM exs_config_api_push A
+		   WHERE 1=1
+		     AND IS_ENABLED = '1'
+		     and QUARTZ_NAME is not null
+		   << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		   << AND QUARTZ_NAME = #QUARTZ_NAME# >>
+		]]>
+	</select>
+	<select id="GetApi2ServerQuartzList">
+		<![CDATA[
+		   SELECT A.*
+		   FROM exs_config_api_polling A
+		   WHERE 1=1
+		     AND IS_ENABLED = '1'
+		     and QUARTZ_NAME is not null
+		   << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		   << AND QUARTZ_NAME = #QUARTZ_NAME# >>
+		]]>
+	</select>
+	
+	<select id="GetApi2ClientList">
+		<![CDATA[
+		   SELECT A.*,A.INDX AS API_INDX
+		   FROM exs_config_api_push A
+		   WHERE 1=1
+		     AND IS_ENABLED = '1'
+		   << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		   << AND QUARTZ_NAME = #QUARTZ_NAME# >>
+		]]>
+	</select>
+	<select id="GetApiClientByIndx">
+		<![CDATA[
+		   SELECT A.*
+		   FROM exs_config_api_push A
+		   WHERE  A.INDX = @INDX
+		]]>
+	</select>
+	<select id="GetApi2ServerList">
+		<![CDATA[
+		   SELECT A.*,A.INDX AS API_INDX
+		   FROM exs_config_api_polling A
+		   WHERE 1=1
+		     AND IS_ENABLED = '1'
+		   << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		   << AND QUARTZ_NAME = #QUARTZ_NAME# >>
+		   order by indx
+		]]>
+	</select>
+	
+	<select id="GetApi2ServerByIndx">
+		<![CDATA[
+		   SELECT A.*
+		   FROM exs_config_api_polling A
+		   WHERE A.INDX = @INDX
+		]]>
+	</select>
+	
+	<select id="GetAppList">
+		<![CDATA[
+			SELECT T.*
+			  FROM exs_monitor_config T
+			   WHERE 1 = 1 
+		      << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		      << AND APP_NAME = #APP_NAME# >>
+			  << AND T.CREATE_TIME >=to_date(#CREATE_TIME_FROM#,'yyyy-mm-dd hh24:mi:ss') >>
+			  << AND T.CREATE_TIME < to_date(#CREATE_TIME_TO#,'yyyy-mm-dd hh24:mi:ss')+1  >>
+			  order by create_time
+		]]>
+	</select>
+	<select id="GetMqMonitorList">
+		<![CDATA[
+			SELECT T.*
+			  FROM exs_monitor_config T
+			   WHERE 1 = 1 
+			     and app_type = 'MQ'
+		      << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		      << AND APP_NAME = #APP_NAME# >>
+			  << AND T.CREATE_TIME >=to_date(#CREATE_TIME_FROM#,'yyyy-mm-dd hh24:mi:ss') >>
+			  << AND T.CREATE_TIME < to_date(#CREATE_TIME_TO#,'yyyy-mm-dd hh24:mi:ss')+1  >>
+			  order by create_time
+		]]>
+	</select>
+	<select id="GetHttpMonitorList">
+		<![CDATA[
+			SELECT T.*
+			  FROM exs_monitor_config T
+			   WHERE 1 = 1 
+			     and app_type = 'HTTP'
+		      << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		      << AND APP_NAME = #APP_NAME# >>
+			  << AND T.CREATE_TIME >=to_date(#CREATE_TIME_FROM#,'yyyy-mm-dd hh24:mi:ss') >>
+			  << AND T.CREATE_TIME < to_date(#CREATE_TIME_TO#,'yyyy-mm-dd hh24:mi:ss')+1  >>
+			  order by create_time
+		]]>
+	</select>
+	<select id="GetSenderList">
+		<![CDATA[
+			SELECT T.*
+			  FROM exs_handle_sender T
+			   WHERE 1 = 1 
+			  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+			  << AND T.CREATE_TIME >=to_date(#CREATE_TIME_FROM#,'yyyy-mm-dd hh24:mi:ss') >>
+			  << AND T.CREATE_TIME < to_date(#CREATE_TIME_TO#,'yyyy-mm-dd hh24:mi:ss')+1  >>
+			  order by create_time
+		]]>
+	</select>
+	<select id="GetReceivedList">
+		<![CDATA[
+			SELECT T.*
+			  FROM exs_handle_received T
+			   WHERE 1 = 1 
+			  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+			  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+			  << AND T.CREATE_TIME >=to_date(#CREATE_TIME_FROM#,'yyyy-mm-dd hh24:mi:ss') >>
+			  << AND T.CREATE_TIME < to_date(#CREATE_TIME_TO#,'yyyy-mm-dd hh24:mi:ss')+1  >>
+			  order by create_time
+		]]>
+	</select>
+	<select id="GetPushReceivedList">
+		<![CDATA[
+			SELECT T.*
+			  FROM exs_access_received T
+			   WHERE 1 = 1 
+			  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+			  << AND T.CREATE_TIME >=to_date(#CREATE_TIME_FROM#,'yyyy-mm-dd hh24:mi:ss') >>
+			  << AND T.CREATE_TIME < to_date(#CREATE_TIME_TO#,'yyyy-mm-dd hh24:mi:ss')+1  >>
+			  order by create_time
+		]]>
+	</select>
+	<select id="GetPullReceivedList">
+		<![CDATA[
+			SELECT T.*
+			  FROM EXS_PULL_RECEIVED T
+			   WHERE 1 = 1 
+			  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+			  << AND T.CREATE_TIME >=to_date(#CREATE_TIME_FROM#,'yyyy-mm-dd hh24:mi:ss') >>
+			  << AND T.CREATE_TIME < to_date(#CREATE_TIME_TO#,'yyyy-mm-dd hh24:mi:ss')+1  >>
+			  order by create_time
+		]]>
+	</select>
+	<select id="GetExsUserList">
+		<![CDATA[
+			SELECT T.*
+			  FROM EXs_auth_user T
+			   WHERE 1 = 1 
+			  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+			  << AND T.CREATE_TIME >=to_date(#CREATE_TIME_FROM#,'yyyy-mm-dd hh24:mi:ss') >>
+			  << AND T.CREATE_TIME < to_date(#CREATE_TIME_TO#,'yyyy-mm-dd hh24:mi:ss')+1  >>
+			  order by create_time
+		]]>
+	</select>
+	
+	<select id="GetAnyXml2DBList">
+		<![CDATA[
+		   SELECT CASE WHEN Now() - 1/48 < MODIFY_TIME
+		             THEN '1'
+		            ELSE 
+		              '0'
+		              END
+		         AS STATUS,A.*,A.INDX AS XML_INDX
+		   FROM EXS_CONFIG_XMLTODB A
+		   WHERE 1=1
+		     AND IS_ENABLED = '1'
+		  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		  << AND ifnull(SOURCE_PATH,'0') <> #SOURCE_PATH# >>
+		  << AND DATA_TYPE in (#DATA_TYPE#) >>
+		  << AND QUARTZ_NAME = #QUARTZ_NAME# >>
+		  << AND MESSAGE_TYPE = #MESSAGE_TYPE# >>		  
+		  << AND MODIFY_TIME < to_date(#EXCEPTIONS#,'yyyy-mm-dd hh24:mi:ss') - 1/48>>
+		]]>
+	</select>
+	<select id="GetMqAnyXml2DBList">
+		<![CDATA[
+		   SELECT CASE WHEN Now() - 1/48 < MODIFY_TIME
+		             THEN '1'
+		            ELSE 
+		              '0'
+		              END
+		         AS STATUS,A.*,A.INDX AS XML_INDX
+		   FROM EXS_CONFIG_XMLTODB A
+		   WHERE 1=1
+		     AND IS_ENABLED = '1'
+		     AND CONSUMER_URL is not null
+		  << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		  << AND QUARTZ_NAME = #QUARTZ_NAME# >>
+		  << AND MESSAGE_TYPE = #MESSAGE_TYPE# >>		  
+		  << AND MODIFY_TIME < to_date(#EXCEPTIONS#,'yyyy-mm-dd hh24:mi:ss') - 1/48>>
+		]]>
+	</select>
+	<select id="GetAnyXml2DBByIndx">
+		<![CDATA[
+		   SELECT A.*,
+		   case
+			         when INDX is null then
+			          '0'
+			         when INDX = '' then
+			          '0' 
+			         else
+			          '1'
+			       end as BTNSHOW,
+		   CASE IS_ENABLED
+		         WHEN '0' THEN
+		          '否'
+		         WHEN '1' THEN
+		          '是'
+		   		END AS IS_ENABLED_NAME
+		   FROM EXS_CONFIG_XMLTODB A 
+		   WHERE A.INDX = @INDX
+		]]>
+	</select>
+	<select id="GetAnyXml2DBSqlByPindx">
+		<![CDATA[
+		   SELECT A.*
+		   FROM EXS_CONFIG_XMLTODB_MAP A 
+		   WHERE A.P_INDX = #P_INDX# and IS_ENABLED='1'
+		   ORDER BY A.SEQ_NO
+		]]>
+	</select>
+	<select id="GetMainTask">
+		<![CDATA[		
+		with todayLog as (
+		   select * 
+		     from exs_handle_log 
+		    where create_time >= to_date(to_char(Now(),'yyyy-mm-dd')||' 00:00:00','yyyy-mm-dd hh24:mi:ss') 
+		      and create_time <= to_date(to_char(Now(),'yyyy-mm-dd')||' 23:59:59','yyyy-mm-dd hh24:mi:ss')
+		),todayHandle as (
+		   select * 
+		     from exs_handle_sender
+		    where create_time >= to_date(to_char(Now(),'yyyy-mm-dd')||' 00:00:00','yyyy-mm-dd hh24:mi:ss') 
+		      and create_time <= to_date(to_char(Now(),'yyyy-mm-dd')||' 23:59:59','yyyy-mm-dd hh24:mi:ss')
+		)
+		select 
+		 (select count(0) from todayLog) total,
+		 (select count(0) from todayLog where msg_status = '1' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB')) XmlToDB_1,
+		 (select count(0) from todayLog where msg_status = '1' and msg_mode in('LocalToDB')) XmlToDB_2,
+		 (select count(0) from todayLog where msg_status = '1' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB')) XmlToDB_3,
+		 (select count(0) from todayLog where msg_status = '1' and msg_mode in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml')) DBToXml_1,
+		 (select count(0) from todayHandle where msg_flag = '0') DBToXml_2,
+		 (select count(0) from todayLog where msg_status = '0' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB')) FAIL_1,
+		 (select count(0) from todayLog where msg_status = '0' and msg_mode in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml')) FAIL_2,
+		 (select count(0) from todayLog where msg_status = '2' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB')) FAIL_3
+		from dual
+		 ]]>
+	</select>
+	<select id="GetMainTask2">
+		<![CDATA[
+		   SELECT 
+			  (SELECT COUNT(0) FROM exs_quartz_config) COUNT_QUARTZ,
+		      (SELECT COUNT(0) FROM exs_config_dbtoxml WHERE IS_ENABLED = '1' and modify_time >= Now() - 1/48) COUNT_DBTOXML,
+		      (SELECT COUNT(0) FROM exs_config_xmltomq WHERE IS_ENABLED = '1' and modify_time >= Now() - 1/48) COUNT_XMLTOMQ,
+		      (SELECT COUNT(0) FROM exs_config_mqtoxml WHERE IS_ENABLED = '1' and modify_time >= Now() - 1/48) COUNT_MQTOXML,
+		      (SELECT COUNT(0) FROM EXS_CONFIG_XMLTODB WHERE IS_ENABLED = '1' and modify_time >= Now() - 1/48) COUNT_XMLTODB,
+		      (SELECT COUNT(0) FROM exs_config_api_push WHERE IS_ENABLED = '1' and modify_time >= Now() - 1/48) COUNT_APITOCLIENT,
+		      (SELECT COUNT(0) FROM exs_config_api_polling WHERE IS_ENABLED = '1' and modify_time >= Now() - 1/48) COUNT_APITOSERVER,
+		      (SELECT COUNT(0) FROM exs_config_api_polling WHERE IS_ENABLED = '1' and modify_time >= Now() - 1/48) COUNT_API,
+		      (SELECT COUNT(0) FROM exs_config_dbtoxml WHERE IS_ENABLED = '1' and modify_time < Now() - 1/48) FAIL_DBTOXML,
+		      (SELECT COUNT(0) FROM exs_config_xmltomq WHERE IS_ENABLED = '1' and modify_time < Now() - 1/48) FAIL_XMLTOMQ,
+		      (SELECT COUNT(0) FROM exs_config_mqtoxml WHERE IS_ENABLED = '1' and modify_time < Now() - 1/48) FAIL_MQTOXML,
+		      (SELECT COUNT(0) FROM EXS_CONFIG_XMLTODB WHERE IS_ENABLED = '1' and modify_time < Now() - 1/48) FAIL_XMLTODB,
+		      (SELECT COUNT(0) FROM exs_config_api_push WHERE IS_ENABLED = '1' and modify_time < Now() - 1/48) FAIL_APITOCLIENT,
+		      (SELECT COUNT(0) FROM exs_config_api_polling WHERE IS_ENABLED = '1' and modify_time < Now() - 1/48) FAIL_APITOSERVER
+		   FROM DUAL
+		]]>
+	</select>
+	<select id="GetMainTask3">
+		<![CDATA[
+		with day1Log as (
+		   select * from exs_handle_log 
+		    where create_time >= to_date(to_char(Now(),'yyyy-mm-dd')||' 00:00:00','yyyy-mm-dd hh24:mi:ss') 
+		      and create_time <= to_date(to_char(Now(),'yyyy-mm-dd')||' 23:59:59','yyyy-mm-dd hh24:mi:ss')
+		),day2Log as (
+		   select * from exs_handle_log 
+		    where create_time >= to_date(to_char(Now()-1,'yyyy-mm-dd')||' 00:00:00','yyyy-mm-dd hh24:mi:ss') 
+		      and create_time <= to_date(to_char(Now(),'yyyy-mm-dd')||' 23:59:59','yyyy-mm-dd hh24:mi:ss')
+		),day3Log as (
+		   select * from exs_handle_log 
+		    where create_time >= to_date(to_char(Now()-2,'yyyy-mm-dd')||' 00:00:00','yyyy-mm-dd hh24:mi:ss') 
+		      and create_time <= to_date(to_char(Now(),'yyyy-mm-dd')||' 23:59:59','yyyy-mm-dd hh24:mi:ss')
+		),day4Log as (
+		   select * from exs_handle_log 
+		    where create_time >= to_date(to_char(Now()-3,'yyyy-mm-dd')||' 00:00:00','yyyy-mm-dd hh24:mi:ss') 
+		      and create_time <= to_date(to_char(Now(),'yyyy-mm-dd')||' 23:59:59','yyyy-mm-dd hh24:mi:ss')
+		),day5Log as (
+		   select * from exs_handle_log 
+		    where create_time >= to_date(to_char(Now()-4,'yyyy-mm-dd')||' 00:00:00','yyyy-mm-dd hh24:mi:ss') 
+		      and create_time <= to_date(to_char(Now(),'yyyy-mm-dd')||' 23:59:59','yyyy-mm-dd hh24:mi:ss')
+		),day6Log as (
+		   select * from exs_handle_log 
+		    where create_time >= to_date(to_char(Now()-5,'yyyy-mm-dd')||' 00:00:00','yyyy-mm-dd hh24:mi:ss') 
+		      and create_time <= to_date(to_char(Now(),'yyyy-mm-dd')||' 23:59:59','yyyy-mm-dd hh24:mi:ss')
+		),day7Log as (
+		   select * from exs_handle_log 
+		    where create_time >= to_date(to_char(Now()-6,'yyyy-mm-dd')||' 00:00:00','yyyy-mm-dd hh24:mi:ss') 
+		      and create_time <= to_date(to_char(Now(),'yyyy-mm-dd')||' 23:59:59','yyyy-mm-dd hh24:mi:ss')
+		)
+		SELECT TO_CHAR(Now(),'YYYY-MM-DD') DAY_1,
+		       TO_CHAR(Now()-1,'YYYY-MM-DD') DAY_2,
+		       TO_CHAR(Now()-2,'YYYY-MM-DD') DAY_3,
+		       TO_CHAR(Now()-3,'YYYY-MM-DD') DAY_4,
+		       TO_CHAR(Now()-4,'YYYY-MM-DD') DAY_5,
+		       TO_CHAR(Now()-5,'YYYY-MM-DD') DAY_6,
+		       TO_CHAR(Now()-6,'YYYY-MM-DD') DAY_7,
+		       (select count(0) from day1Log where msg_status = '1' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB')) ToDB_SUC_1,
+		       (select count(0) from day1Log where msg_status = '1' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB')) ToDB_SUC_2,
+		       (select count(0) from day1Log where msg_status = '1' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB')) ToDB_SUC_3,
+		       (select count(0) from day1Log where msg_status = '1' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB')) ToDB_SUC_4,
+		       (select count(0) from day1Log where msg_status = '1' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB')) ToDB_SUC_5,
+		       (select count(0) from day1Log where msg_status = '1' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB')) ToDB_SUC_6,
+		       (select count(0) from day1Log where msg_status = '1' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB')) ToDB_SUC_7,
+		       (select count(0) from day1Log where msg_status = '2' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB')) ToDB_FAIL_1,
+		       (select count(0) from day1Log where msg_status = '2' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB')) ToDB_FAIL_2,
+		       (select count(0) from day1Log where msg_status = '2' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB')) ToDB_FAIL_3,
+		       (select count(0) from day1Log where msg_status = '2' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB')) ToDB_FAIL_4,
+		       (select count(0) from day1Log where msg_status = '2' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB')) ToDB_FAIL_5,
+		       (select count(0) from day1Log where msg_status = '2' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB')) ToDB_FAIL_6,
+		       (select count(0) from day1Log where msg_status = '2' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB')) ToDB_FAIL_7,
+		       (select count(0) from day1Log where msg_status = '1' and msg_mode in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml')) DBTo_SUC_1,
+		       (select count(0) from day1Log where msg_status = '1' and msg_mode in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml')) DBTo_SUC_2,
+		       (select count(0) from day1Log where msg_status = '1' and msg_mode in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml')) DBTo_SUC_3,
+		       (select count(0) from day1Log where msg_status = '1' and msg_mode in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml')) DBTo_SUC_4,
+		       (select count(0) from day1Log where msg_status = '1' and msg_mode in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml')) DBTo_SUC_5,
+		       (select count(0) from day1Log where msg_status = '1' and msg_mode in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml')) DBTo_SUC_6,
+		       (select count(0) from day1Log where msg_status = '1' and msg_mode in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml')) DBTo_SUC_7,
+		       (select count(0) from day1Log where msg_status = '2' and msg_mode in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml')) DBTo_DB_1,
+		       (select count(0) from day1Log where msg_status = '2' and msg_mode in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml')) DBTo_DB_2,
+		       (select count(0) from day1Log where msg_status = '2' and msg_mode in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml')) DBTo_DB_3,
+		       (select count(0) from day1Log where msg_status = '2' and msg_mode in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml')) DBTo_DB_4,
+		       (select count(0) from day1Log where msg_status = '2' and msg_mode in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml')) DBTo_DB_5,
+		       (select count(0) from day1Log where msg_status = '2' and msg_mode in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml')) DBTo_DB_6,
+		       (select count(0) from day1Log where msg_status = '2' and msg_mode in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml')) DBTo_DB_7
+		FROM DUAL
+		]]>
+	</select>
+	
+	<select id="GetAccessServerList">
+		<![CDATA[
+		   SELECT A.* 
+		   FROM EXS_ACCESS_SERVER A
+		   WHERE 1=1
+		     AND IS_ENABLED = '1'
+		   << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		   << AND MESSAGE_TYPE = #MESSAGE_TYPE# >>
+		]]>
+	</select>
+	<select id="GetAccessLimitList">
+		<![CDATA[
+		   SELECT A.* 
+		   FROM EXS_ACCESS_LIMIT A
+		   WHERE 1=1
+		     AND IS_ENABLED = '1'
+		   << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		   << AND MESSAGE_TYPE = #MESSAGE_TYPE# >>
+		   << AND MESSAGE_SOURCE = #MESSAGE_SOURCE# >>
+		]]>
+	</select>
+	
+	<select id="GetMainCount">
+		<![CDATA[		
+			select (select count(0) from exs_config_api_polling where is_enabled = '1' and modify_time >= Now() - 1/48)+
+			       (select count(0) from exs_config_dbtoxml where is_enabled = '1' and modify_time >= Now() - 1/48)+
+			       (select count(0) from exs_config_xmltomq where is_enabled = '1' and modify_time >= Now() - 1/48)+
+			       (select count(0) from exs_config_mqtoxml where is_enabled = '1' and modify_time >= Now() - 1/48)+
+			       (select count(0) from exs_config_xmltodb where is_enabled = '1' and modify_time >= Now() - 1/48) config_success,
+			       (select count(0) from exs_config_api_polling where is_enabled = '1' and modify_time < Now() - 1/48)+
+			       (select count(0) from exs_config_dbtoxml where is_enabled = '1' and modify_time < Now() - 1/48)+
+			       (select count(0) from exs_config_xmltomq where is_enabled = '1' and modify_time < Now() - 1/48)+
+			       (select count(0) from exs_config_mqtoxml where is_enabled = '1' and modify_time < Now() - 1/48)+
+			       (select count(0) from exs_config_xmltodb where is_enabled = '1' and modify_time < Now() - 1/48) config_fail,
+			       (select count(0) from exs_quartz_config where modify_time >= Now() - 1 / 48)+
+			       (select count(0) from exs_monitor_config where is_enabled = '1' and modify_time >= Now() - 1 / 48) warn_success,
+			       (select count(0) from exs_quartz_config where modify_time < Now() - 1 / 48)+
+			       (select count(0) from exs_monitor_config where is_enabled = '1' and modify_time < Now() - 1 / 48) warn_fail,
+			       (select count(0) from exs_handle_sender where msg_flag = '1')+
+			       (select count(0) from exs_access_received where msg_flag = '1')+
+			       (select count(0) from exs_pull_received where msg_flag = '1') monitor_success,
+			       (select count(0) from exs_handle_sender where msg_flag <> '1')+
+			       (select count(0) from exs_access_received where msg_flag <> '1')+
+			       (select count(0) from exs_pull_received where msg_flag <> '1') monitor_fail
+			  from dual
+		 ]]>
+	</select>
+	<select id="GetMainWarn">
+		<![CDATA[		
+			select '定时任务' enent_name,
+			       (select count(0) from exs_quartz_config where modify_time >= Now() - 1 / 48) success,
+			       (select count(0) from exs_quartz_config where modify_time < Now() - 1 / 48) fail,
+			       'GetHTML?html/01QuartzConfigList.html' uri
+			  from dual
+			union all
+			select '应用程序' enent_name,
+			       (select count(0) from exs_monitor_config where is_enabled = '1' and modify_time >= Now() - 1 / 48) success,
+			       (select count(0) from exs_monitor_config where is_enabled = '1' and modify_time < Now() - 1 / 48) fail,
+			       'GetHTML?html/04AppList.html' uri
+			  from dual
+		 ]]>
+	</select>
+	<select id="GetMainMonitor">
+		<![CDATA[
+			select '消息发送记录' enent_name,
+			       (select count(0) from exs_handle_sender where msg_flag = '1') success,
+			       (select count(0) from exs_handle_sender where msg_flag <> '1') fail,
+			       'GetHTML?html/04SendList.html' uri
+			  from dual
+			union all
+			select '企业回执接收' enent_name,
+			       (select count(0) from exs_access_received where msg_flag = '1') success,
+			       (select count(0) from exs_access_received where msg_flag <> '1') fail,
+			       'GetHTML?html/04PushReceivedList.html' uri
+			  from dual
+			union all
+			select '企业回执推送' enent_name,
+			       (select count(0) from exs_pull_received where msg_flag = '1') success,
+			       (select count(0) from exs_pull_received where msg_flag <> '1') fail,
+			       'GetHTML?html/04PullReceivedList.html' uri
+			  from dual
+		 ]]>
+	</select>
+	<select id="GetMainConfig">
+		<![CDATA[		
+		   select '消息生成' enent_name,
+			       (select count(0) from exs_config_dbtoxml where is_enabled = '1' and modify_time >= Now() - 1/48) success,
+			       (select count(0) from exs_config_dbtoxml where is_enabled = '1' and modify_time < Now() - 1/48) fail,
+			       'GetHTML?html/02DB2AnyXmlList.html' uri
+			  from dual
+			union all
+			select '路由中心' enent_name,
+			       (select count(0) from exs_config_xmltomq where is_enabled = '1' and modify_time >= Now() - 1/48) success,
+			       (select count(0) from exs_config_xmltomq where is_enabled = '1' and modify_time < Now() - 1/48) fail,
+			       'GetHTML?html/03Xml2MqList.html' uri
+			  from dual
+			union all
+			select '路由解析' enent_name,
+			       (select count(0) from exs_config_mqtoxml where is_enabled = '1' and modify_time >= Now() - 1/48) success,
+			       (select count(0) from exs_config_mqtoxml where is_enabled = '1' and modify_time < Now() - 1/48) fail,
+			       'GetHTML?html/03Mq2XmlList.html' uri
+			  from dual
+			union all
+			select '消息入库' enent_name,
+			       (select count(0) from exs_config_xmltodb where is_enabled = '1' and modify_time >= Now() - 1/48) success,
+			       (select count(0) from exs_config_xmltodb where is_enabled = '1' and modify_time < Now() - 1/48) fail,
+			       'GetHTML?html/02AnyXml2DBList.html' uri
+			  from dual
+			union all
+			select '接收接口定义' enent_name,
+			       (select count(0) from exs_config_api_polling where is_enabled = '1' and method_name = 'PutMessage' and modify_time >= Now() - 1/48) success,
+			       (select count(0) from exs_config_api_polling where is_enabled = '1' and method_name = 'PutMessage' and modify_time < Now() - 1/48) fail,
+			       'GetHTML?html/02Api2ServerList.html' uri
+			  from dual
+			union all
+			select '推送接口定义' enent_name,
+			       (select count(0) from exs_config_api_polling where is_enabled = '1' and method_name = 'GetMessage' and modify_time >= Now() - 1/48) success,
+			       (select count(0) from exs_config_api_polling where is_enabled = '1' and method_name = 'GetMessage' and modify_time < Now() - 1/48) fail,
+			       'GetHTML?html/02Api2ServerList.html' uri
+			  from dual
+			union all
+			select '接收消息解析' enent_name,
+			       (select count(0) from exs_config_api_polling where is_enabled = '1' and method_name = 'PutMessage' and modify_time >= Now() - 1/48 and quartz_name is not null ) success,
+			       (select count(0) from exs_config_api_polling where is_enabled = '1' and method_name = 'PutMessage' and modify_time < Now() - 1/48 and quartz_name is not null ) fail,
+			       'GetHTML?html/02Api2ServerQuartzList.html' uri
+			  from dual
+			union all
+			select '推送消息生成' enent_name,
+			       (select count(0) from exs_config_api_polling where is_enabled = '1' and method_name = 'GetMessage' and modify_time >= Now() - 1/48 and quartz_name is not null ) success,
+			       (select count(0) from exs_config_api_polling where is_enabled = '1' and method_name = 'GetMessage' and modify_time < Now() - 1/48 and quartz_name is not null ) fail,
+			       'GetHTML?html/02Api2ServerQuartzList.html' uri
+			  from dual
+		 ]]>
+	</select>
+	
+	<select id="GetPortalConfigApp">
+		<![CDATA[		
+			select 
+			     (select count(0) from exs_quartz_config where modify_time >= Now() - 1/48) quartz_success,
+			     (select count(0) from exs_quartz_config where modify_time < Now() - 1/48) quartz_fail,
+			     (select count(0) from exs_monitor_config where is_enabled = '1' and modify_time >= Now() - 1/48) app_success,
+			     (select count(0) from exs_monitor_config where is_enabled = '1' and modify_time < Now() - 1/48) app_fail
+			from dual
+		 ]]>
+	</select>
+	<select id="GetPortalConfigXml">
+		<![CDATA[		
+		   select (select count(0) from exs_config_dbtoxml where is_enabled = '1' and modify_time >= Now() - 1/48) dbtoxml_success,
+			      (select count(0) from exs_config_xmltomq where is_enabled = '1' and modify_time >= Now() - 1/48) xmltomq_success,
+			      (select count(0) from exs_config_mqtoxml where is_enabled = '1' and modify_time >= Now() - 1/48) mqtoxml_success,
+			      (select count(0) from exs_config_xmltodb where is_enabled = '1' and modify_time >= Now() - 1/48) xmltodb_success,
+			      (select count(0) from exs_config_dbtoxml where is_enabled = '1' and modify_time < Now() - 1/48) dbtoxml_fail,
+			      (select count(0) from exs_config_xmltomq where is_enabled = '1' and modify_time < Now() - 1/48) xmltomq_fail,
+			      (select count(0) from exs_config_mqtoxml where is_enabled = '1' and modify_time < Now() - 1/48) mqtoxml_fail,
+			      (select count(0) from exs_config_xmltodb where is_enabled = '1' and modify_time < Now() - 1/48) xmltodb_fail
+			 from dual
+		 ]]>
+	</select>
+	<select id="GetPortalConfigApi">
+		<![CDATA[		
+		select (select count(0) from exs_config_api_polling where is_enabled = '1' and method_name = 'PutMessage' and modify_time >= Now() - 1/48) api_push_success,
+		       (select count(0) from exs_config_api_polling where is_enabled = '1' and method_name = 'GetMessage' and modify_time >= Now() - 1/48) api_pull_success,
+		       (select count(0) from exs_config_api_polling where is_enabled = '1' and method_name = 'PutMessage' and modify_time >= Now() - 1/48 and quartz_name is not null ) api_quartz_push_success,
+		       (select count(0) from exs_config_api_polling where is_enabled = '1' and method_name = 'GetMessage' and modify_time >= Now() - 1/48 and quartz_name is not null ) api_quartz_pull_success,
+		       (select count(0) from exs_config_api_polling where is_enabled = '1' and method_name = 'PutMessage' and modify_time < Now() - 1/48) api_push_fail,
+		       (select count(0) from exs_config_api_polling where is_enabled = '1' and method_name = 'GetMessage' and modify_time < Now() - 1/48) api_pull_fail,
+		       (select count(0) from exs_config_api_polling where is_enabled = '1' and method_name = 'PutMessage' and modify_time < Now() - 1/48 and quartz_name is not null ) api_quartz_push_fail,
+		       (select count(0) from exs_config_api_polling where is_enabled = '1' and method_name = 'GetMessage' and modify_time < Now() - 1/48 and quartz_name is not null ) api_quartz_pull_fail
+		  from dual
+		 ]]>
+	</select>
+	<select id="GetLogMonthReport">
+		<![CDATA[
+		select create_time,sum(a1) a1,sum(a2) a2,sum(a3) a3,sum(a4) a4,sum(a5) a5,count(a6) a6
+			from (
+					select str_to_date(create_time,'%Y-%m-%d') create_time,
+				         case 
+				           when msg_status = '1' and msg_mode in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml','MQToXml') then 1
+				           else 0
+				         end as a1,
+				         case 
+				            when msg_status <> '1' and msg_mode in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml','MQToXml') then 1
+				           else 0
+				         end as a2,
+				         case when msg_status = '1' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB','XmlToMQ')
+				           then 1
+				           else 0
+				         end a3,
+				         case when msg_status <> '1' and msg_mode in('ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB','XmlToMQ')
+				           then 1
+				           else 0
+				         end a4,
+				         case when msg_status is null or msg_mode is null or msg_mode not in('DBToActiveMQ','DBToIBMMQ','DBToRabbitMQ','DBToFTP','DBToLocal','DBToXml','MQToXml','ActiveMQToDB','IBMMQToDB','RabbitMQToDB','FTPToDB','LocalToDB','XmlToDB','XmlToMQ')
+				           then 1
+				           else 0
+				         end a5,
+				         indx a6
+				    from exs_handle_log
+				   where create_time >= str_to_date(str_to_date(Now() - 30, '%Y-%m-%d') || ' 00:00:00', '%Y-%m-%d%k%i%s')
+				     and create_time <= str_to_date(str_to_date(Now(), '%Y-%m-%d') || ' 23:59:59','%Y-%m-%d%k%i%s')
+				   order by create_time desc
+			) X_Y_Z_
+			group by create_time
+		]]>
+	</select>
+	<select id="GetPointMonitorList">
+		<![CDATA[		
+	   select x_.*  
+	    from(
+		    select case when now() - 1/48 < modify_time then '1' else '0' end as status,
+			                 '消息生成' msg_name,
+			       quartz_name,
+			       creator,
+			       create_time,
+			       rec_ver
+			  from exs_config_dbtoxml
+			union all
+			select case when now() - 1/48 < modify_time then '1' else '0' end as status,
+			                 '消息入库' msg_name,
+			       quartz_name,
+			       creator,
+			       create_time,
+			       rec_ver
+			  from exs_config_xmltodb
+			union all
+			select case when now() - 1/48 < modify_time then '1' else '0' end as status,
+			                 '消息发送' msg_name,
+			       quartz_name,
+			       creator,
+			       create_time,
+			       rec_ver
+			  from exs_config_xmltomq
+			union all
+			select case when now() - 1/48 < modify_time then '1' else '0' end as status,
+			                 '消息落地' msg_name,
+			       quartz_name,
+			       creator,
+			       create_time,
+			       rec_ver
+			  from exs_config_mqtoxml
+			union all
+			select case when now() - 1/48 < modify_time then '1' else '0' end as status,
+			                 '消息对传' msg_name,
+			       quartz_name,
+			       creator,
+			       create_time,
+			       rec_ver
+			  from exs_config_mqtomq
+			union all
+			select case when now() - 1/48 < modify_time then '1' else '0' end as status,
+			                 '文件合并' msg_name,
+			       quartz_name,
+			       creator,
+			       create_time,
+			       rec_ver
+			  from exs_config_xmltomerge
+			union all
+			select case when now() - 1/48 < modify_time then '1' else '0' end as status,
+			                 '文件拆分' msg_name,
+			       quartz_name,
+			       creator,
+			       create_time,
+			       rec_ver
+			  from exs_config_xmltosplit
+			union all
+			select case when now() - 1/48 < modify_time then '1' else '0' end as status,
+			                 '接收接口' msg_name,
+			       quartz_name,
+			       creator,
+			       create_time,
+			       rec_ver
+			  from exs_config_api_polling
+			union all
+			select case when now() - 1/48 < modify_time then '1' else '0' end as status,
+			                 '推送接口' msg_name,
+			       quartz_name,
+			       creator,
+			       create_time,
+			       rec_ver
+			  from exs_config_api_push
+			) x_  
+		where 1=1
+		 << AND (CREATOR = #CREATOR# or 'Y' = #ISROOT#) >>
+		 << and x_.msg_name = #msg_name# >>
+		 << and x_.quartz_name = #quartz_name# >>  
+		 ]]>
+	</select>
+	
+</SqlMap>

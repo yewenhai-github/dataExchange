@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>organization</title>
+    <meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<link href="../../resources/biz/css/reset.css" rel="stylesheet" type="text/css"/>
+    <link href="../../resources/biz/css/pop.css" rel="stylesheet" type="text/css"/>
+    <link href="../../resources/js/easyui1.9.4/themes/metro/easyui.css" rel="stylesheet"/>
+    <link href="../../resources/js/easyui1.9.4/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../resources/js/easyuiext/extend/css/IconExtension.css" rel="stylesheet" type="text/css"/>
+	<link href="../../resources/js/bootstrap/css/bootstrap.css" rel="stylesheet"/>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/jquery.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="../../resources/js/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/dataform.js"></script>
+</head>
+<body class="easyui-layout page-space">
+	<table id="dg" class="easyui-treegrid" style="width:1000px;height:800px"/>
+</body>
+</html>
+<script type="text/javascript">
+$(function() {
+	$('#dg').treegrid({
+		idField:'indx',
+        treeField:'org_name',
+        url:'../../app/user/getorglist',
+        method: 'post',
+        fit : true,
+        rownumbers: true,
+        pagination: false,
+        columns: [[
+          	    {field: 'indx', title: 'id', hidden: true},
+          	    {field: 'parentid', title: '上级id', hidden: true},
+          	    {field: 'org_name', title: '组织机构名称', width: 220},
+          		{field: 'org_id', title: '组织机构代码', align: "center", width: 110},
+              	{field: 'order_num', title: '组织机构序号', align: "center", width: 110},
+              	{field: 'type', title: '类型', align: "center", width: 80,formatter : rowformater},
+              	{field: 'createTime', title: '创建时间', align: "center", width: 150},
+              	{field: 'creator', title: '创建人', align: "center", width: 100}
+        ]
+        ],
+	 	toolbar : [ 
+		            {text : "刷新",iconCls : "icon-20130406015709810_easyicon_net_16",handler : function() {
+		           	 $('#dg').treegrid('reload');
+		            }},
+                 {text : "增加",iconCls : "icon-add",handler : function() {
+                	 parent.popShipWin('pages/auth/sauthorgedit.html','机构新增');
+                 }},
+                 {text : "修改",iconCls : "icon-edit",
+                     handler : function() {
+                 		var row = $('#dg').treegrid('getSelections');
+                 		if (row.length==1) {
+                 			var send=row[0].parentid+","+row[0].org_id+","+row[0].org_name+","+row[0].order_num+","+row[0].indx+","+row[0].type;
+                 			parent.popShipWin('pages/auth/sauthorgedit.html?ValueId=' + send ,'机构编辑');
+                 		}else{
+                 		    $.messager.alert("提示信息", "请选择需修改的一行！",'warning');
+                 		}
+                  }},
+                 {text : "删除",iconCls : "icon-delete",
+                     handler : function() {
+                         var rows = $('#dg').treegrid('getSelections');
+                         if (rows.length <= 0) {
+                             $.messager.alert("警告", "请您选择需删除的数据", 'error');
+                         } else if (rows.length > 1) {
+                             $.messager.alert("警告", "不允许批量删除", 'error');
+                         } else {
+                        	 $.messager.confirm("提示信息", "您确定要删除这条记录?", function(r) {
+                     			if (r) {
+                     					$.post('../../app/user/delorg', {
+                     						indx : rows[0].indx
+                     					}, function(result) {
+                     						$.messager.show({title : '提示信息',msg : result.ErrMessage});
+                     						$('#dg').treegrid('reload');
+                     					}, 'json');
+                     				}
+                     		});
+                         }
+                     }
+           }]
+	});
+	
+	
+	function rowformater(val,row,index){
+		if(row.type === '0'){
+			return "公司";
+		}else if(row.type === '1'){
+			return "部门";
+		}else{
+			return "";
+		}
+	  }
+});
+</script>

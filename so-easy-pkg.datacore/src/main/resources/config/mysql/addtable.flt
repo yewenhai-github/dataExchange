@@ -1,0 +1,26 @@
+create table exs_quartz_config (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_quote_config (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_config_dbtoxml (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_config_dbtoxml_sql (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_config_xmltodb (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_config_xmltodb_map (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_config_mqtomq (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_config_mqtoxml (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_config_xmltomq (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_config_mapping (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_config_xmltomerge (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_config_xmltosplit (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_handle_log (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_handle_sender (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_handle_received (indx varchar(50) primary key) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_monitor_config (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+#api模块
+create table exs_config_api_polling (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_config_api_push (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_access_customer (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_access_limit (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+create table exs_access_received (indx varchar(50) primary key) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+#create table exs_quartz_config_cluster (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+#create table exs_auth_user (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+#create table exs_config_updatedb (indx bigint(20) primary key auto_increment) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

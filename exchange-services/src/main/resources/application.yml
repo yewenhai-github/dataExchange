@@ -1,0 +1,19 @@
+server:
+  port: 8001
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain,text/css,application/javascript,image/png
+    min-response-size: 500
+spring:
+    encoding: 
+      force: true
+      charset: UTF-8
+      enabled: true    
+logging:
+  level:
+    root: error
+  pattern:
+    console: "%d{yyyy/MM/dd-HH:mm:ss} [%thread] %-5level %logger- %msg%n"
+    file: "%d{yyyy/MM/dd-HH:mm} [%thread] %-5level %logger- %msg%n"
+  file:
+    name: /root/javaspace/logs/exchange-services.log

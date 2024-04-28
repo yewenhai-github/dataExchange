@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<title>user maneger</title>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<link href="../../resources/biz/css/reset.css" rel="stylesheet" type="text/css"/>
+    <link href="../../resources/biz/css/pop.css" rel="stylesheet" type="text/css"/>
+    <link href="../../resources/js/easyui1.9.4/themes/metro/easyui.css" rel="stylesheet"/>
+    <link href="../../resources/js/easyui1.9.4/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../resources/js/easyuiext/extend/css/IconExtension.css" rel="stylesheet" type="text/css"/>
+	<link href="../../resources/js/bootstrap/css/bootstrap.css" rel="stylesheet"/>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/jquery.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="../../resources/js/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/dataform.js"></script>
+</head>
+<body class="easyui-layout page-space">
+	<!-- userList -->
+	<div id="toolbar" class="search-box">
+			<div>
+				<span id="search_user_name">用户名：</span>
+				<input name="txt_username" id="txt_username" class="easyui-textbox" style="height:30px;line-height:30px;width:166px;"/>
+				<span id="search_user_real_name">姓名：</span>
+				<input name="txt_user_real_name" id="txt_user_real_name" class="easyui-textbox"	style="height:30px;line-height:30px;width:166px;"/>
+				<span id="search_role_id">角色：</span>
+				<input name="txt_role_id" id="txt_role_id" class="easyui-combobox" editable="true" style="height:30px;line-height:30px;width:166px;" />
+				<button id="btnSearch" class="easyui-linkbutton" onclick="usersearch()" iconCls="icon-search" data-options="selected:true">查询</button>
+			</div>
+			<div>
+				<div id="buttonlist">
+					<button id="btnadd" href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" onclick="usernew()">新增</button>
+					<button id="btnremove" class="easyui-linkbutton" iconCls="icon-delete">删除</button>
+					<button id="btnreset" class="easyui-linkbutton" iconCls="icon-lock_start">密码重置</button>
+				</div>
+			</div>
+	</div>
+	<div id="dg"></div>
+	
+	<!-- userEdit -->
+	<div id="dlg2" class="easyui-dialog" style="width: 500px; height: 420px; padding: 10px 20px;" closed="true" buttons="#dlg-buttons">
+       	<form id="fm2" method="post"> 
+	       <div class="fitem"> 
+	            <div class="container-fluid">
+	            	<div class="row p-top5">
+	            		<div class="col-xs-4 lbl-text tip-red">用户名</div>
+	            		<div class="col-xs-8">
+	            			<input name="username" id="username" class="easyui-textbox" style="height:30px;line-height:30px;width:100%;" />
+	            		</div>
+	            	</div>
+	            	<div class="row p-top5">
+	            		<div class="col-xs-4 lbl-text tip-red">姓名</div>
+	            		<div class="col-xs-8">
+	            			<input name="user_real_name" id="user_real_name" class="easyui-textbox" style="height:30px;line-height:30px;width:100%" />
+	            		</div>
+	            	</div>
+	            	<div class="row p-top5">
+	            		<div class="col-xs-4 lbl-text tip-red">手机</div>
+	            		<div class="col-xs-8">
+	            			<input  name="user_mobile" id="user_mobile" class="easyui-textbox" style="height:30px;line-height:30px;width:100%"/>
+	            		</div>
+	            	</div>
+	            	<div class="row p-top5">
+	            		<div class="col-xs-4 lbl-text tip-blue">电话</div>
+	            		<div class="col-xs-8">
+	            			<input  name="user_tel" id="user_tel" class="easyui-textbox" style="height:30px;line-height:30px;width:100%"/>
+	            		</div>
+	            	</div>
+	            	<div class="row p-top5">
+	            		<div class="col-xs-4 lbl-text tip-red">邮箱</div>
+	            		<div class="col-xs-8">
+	            			<input  name="user_email" id="user_email" class="easyui-textbox" style="height:30px;line-height:30px;width:100%"/>
+	            		</div>
+	            	</div>
+	            	<div class="row p-top5">
+	            		<div class="col-xs-4 lbl-text tip-red">公司</div>
+	            		<div class="col-xs-8">
+	            			<input name="org_id" id="org_id" class="easyui-combotree" style="height:30px;line-height:30px;width:100%"/>
+	            		</div>
+	            	</div>
+	            	<div class="row p-top5">
+	            		<div class="col-xs-4 lbl-text tip-blue">部门</div>
+	            		<div class="col-xs-8">
+	            			<input name="user_dept_id" id="user_dept_id" class="easyui-combobox" style="height:30px;line-height:30px;width:100%" 
+	            				/>
+	            		</div>
+	            	</div>
+	            	<div class="row p-top5">
+	            		<div class="col-xs-4 lbl-text tip-red">角色</div>
+	            		<div class="col-xs-8">
+	            			<input name="role_id" id="role_id" class="easyui-combobox" style="height:30px;line-height:30px;width:100%"/>
+	            		</div>
+	            	</div>
+	            	<div class="row p-top5" id="div_id_type" style="display:none;"> 
+	            		<div class="col-xs-4 lbl-text tip-blue"><span/>证件类型</div>
+	            		<div class="col-xs-8">
+	            			<input name="id_type" id="id_type" class="easyui-combobox" style="height:30px;line-height:30px;width:100%" />
+	            		</div>
+	            	</div>
+	            	<div class="row p-top5" id="div_id_number" style="display:none;">
+	            		<div class="col-xs-4 lbl-text tip-blue"><span/>证件号码</div>
+	            		<div class="col-xs-8">
+	            			<input  name="id_number" id="id_number" class="easyui-textbox" style="height:30px;line-height:30px;width:100%"/>
+	            		</div>
+	            	</div>
+	            	<div class="row p-top5">
+	            		<div class="col-xs-4"></div>
+	            		<div class="col-xs-8"><span style="color:red;" >注：初始密码为111111</div>
+	            	</div>
+	            </div>
+	       </div> 
+	       <input type="hidden" name="indx" id="indx" />
+       </form> 
+    </div>
+    <div id="dlg-buttons"> 
+    	<button id="btnUserSave" class="easyui-linkbutton" iconCls="icon-save">
+    	   <i class='icon-save'></i>保存</button>
+        <a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript:$('#dlg2').dialog('close')"
+           iconcls="icon-cancel">取消</a> 
+    </div>  
+</body>
+</html>
+<script type="text/javascript">
+$(function() {
+  $("#dg").datagrid({
+      url:'../../app/user/getuserlist',
+      dataType: "json",
+      fit:true,
+      striped:true,
+      fitColumns:false,
+      rownumbers:true,
+      remoteSort:true,
+      toolbar:"#toolbar",
+      collapsible:true,
+      pagination: true,
+      pageSize: 10,
+      pageList: [10,50,100],
+      columns:[[
+          {field:'indx',checkbox:true},
+          {field:'username',title: "用户名",width:180,sortable:true,formatter : rowformater},
+          {field:'user_real_name',title: "姓名",width:100,sortable:true},
+          {field:'user_mobile',title: "手机",width:160,sortable:true},
+          {field:'user_tel',title: "电话",width:100,sortable:true},
+          {field:'user_email',title: "邮箱",width:160,sortable:true},
+          {field:'org_name',title: "公司",width:150,sortable:true},
+          {field:'user_dept_name',title: "部门",width:150,sortable:true},
+          {field:'role_name',title: "角色",width:150,sortable:true},
+          {field:'create_time',title: "创建时间",width:150,sortable:true},
+          {field:'indx1',title: "创建人编码",width:80,align:'center',formatter : rowformater2}
+      ]
+      ],  
+      loadMsg:'LOADING...',
+      showHeader:true,
+      showFooter:true           
+  });
+  function rowformater(val,row,index){
+    return '<a href=\'javacript:;\' onclick=\'useredit('+index+')\'>'+row.username+'</a>';
+  }
+  function rowformater2(val,row,index){
+    return row.indx;
+  }
+  //角色
+  $('#txt_role_id').combobox({method: 'post',url:'../../app/user/getcomboboxrole',valueField:"indx",textField:'role_name'});
+  
+  
+  //公司
+  $('#org_id').combotree({url:"../../app/user/getcomboboxorg",
+      onSelect:function(data){
+    	//部门
+		$('#user_dept_id').combobox({method: 'post',url:'../../app/user/getcomboboxdept?org_id='+data.id,valueField:"id",textField:'text'});
+  	  }
+  });
+  //角色
+  $('#role_id').combobox({method: 'post',url:'../../app/user/getcomboboxrole',valueField:"indx",textField:'role_name'});
+});
+function usersearch(){
+	var param = $.getformElementParams($('#toolbar'));
+	$("#dg").datagrid("load", param); 
+}
+function usernew() {
+    $("#dlg2").dialog("open").dialog('setTitle', '信息新增'); 
+    $('#fm2').form('clear');  
+}
+function useredit(index){
+	var row =$('#dg').datagrid('getData').rows[index];
+	if (row) {
+		$('#fm2').form('load', {
+			indx:row.indx,
+			username:row.username,
+			user_real_name:row.user_real_name,
+			user_mobile:row.user_mobile,
+			user_tel:row.user_tel,
+			user_email:row.user_email,
+			org_id:row.org_id,
+ 			user_dept_id:row.user_dept_id,
+			role_id:row.role_id,
+			id_type:row.id_type,
+			id_number:row.id_number
+		});
+		$("#dlg2").dialog("open").dialog('setTitle', '信息编辑', 'info');
+		
+		$("#org_id").combotree('setValue', row.org_id);
+		//初始化公司下的部门信息
+		$('#user_dept_id').combobox({method: 'post',url:'../../app/user/getcomboboxdept?org_id='+row.org_id,valueField:"id",textField:'text'});
+		$('#user_dept_id').combobox('setValues', row.user_dept_id);
+		$('#role_id').combobox('setValues', row.role_id);
+	} 
+}
+
+$("#btnremove").click(function(){
+	var row = $('#dg').datagrid('getSelections');
+	if (row.length <= 0) {
+		$.messager.alert("提示信息", "请您选择需删除的数据",'warning');
+	}else{
+		var indxs = "";
+	 	for(var i = 0 ; i < row.length; i++){
+	   		if(indxs == null || indxs.length == 0){
+	   			indxs = row[i].indx;
+	   		}else{
+	   			indxs = indxs+","+row[i].indx;
+	   		}
+	 	}
+	 	$.messager.confirm("提示信息", '您确定要删除这条记录?', function (r) {
+	        if (r) {
+	            $.post('../../app/user/deluser', {indxs: indxs }, function (result) {
+	                if (result.IsOk == '1' || result.IsOk == 'true') {
+	                	$.messager.show({title: "提示信息",msg: "操作成功"});
+	                } else {
+	                    $.messager.alert({title: "提示信息",msg: '操作失败'});
+	                }
+	                $('#dg').datagrid('reload'); 
+	            }, 'json');
+	        }
+	    });
+	}
+});
+             
+$("#btnreset").click(function(){
+	var row = $('#dg').datagrid('getSelections');
+	if (row.length <= 0) {
+		$.messager.alert("提示信息", "请您选择需更改的记录",'warning');
+	}else{
+		var indxs = "";
+	 	for(var i = 0 ; i < row.length; i++){
+	   		if(indxs == null || indxs.length == 0){
+	   			indxs = row[i].indx;
+	   		}else{
+	   			indxs = indxs+","+row[i].indx;
+	   		}
+	 	}
+	 	$.messager.confirm("提示信息", "您确定要为这些记录重置密码?", function (r) {
+	        if (r) {
+	            $.post('../../app/user/resetpassword', { indxs: indxs }, function (result) {
+	                if (result.success) {
+	                    $('#dg').datagrid('reload');    // reload the auth data  
+	                } else {
+	                    $.messager.show({title: "提示信息",msg: "密码重置成功，已修改为111111"});
+	                    $('#dg').datagrid('reload');
+	                }
+	            }, 'json');
+	          }
+	    });
+	}
+});
+	           
+$("#btnUserSave").click(function(){
+	var _form = document.getElementById("fm2");
+	var inputs = _form.getElementsByTagName("input");
+	for(var i=0;i<inputs.length;i++){
+		if(inputs[i].name == 'username' && (inputs[i].value==null||inputs[i].value=="")){
+			$.messager.alert("警告", "用户名不能为空");
+			return;
+		}else if(inputs[i].name == 'user_real_name' && (inputs[i].value==null||inputs[i].value=="")){
+			$.messager.alert("警告", "姓名不能为空");
+			return;
+		}else if(inputs[i].name == 'user_mobile' && (inputs[i].value==null||inputs[i].value=="")){
+			$.messager.alert("警告", "手机号不能为空");
+			return;
+		}/* else if(inputs[i].name == 'user_tel' && (inputs[i].value==null||inputs[i].value=="")){
+			$.messager.alert("警告","电话号码不能为空");
+			return;
+		} */else if(inputs[i].name == 'user_email' && (inputs[i].value==null||inputs[i].value=="")){
+			$.messager.alert("警告", "邮箱账号不能为空");
+			return;
+		}else if(inputs[i].name == 'role_id' && (inputs[i].value==null||inputs[i].value=="")){
+			$.messager.alert("警告", "角色不能为空");
+			return;
+		}else if(inputs[i].name == 'org_id' && (inputs[i].value==null||inputs[i].value=="")){
+			$.messager.alert("警告", "公司不能为空");
+			return;
+		}
+		/* else if(inputs[i].name == 'user_dept_id' && (inputs[i].value==null||inputs[i].value=="")){
+			$.messager.alert("警告", "部门不能为空");
+			return;
+		}
+		if($("#IdFlag").val()=="true"){
+			if(inputs[i].name == 'id_type' && (inputs[i].value==null||inputs[i].value=="")){
+				$.messager.alert("警告",'证件类型不能为空');
+				return;
+			}else if(inputs[i].name == 'id_number' && (inputs[i].value==null||inputs[i].value=="")){
+				$.messager.alert("警告",'证件号码不能为空');
+				return;
+			}
+		} */
+			
+		if(inputs[i].name == 'user_mobile'){
+			var reTell = /^1\d{10}$/
+			if(!reTell.test(inputs[i].value)){
+				$.messager.alert("警告", "请输入正确的手机号,应为十一位数字");
+				return;
+			}
+		}/* else if(inputs[i].name == 'user_tel'){
+			var reTell = /^\d{7}$/
+			if(!reTell.test(inputs[i].value)){
+				$.messager.alert("警告","请输入正确的电话号码");
+				return false;
+			}
+		} */else if(inputs[i].name == 'user_email'){
+			var reTell = /^[\.a-zA-Z0-9_-]+@[\.a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+			if(!reTell.test(inputs[i].value)){
+				$.messager.alert("警告", "请输入正确的邮箱账号");
+				return;
+			}
+		}
+	}
+	
+	var param = $.getformElementParams($('#fm2'));
+  	$.ajax({
+        url:'../../app/user/saveuser',
+        type:"POST",
+        dataType:"json",
+        data:param,
+        success:function(result){
+             if(result.IsOk){
+                 $("#fm2").form("clear");
+                 $("#dlg2").dialog("close");
+                 $.messager.alert("提示信息",'保存成功！');
+             }
+             $('#dg').datagrid('reload');
+             /* parent.LoadingHide(); */
+        }
+    });
+});
+
+</script>

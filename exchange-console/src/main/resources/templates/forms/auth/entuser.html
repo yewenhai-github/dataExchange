@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>企业用户</title>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<link href="../../resources/biz/css/reset.css" rel="stylesheet" type="text/css"/>
+    <link href="../../resources/biz/css/pop.css" rel="stylesheet" type="text/css"/>
+    <link href="../../resources/js/easyui1.9.4/themes/metro/easyui.css" rel="stylesheet"/>
+    <link href="../../resources/js/easyui1.9.4/themes/icon.css" rel="stylesheet" type="text/css" />
+    <link href="../../resources/js/easyuiext/extend/css/IconExtension.css" rel="stylesheet" type="text/css"/>
+	<link href="../../resources/js/bootstrap/css/bootstrap.css" rel="stylesheet"/>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/jquery.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/easyui1.9.4/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="../../resources/js/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../../resources/js/session.js"></script>
+	<script type="text/javascript" src="../../resources/js/public.js"></script>
+	<script type="text/javascript" src="../../resources/js/dataform.js"></script>
+</head>
+<body class="easyui-layout">
+<div id="toolbar">
+	<div>
+		<span class="td70">用户名:</span>
+		<input name="txt_USERNAME" id="txt_USERNAME" class="easyui-textbox" style="height:30px;line-height:30px;width:166px;"/>
+		<span class="td70">姓名: </span>
+		<input name="txt_USER_REAL_NAME" id="txt_USER_REAL_NAME" class="easyui-textbox"	style="height:30px;line-height:30px;width:166px;"/>
+		<!-- <span class="td70">角色: </span>
+		<input name="txt_USER_ROLE" id="txt_USER_ROLE" class="easyui-combobox" editable="true" style="height:30px;line-height:30px;width:166px;" /> -->
+		
+		<button id="btnSearch" class="easyui-linkbutton" iconCls="icon-search-w" data-options="selected:true" onclick="search()">查 询</button>
+		<!-- <button id="btnMore" class="easyui-linkbutton" iconCls="icon-arrow_out_longer">更多...</button> -->
+	</div>
+	<div class="group-search">
+        <!-- <div>
+	        <span class="td70">部门: </span>
+			<input name="txt_USER_DEPT_ID_S" id="txt_USER_DEPT_ID_S" class="easyui-combotree" editable="true" style="height:30px;line-height:30px;width:166px;" />
+        </div> -->
+    </div>
+	<div>
+		<div id="buttonlist">
+			<button id="btnadd" href="javascript:void(0)" class="easyui-linkbutton" iconcls="icon-add" onclick="new2()">新 增</button>
+			<button id="btnremove" class="easyui-linkbutton" iconCls="icon-delete">删 除</button>
+			<button id="btnreset" class="easyui-linkbutton" iconCls="icon-lock_start">密码重置</button>
+		</div>
+	</div>
+</div>
+<div id="dg"></div>
+ <div id="dlg2" class="easyui-dialog" style="width: 600px; height: 420px; padding: 10px 20px;"
+      	closed="true" buttons="#dlg-buttons">  
+      	<form id="fm2" method="post"> 
+       <div class="fitem"> 
+            <div class="container-fluid">
+            	<div class="row p-top5">
+            		<div class="col-xs-3 lbl-text tip-red">
+                      		  用户类型
+            		</div>
+            		<div class="col-xs-9">
+            			<input name="txt_USER_TYPE" id="txt_USER_TYPE" class="easyui-combobox" style="height:30px;line-height:30px;width:100%"/>
+            		</div>
+            	</div>
+            	<div class="row p-top5">
+            		<div class="col-xs-3 lbl-text tip-red">
+                      		统一社会信用代码
+            		</div>
+            		<div class="col-xs-9">
+            			<input name="txt_ORG_ID" id="txt_ORG_ID" class="easyui-textbox" style="height:30px;line-height:30px;width:100%;" />
+            		</div>
+            	</div>
+            	<div class="row p-top5">
+            		<div class="col-xs-3 lbl-text tip-red">
+                      		用户名
+            		</div>
+            		<div class="col-xs-9">
+            			<input name="txt_USERNAME_S" id="txt_USERNAME_S" class="easyui-textbox" style="height:30px;line-height:30px;width:100%;" />
+            		</div>
+            	</div>
+            	<div class="row p-top5">
+            		<div class="col-xs-3 lbl-text tip-red">
+                      		 姓名
+            		</div>
+            		<div class="col-xs-9">
+            			<input name="txt_USER_REAL_NAME_S" id="txt_USER_REAL_NAME_S" class="easyui-textbox" style="height:30px;line-height:30px;width:100%" />
+            		</div>
+            	</div>
+            	<div class="row p-top5">
+            		<div class="col-xs-3 lbl-text tip-red">
+                      		手机
+            		</div>
+            		<div class="col-xs-9">
+            			<input  name="txt_USER_MOBILE" id="txt_USER_MOBILE" class="easyui-textbox" style="height:30px;line-height:30px;width:100%"/>
+            		</div>
+            	</div>
+            	<div class="row p-top5">
+            		<div class="col-xs-3 lbl-text tip-blue">
+                      		  电话
+            		</div>
+            		<div class="col-xs-9">
+            			<input  name="txt_USER_TEL" id="txt_USER_TEL" class="easyui-textbox" style="height:30px;line-height:30px;width:100%"/>
+            		</div>
+            	</div>
+            	<div class="row p-top5">
+            		<div class="col-xs-3 lbl-text tip-red">
+                      		邮箱
+            		</div>
+            		<div class="col-xs-9">
+            			<input  name="txt_USER_EMAIL" id="txt_USER_EMAIL" class="easyui-textbox" style="height:30px;line-height:30px;width:100%"/>
+            		</div>
+            	</div>
+            	<div class="row p-top5">
+            		<div class="col-xs-3 lbl-text tip-red">
+                      		  角色
+            		</div>
+            		<div class="col-xs-9">
+            			<input name="txt_ROLE_ID" id="txt_ROLE_ID" class="easyui-combobox" style="height:30px;line-height:30px;width:100%" />
+            		</div>
+            	</div>
+            	<div class="row p-top5">
+            		<div class="col-xs-3"></div>
+            		<div class="col-xs-9">
+            			<span style="color:red;" >注：初始密码为111111</span>
+            		</div>
+            	</div>
+            </div>
+       </div> 
+       <input type="hidden" name="action" id="hidtype" /> 
+       <input type="hidden" name="txt_INDX" id="txt_INDX" />
+       <input type="hidden" name="txt_DEPT_ID" id="txt_DEPT_ID" />
+      </form> 
+   </div>
+   <div id="dlg-buttons"> 
+   	<button id="btnUserSave" class="easyui-linkbutton" iconCls="icon-save"
+           commandname="SaveUser"
+           commanddatas="FormToData('fm2');"
+           commandok="showSuccess"
+           isvalidate="1" formid="fm2">
+           <i class='icon-save'></i>保 存
+       </button>
+       <a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript:$('#dlg2').dialog('close')"
+           iconcls="icon-cancel">取消</a> 
+   </div>  
+</body>
+</html>
+<script type="text/javascript">
+/*<![CDATA[*/
+$(function() {
+	EnterToSearch("btnSearch");
+	
+	$("#dg").datagrid({
+		url : '../../user/GetUserList3',
+		dataType : "json",
+		fit : true,
+		striped : true,
+		fitColumns : false,
+		rownumbers : true,
+		remoteSort : true,
+		pagination : true,
+		toolbar : "#toolbar",
+		collapsible : true,
+		pageSize: 15,
+        pageList: [15,30,100],
+		columns:[
+			[
+			{field:'INDX',checkbox:true},
+			{field:'PASSWORD',hidden:true},
+            {field:'USERNAME',title:'用户名',width:100,sortable:true,formatter : rowformater},
+            {field:'USER_TYPE',title:'用户类型',width:100,sortable:true,formatter : rowType},
+            {field:'ROLE_NAME',title:'角色',width:100,sortable:true},
+            {field:'USER_REAL_NAME',title:'姓名',width:100,sortable:true},
+            {field:'USER_MOBILE',title:'手机',width:100,sortable:true},
+            {field:'USER_TEL',title:'电话',width:100,sortable:true},
+            {field:'USER_EMAIL',title:'邮箱',width:200,sortable:true},
+            {field:'ORG_ID',title:'统一社会信用代码',width:150,sortable:true},
+            {field:'ORG_NAME',title:'企业名称',width:150,sortable:true},
+            /*{field:'DEPT_ID',title:'部门编码',width:150,sortable:true},
+            {field:'DEPT_NAME',title:'部门名称',width:150,sortable:true},*/
+            /* {field:'ROLE_NAME',title:'角色名称',width:150,sortable:true}, */
+            /* {field:'IS_ROOT',title:'数据权限等级',width:110,sortable:true,align:'center',formatter:rowRoot}, */
+            {field:'CREATE_TIME',title:'创建时间',width:125,sortable:true}
+        ]],  
+		loadMsg : 'LOADING...',
+		showHeader : true,
+		showFooter : true
+	});
+	var p = $('#dg').datagrid('getPager');
+	$(p).pagination({
+		beforePageText : '第',
+		afterPageText : '页    共 {pages} 页',
+		displayMsg : '当前显示 {from} - {to} 条记录   共 {total} 条记录'
+	});
+
+	$('#txt_USER_TYPE').combobox({
+		method : 'get',
+		url : '../../flow/GetUserTypes',
+		valueField : "CODE_VALUE",
+		textField : 'CODE_DISPLAY_VALUE_CN'
+	});
+	
+	$.ajax({
+        url: '../../auth/GetUserInfo',
+        type: "POST",
+        dataType: "json",
+        success: function (result) {
+        	if('Y' == result.isRoot){//管理员时，角色控件加载所有数据
+        		$('#txt_ROLE_ID').combobox({
+        			method : 'get',
+        			url : '../../auth/GetComboboxRole',
+        			valueField : "INDX",
+        			textField : 'ROLE_NAME'
+        		});
+        	}else{
+        		//非管理员时不能修改用户类型，只能是系统默认
+        		$("#txt_USER_TYPE").combobox({disabled: true}); 
+        	}
+        	
+        	if("1" == result.usertype){//种业公司
+        		$('#txt_ROLE_ID').combobox({method : 'get',url : '../../auth/GetSeedcomRole',valueField : "ID",textField : 'NAME'});
+        	}else if("2" == result.usertype){//经销商
+        		$('#txt_ROLE_ID').combobox({method : 'get',url : '../../auth/GetDealerRole',valueField : "ID",textField : 'NAME'});
+        	}
+        	
+        	//个人级别的权限，不能新增、删除
+        	if("2" == result.roletype){
+        		$("#btnadd").attr("style","display:none;");        		
+        		$("#btnremove").attr("style","display:none;");        		
+        	}
+        }
+    });
+	
+	//隐藏查询条件
+    Hide("group-search", "btnMore", "dg");
+});
+
+function rowformater(val, row, index) {
+	return '<a href=\'javacript:;\' onclick=\'USEREdit(' + index + ')\'>'
+			+ row.USERNAME + '</a>';
+}
+function rowType(val,row,index){
+	var	rt ="";
+	if(row.USER_TYPE=="0"){
+		rt="<span class=\"label label-success\">国科</span>";
+	}else if(row.USER_TYPE=="1"){
+		rt="<span class=\"label label-success\">种业公司</span>";
+	}else if(row.USER_TYPE=="2"){
+		rt="<span class=\"label label-success\">经销商</span>";
+	}else{
+		rt="<span class=\"label label-warning\">未分类</span>";
+	}
+	return rt;
+}
+
+$("#btnremove").click(function() {
+	var row = $('#dg').datagrid('getSelections');
+	var allid = "";
+	for (var i = 0; i < row.length; i++) {
+		if (allid == null || allid.length == 0)
+			allid = row[i].INDX;
+		else
+			allid = allid + "," + row[i].INDX;
+	}
+	if (row.length > 0) {
+		$.messager.confirm('提示', '您确定要删除这条记录?', function(r) {
+			if (r) {
+				$.post('../../user/DelUser', {
+					id : allid
+				}, function(result) {
+					if (result.success) {
+						$('#dg').datagrid('reload'); // reload the user
+														// data
+					} else {
+						$.messager.show({ // show error message
+							title : '提示',
+							msg : result.ErrMessage
+						});
+						$('#dg').datagrid('reload');
+					}
+				}, 'json');
+			}
+		});
+	} else {
+		$.messager.alert("提示信息", "请选择需删除的行！", 'warning');
+	}
+});
+
+$("#btnreset").click(function() {
+	var row = $('#dg').datagrid('getSelections');
+	var allid = "";
+	for (var i = 0; i < row.length; i++) {
+		if (allid == null || allid.length == 0)
+			allid = row[i].INDX;
+		else
+			allid = allid + "," + row[i].INDX;
+	}
+	if (row.length > 0) {
+		$.messager.confirm('提示', '您确定要为这条记录重置密码?', function(r) {
+			if (r) {
+				$.post('../../user/ResetUser', {
+					id : allid
+				}, function(result) {
+					if (result.success) {
+						$('#dg').datagrid('reload'); // reload the user
+														// data
+					} else {
+						$.messager.show({ // show error message
+							title : '提示',
+							msg : result.ErrMessage
+						});
+						$('#dg').datagrid('reload');
+					}
+				}, 'json');
+			}
+		});
+	} else {
+		$.messager.alert("提示信息", "请选择需要重置密码的行！", 'warning');
+	}
+});
+
+$("#btnUserSave").click(function() {
+	parent.LoadingShow();
+	var INDX = $('#txt_INDX').val();
+	var USERNAME = $('#txt_USERNAME_S').val(); // 用户名
+	var USER_REAL_NAME = $('#txt_USER_REAL_NAME_S').val();// 姓名
+	var USER_EMAIL = $('#txt_USER_EMAIL').val(); // EMAIL
+	var USER_MOBILE = $('#txt_USER_MOBILE').val();// 手机
+	var USER_TEL = $('#txt_USER_TEL').val();// 电话
+	var USER_DEPT_ID = $('#txt_DEPT_ID').val();
+	var txt_ORG_ID = $('#txt_ORG_ID').val();
+	var txt_USER_TYPE = $('#txt_USER_TYPE').combobox("getValue");//用户类型
+	var USER_ROLE_ID = $('#txt_ROLE_ID').combobox("getValue");
+	var USER_ROLE_NAME = $('#txt_ROLE_ID').combobox("getText");
+
+	if (requir()) {
+		$.ajax({
+			url : '../../user/SaveUserEdit2',
+			type : "POST",
+			dataType : "json",
+			data : {
+				INDX : INDX,
+				USERNAME : USERNAME,
+				USER_REAL_NAME : USER_REAL_NAME,
+				USER_EMAIL : USER_EMAIL,
+				USER_MOBILE : USER_MOBILE,
+				USER_TEL : USER_TEL,
+				USER_DEPT_ID : USER_DEPT_ID,
+				ORG_ID : txt_ORG_ID,
+				USER_TYPE : txt_USER_TYPE,
+				USER_ROLE_ID : USER_ROLE_ID,
+				USER_ROLE_NAME : USER_ROLE_NAME
+			},
+			success : function(result) {
+				if (result.IsOk == 1) {
+					$.messager.alert('消息', result.ErrMessage);
+					$('#dg').datagrid('reload');
+					$("#fm2").form("clear");
+					$("#dlg2").dialog("close");
+					parent.LoadingHide();
+				} else {
+					$.messager.alert('消息', result.ErrMessage);
+					$('#dg').datagrid('reload');
+					parent.LoadingHide();
+				}
+			}
+		});
+	} else
+		return false;
+});
+
+function del_html_tags(str, reallyDo, replaceWith) {
+	var e = new RegExp(reallyDo, "g");
+	words = str.replace(e, replaceWith);
+	return words;
+}
+function search() {
+	var param = {
+		USERNAME : $("#txt_USERNAME").val(),
+		USER_REAL_NAME : $("#txt_USER_REAL_NAME").val()/* ,
+		USER_DEPT_NAME : $("#txt_USER_DEPT_ID_S").combotree("getText"),
+		ROLE_NAME : $("#txt_USER_ROLE").datebox('getText') */
+	}
+	$("#dg").datagrid("load", param);
+}
+function new2() {
+	$("#dlg2").dialog("open").dialog('setTitle', '信息新增');
+	$('#fm2').form('clear');
+	$.ajax({
+        url: '../../auth/GetUserInfo',
+        type: "POST",
+        dataType: "json",
+        success: function (result) {
+        	$("#txt_USER_TYPE").combobox('setValue',result.usertype);
+        	$("#txt_ORG_ID").textbox('setValue',result.orgid); 
+        }
+    });
+	document.getElementById("hidtype").value = "submit";
+}
+
+function USEREdit(index) {
+	
+	var row = $('#dg').datagrid('getData').rows[index];
+	if (row) {
+		$('#fm2').form('load', {
+			txt_USERNAME_S : row.USERNAME,
+			txt_USER_REAL_NAME_S : row.USER_REAL_NAME,
+			txt_USER_EMAIL : row.USER_EMAIL,
+			txt_USER_MOBILE : row.USER_MOBILE,
+			txt_USER_TEL : row.USER_TEL,
+			txt_INDX : row.INDX
+		});
+		$('#txt_DEPT_ID').val(row.DEPT_ID);
+		$('#txt_USER_TYPE').combobox('setValue', row.USER_TYPE);
+		$('#txt_ROLE_ID').combobox('setValue', row.ROLE_ID);
+		$("#txt_ORG_ID").textbox('setValue',row.ORG_ID); 
+		$("#dlg2").dialog("open").dialog('setTitle', '信息编辑', 'info');
+	}
+}
+function requir() {
+	if ($("#txt_USERNAME_S").val() == null || $("#txt_USERNAME_S").val() == "") {
+		$.messager.alert("警告!", "用户名不能为空");
+		parent.LoadingHide();
+		return false;
+	}
+	if ($("#txt_USER_REAL_NAME_S").val() == null
+			|| $("#txt_USER_REAL_NAME_S").val() == "") {
+		$.messager.alert("警告!", "姓名不能为空");
+		parent.LoadingHide();
+		return false;
+	}
+	if ($("#txt_USER_MOBILE").val() == null
+			|| $("#txt_USER_MOBILE").val() == "") {
+		$.messager.alert("警告!", "手机号不能为空");
+		parent.LoadingHide();
+		return false;
+	} else {
+		var reTell = /^1\d{10}$/
+		if (!reTell.test($("#txt_USER_MOBILE").val())) {
+			$.messager.alert("警告!", "请输入正确的手机号,应为11位数字");
+			parent.LoadingHide();
+			return false;
+		}
+	}
+	/*if ($("#txt_ROLE_ID").combotree('getValue') == null
+			|| $("#txt_ROLE_ID").combotree('getValue') == "") {
+		$.messager.alert("警告!", "部门不能为空");
+		parent.LoadingHide();
+		return false;
+	}*/
+	if (!($("#txt_USER_EMAIL").val() == null || $("#txt_USER_EMAIL").val() == "")) {
+		var reTell = /^[\.a-zA-Z0-9_-]+@[\.a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
+		if (!reTell.test($("#txt_USER_EMAIL").val())) {
+			$.messager.alert("警告!", "请输入正确的邮箱账号");
+			parent.LoadingHide();
+			return false;
+		}
+	}
+	/*if (!($("#txt_USER_TEL").val() == null || $("#txt_USER_TEL").val() == "")) {
+		var reTell = /^\d{7}$/
+		if (!reTell.test($("#txt_USER_TEL").val())) {
+			$.messager.alert("警告!", "请输入正确的电话号码,应为7位数字");
+			parent.LoadingHide();
+			return false;
+		}
+	}*/
+	return true;
+}
+/*]]>*/
+</script>

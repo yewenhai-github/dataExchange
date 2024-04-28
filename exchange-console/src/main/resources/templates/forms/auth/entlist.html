@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8"/>
+	<title>客户管理</title>
+    <link href="../../resources/biz/css/pop.css" rel="stylesheet" type="text/css"/>
+    <link href="../../resources/js/easyui1.9.4/themes/metro/easyui.css" rel="stylesheet"/>
+    <link href="../../resources/js/easyui1.9.4/themes/icon.css" rel="stylesheet" type="text/css" />
+    <script src="../../resources/js/easyui1.9.4/jquery.min.js" type="text/javascript"></script>
+    <script src="../../resources/js/easyui1.9.4/jquery.easyui.min.js" type="text/javascript"></script>
+    <script src="../../resources/js/easyui1.9.4/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+    
+	<script src="../../resources/js/dataform.js" type="text/javascript"></script>
+</head>
+<body class="easyui-layout">
+
+	<div id="toolbar">
+		<div>
+			<!-- <span class="td70">商机编号：</span>
+			<input id="txt_" name="txt_" class="easyui-combobox" style="width:166px;height:30px;line-height:30px;"/> -->
+			<span class="td70">统一社会信用代码：</span>
+			<input id="CUSTOMER_NO" name="CUSTOMER_NO" class="easyui-textbox" style="width:166px;height:30px;line-height:30px;"/>
+			<span class="td70">客户名称：</span>
+			<input id="CUSTOMER_NAME" name="CUSTOMER_NAME" class="easyui-textbox" style="width:166px;height:30px;line-height:30px;"/>
+			<span class="td70">创建人：</span>
+			<input id="CREATED_BY_NAME" name="CREATED_BY_NAME" class="easyui-combobox" style="width:166px;height:30px;line-height:30px;"/>
+			<button id="btnSearch" class="easyui-linkbutton"
+                iconCls="icon-search-w" data-options="selected:true" onclick="search()">查 询
+        	</button>
+		</div>
+		
+			
+		<div style="display: none">
+		<iframe name="export_excel_form_iframe"
+			style="width: 1px; height: 0px;"></iframe>
+	</div>
+		<div>
+			<div id="buttonlist" >
+				<button href="javascript:void(0);" class="easyui-linkbutton" iconcls="icon-add" id="btnadd">新建</button>
+			    <button id="btn_remove" class="easyui-linkbutton" iconcls="icon-delete"  onclick="Remove()">删除</button>
+			    <button id="btn_audit" class="easyui-linkbutton" iconcls="icon-2012080404391"  onclick="Audit()">审核</button>
+				<button id="btnimport" class="easyui-linkbutton" iconCls="icon-page_white_excel"  onclick="ExportExcel()">导出</button>
+			</div> 
+		</div>
+	</div>
+	<div id="dg"></div>
+	<div>
+	    <form id="export_excel_form" action="../../auth/ExcelCustomerList" method="post" target="export_excel_form_iframe">
+	        <input type="hidden" id="txt_CUSTOMER_NO" name="txt_CUSTOMER_NO" value=""/>
+	        <input type="hidden" id="txt_CUSTOMER_NAME" name="txt_CUSTOMER_NAME" value=""/>
+	        <input type="hidden" id="txt_CREATED_BY_NAME" name="txt_CREATED_BY_NAME" value=""/>
+	    </form>
+	</div>
+	<div id="dlg9" class="easyui-dialog" style="width: 300px; height: 100px; padding: 10px 20px;"
+       closed="true" buttons="#dlg9-buttons">  
+      
+       <button id="btnExamine1" class="easyui-linkbutton" iconCls="icon-accept" onclick="AuditExamine('1')"
+            isvalidate="1" >
+            <i class='icon-save'></i>审核通过
+        </button>
+        <button id="btnExamine2" class="easyui-linkbutton" iconCls="icon-01" onclick="AuditExamine('2')"
+            isvalidate="1" >
+            <i class='icon-01'></i>审核否决
+        </button>
+   </div>
+</body>
+</html>
+<script type="text/javascript">
+/*<![CDATA[*/
+$(function(){
+	EnterToSearch("btnSearch");
+	
+	$('#dg').datagrid({
+		type:"GET",
+		url:"../../ent/GetEntList",
+		dataType:"json",
+		fit:true,
+        striped:true,
+        fitColumns:false,
+        rownumbers:true,
+        remoteSort:true,
+        pagination: true,
+        toolbar:"#toolbar",
+        collapsible:true,
+        pageSize: 15,
+        pageList: [15,30,100],
+        columns:[
+        	[
+    				{field:'INDX',checkbox:true},
+    				{field:'CUSTOMER_NO',title:'统一社会信用代码',width:140,sortable:true,
+    					formatter:function(val, rowData, index){
+    						return "<a href=\"entedit.html?ValueId=" + rowData.CUSTOMER_NO + "\">" + val + "</a>";
+    				}},
+    				{field:'STATUS',title:'客户类型',width:80,sortable:true},
+    				{field:'APPROVAL_STATUS_CODE',title:'审核状态',width:80,sortable:true,formatter:rowStatus},
+    				{field:'CUSTOMER_NAME',title:'客户名称',width:150,sortable:true},
+    				{field:'PERSON',title:'联系人',width:80,sortable:true},
+    				{field:'POSITION',title:'联系人职位',width:100,sortable:true},
+    				{field:'TEL',title:'电话',width:100,sortable:true},
+    				{field:'MAIL',title:'邮箱',width:140,sortable:true},
+    				{field:'COMPANY_ADDRESS',title:'公司地址',width:150,sortable:true},
+    				{field:'ORG_NAME',title:'代理',width:150,sortable:true},
+    	            {field:'APPROVAL_USER',title:'审核人',width:80,sortable:true},
+    	            {field:'APPROVALDATE',title:'审核时间',width:125,sortable:true},
+    				{field:'CREATED_BY_NAME',title:'创建人',width:80,sortable:true},
+    				{field:'CREATE_TIME',title:'创建时间',width:120,sortable:true}
+            ]],  
+        loadMsg:'LOADING...',
+        showHeader:true,
+        showFooter:true
+	});
+	var p = $('#dg').datagrid('getPager'); 
+    $(p).pagination({ 
+        beforePageText: '第',
+        afterPageText: '页    共 {pages} 页', 
+        displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录'
+    });
+	$("#btnadd").click(function(){
+		window.location.href = "CustomerEdit.html";
+	});
+	$("#CREATED_BY_NAME").combobox({
+		method: 'get',
+  		url:'../../user/GetUserCombobox',
+  		valueField:"INDX",
+  		textField:'USER_REAL_NAME'
+	});
+});
+function BillEdit(index){
+	var row = $('#dg').datagrid('getData').rows[index];
+	parent.PopShipWin(row.INDX, '1','CUSTOMER');
+}
+function search(){
+	var param = {
+        CUSTOMER_NO:$("#CUSTOMER_NO").val(),
+        CUSTOMER_NAME:$("#CUSTOMER_NAME").val(),
+        CREATED_BY_NAME:$("#CREATED_BY_NAME").combobox("getText")
+	};
+	$("#dg").datagrid("load",param);
+}
+
+function Remove(){
+	var row = $("#dg").datagrid("getSelections");
+	var allid = "";
+	for(var i = 0 ; i<row.length;i++){
+		if(allid==null||allid.length==0)
+			allid = row[i].INDX;
+		else
+			allid=allid+","+row[i].INDX;
+	}
+	if(row.length>0){
+		$.messager.confirm('提示','您确定要删除这条记录么?',function(r){
+			if(r){
+				$.post('../../flow/DelCustomer', { id: allid }, function (result) {
+	                    if (result.IsOk=='1') {
+	                    	$.messager.show({title: '提示',msg: result.ErrMessage});
+	                        $('#dg').datagrid('reload');    // reload the user data  
+	                    } else {
+	                        $.messager.alert({   // show error message  
+	                            title: '提示',
+	                            msg: result.ErrMessage
+	                        });
+	                        $('#dg').datagrid('reload'); 
+	                    }
+	                }, 'json');
+			}
+		});
+	}else{
+		$.messager.alert("提示信息", "请选择需删除的行！",'warning');
+	}
+}
+
+function new9(){
+	$("#FOLLOW_PERSON").val($("#txt_FOLLOW_PERSON").combobox("getText"));
+	var row = $("#dg").datagrid("getSelections");
+	var allid = "";
+	for(var i = 0 ; i<row.length;i++){
+		if(allid==null||allid.length==0)
+			allid = row[i].INDX;
+		else
+			allid=allid+","+row[i].INDX;
+	}
+	$("#INDX").val(allid);
+	
+	$("#export_excel_form").submit(); 
+}
+
+function Audit(){
+	var row = $("#dg").datagrid("getSelections");
+	var allid = "";
+	for(var i = 0 ; i<row.length;i++){
+		if(allid==null||allid.length==0)
+			allid = row[i].INDX;
+		else
+			allid=allid+","+row[i].INDX;
+	}
+	if(row.length>0){
+		$("#dlg9").dialog("open").dialog('setTitle', '审核'); 
+	}else{
+		$.messager.alert("提示信息", "请选择需审核的行！",'warning');
+	}
+}
+function AuditExamine(sta){
+	var row = $("#dg").datagrid("getSelections");
+	var allid = "";
+	for(var i = 0 ; i<row.length;i++){
+		if(allid==null||allid.length==0){
+			if(row[i].APPROVALDATE!=""){
+				$.messager.alert("提示信息", "已审核的数据不能重复审核！",'warning');
+				return;
+			}
+			allid = row[i].INDX;
+		}else{
+			allid=allid+","+row[i].INDX;
+		}
+	}
+	if(row.length>0){
+		$.ajax({
+			type: "POST",
+			url: "../../AuditCustomer",
+			data: {id:allid, status:sta},
+			dataType: "json",
+			success: function(data){
+				if (data.IsOk=='1') {
+					$.messager.show({   // show error message  
+						title: '提示',
+						msg: data.ErrMessage
+					});
+					$("#dlg9").dialog("close").dialog('setTitle', '审核'); 
+					$('#dg').datagrid('reload');    // reload the user data  
+				} else {
+					$.messager.alert({   // show error message  
+						title: '提示',
+						msg: data.ErrMessage
+					});
+					$('#dg').datagrid('reload'); 
+				}
+			}
+		});
+	}
+}
+
+function rowStatus(val,row,index){
+	var rt = "";
+	switch (row.APPROVAL_STATUS_CODE) {
+		case '0':
+			rt += "<span class=\"label label-warning\">未审核</span>";
+			break;
+		case '1':
+			rt += "<span class=\"label label-success\">审核通过</span>";
+			break;
+		case '2':
+			rt += "<span class=\"label label-danger\">审核不通过</span>";
+			break;
+		default:
+			rt += "<span class=\"label label-warning\">未审核</span>";
+		break;
+	}
+	return rt;
+}
+
+//导出
+function ExportExcel() {
+    var total = $('#dg').datagrid('getPager').data("pagination").options.total;
+    var msg = '本次将导出' + total + '条,预计耗时' + Math.ceil(total / 600) + '秒';
+    $.messager.confirm('提示', msg, function (r) {
+        if (r) {
+            $("#txt_CUSTOMER_NO").val($("#CUSTOMER_NO").textbox('getValue'));
+            $("#txt_CUSTOMER_NAME").val($('#CUSTOMER_NAME').textbox("getValue"));
+            $("#txt_CREATED_BY_NAME").val($('#CREATED_BY_NAME').combobox("getText"));
+            $("#export_excel_form").submit();
+        }
+    });
+}
+
+/*]]>*/
+</script>

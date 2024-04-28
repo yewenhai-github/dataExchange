@@ -1,0 +1,22 @@
+@charset "utf-8";
+/* CSS Document */
+* {padding:0px;margin:0px auto;}
+body {padding:0px;margin:0px auto;font-size:12px;font-family:"微软雅黑";}
+ul, li, ol, dl, dt, dd, div, p, span, h1, h2, h3, h4, h5, h6, a {padding:0px;margin:0px;}
+ul,li,ol{list-style:none;}
+a{text-decoration:none;color:#000000;}
+
+/* login */
+.login-header{width:100%;text-align:center;height:30px;font-size:24px;line-height:30px;}
+.login{width:400px;position:fixed;height:220px;top:50%;left:50%;display:none;background:#ffffff;z-index:9999;margin-left:-200px;margin-top:-140px;border-radius: 5px; overflow: hidden}
+.login-title{width:100%;margin:0 0px 0px 0px;text-align:center;line-height:50px;height:50px;font-size:19px;position:relative; background: #55ACEF; color: #fff; font-weight: 600;}
+.login-title span{position:absolute;font-size:12px;right:-20px;top:-30px;background:#ffffff;border:#ebebeb solid 1px;width:40px;height:40px;border-radius:20px;}
+.login-title span a{display:block;}
+.login-input-content{margin-top:20px;}
+.login-input {overflow:hidden;margin:0px 0px 20px 0px;}
+.login-input label{float:left;width:90px;padding-right:10px;text-align:right;line-height:35px;height:35px;font-size:14px;}
+.login-input input.list-input{float:left;line-height:35px;height:35px;width:250px;border:#ebebeb 1px solid;text-indent:5px;}
+.login-button{ padding-left: 100px;}
+.login-button a{display:block;width:30%;margin:0 15px 0 0;line-height:40px;font-size:14px;text-align:center; float: left; background: #55ACEF; border-radius: 5px; color: aliceblue}
+.login-button a:hover{color: aliceblue}
+.login-bg{width:100%;height:100%;position:fixed;top:0px;left:0px;background:#000;filter:alpha(opacity=80);-moz-opacity:0.3;-khtml-opacity:0.5;opacity:0.5;display:none;}

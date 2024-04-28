@@ -1,0 +1,573 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Xml2DB配置详细</title>
+    <!--[if lt IE 9]>
+    <script src='resources/js/assets/javascripts/html5shiv.js' type='text/javascript'></script>
+    <![endif]-->
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no'
+        name='viewport' />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/bootstrap/bootstrap.css'
+        media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/light-theme.css'
+        id='color-settings-body-color' media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/assets/stylesheets/demo.css'
+        media='all' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/jquery-ui.css'
+        media='screen' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/ui.jqgrid.css'
+        media='screen' />
+    <link type='text/css' rel='stylesheet' href='resources/js/jqgrid/css/prettify.css' />
+    <link type='text/css' rel='stylesheet' href='console/css/ystep.css' />
+    <link type='text/css' rel='stylesheet' href='console/css/css.css' media='all' />
+    <script type='text/javascript' src='resources/js/assets/javascripts/jquery/jquery.min.js'></script>
+    <script type="text/ecmascript" src="resources/js/jqgrid/js/jquery.jqGrid.min.js"></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/prettify.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/codetabs.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/themeswitchertool.js'></script>
+    <script type="text/ecmascript" src='resources/js/jqgrid/js/i18n/grid.locale-cn.js'></script>
+    <script type="text/ecmascript" src='resources/js/My97DatePicker/WdatePicker.js'></script>
+    <script type='text/javascript' src='GetJS?button.js'></script>
+    <script type='text/javascript' src="GetJS?messagebox.js"></script>
+    <script type='text/javascript' src='GetJS?combobox.js'></script>
+    <script type='text/javascript' src="GetJS?dataform.js"></script>
+    <script type='text/javascript' src="GetJS?popupwindow.js"></script>
+    <script type='text/javascript' src='GetJS?js/ystep.js'></script>
+    <script type='text/javascript' src='console/js/public.js'></script>
+    <script type='text/javascript' src='GetJS?js/checkradio.js'></script>
+    <script type="text/javascript">
+        function InitPage() {
+            if (GetRequestName("INDX") != "") {
+                postData("GetXml2DBByIndx?INDX=" + GetRequestName("INDX"), null, true, callback1, null)
+            } else {
+                $("#btnDel").css("display", "none");
+                $("#btnRecovery").css("display", "none");
+            }
+        }
+
+        $(document).ready(function () {
+            $("#INDX").val(GetRequestName("INDX"));
+        });
+        function callbackfunction() {
+            DoCommand("GetXml2DBByIndx?INDX=" + GetRequestName("INDX"));
+        }
+        function showSuccess(s) {
+            var v = eval("(" + s + ")");
+            if (v.IsOk == "1") {
+                var json = v.ReturnData.replace(/"([^"]+)":/g, function (val) { return val.toUpperCase(); });
+                var data = eval("(" + json + ")");
+                if (data != null) {
+                    if (data.XML2DBDATA[0].INDX != "") {
+                        ShowMessages(v.ErrMessage, "友情提示", "msgok", function okFunction() {
+                            DoCommand("GetXml2DBByIndx?INDX=" + data.XML2DBDATA[0].INDX);
+                            $("#INDX").val(data.XML2DBDATA[0].INDX);
+                        }, 0);
+                    }
+                }
+                else {
+                    ShowMessages(v.ErrMessage, "友情提示", "msgok", function okFunction() {
+                        location.href = "GetHTML?02Xml2DBList.html";
+                    }, 0);
+                }
+            }
+            else
+                ShowMessages(v.ErrMessage, "友情提示", "msgwaring", null, 0);
+        }
+
+        function callback1(s) {
+            var data = eval("(" + s + ")");
+            if (data.ReturnData) {
+                var json = data.ReturnData;
+                json = json.replace(/"([^"]+)":/g, function (v) { return v.toUpperCase(); });
+                var rtdata = eval("(" + json + ")");
+                FormBind(rtdata);
+
+                switch ($("#txtIS_ENABLED").val()) {
+                    case '1':
+                        $("#txtIS_ENABLED").val("是");
+                        break;
+                    case '0':
+                        $("#txtIS_ENABLED").val("否");
+                        break;
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class='row-fluid' id='content-wrapper'>
+        <div class='span12'>
+                  <div class='row-fluid' id="GoodsTitle">
+               <!-- <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 10px;
+                    border-bottom: 1px solid #114;">
+                    <tr>
+                        <td style="text-align: left; padding: 10px; width: 70%; padding-top: 10px;">
+                            <button class='btn btn-primary btn-small' id="btnSave" type="button" commandname="SaveXml2DBByIndx" commanddatas="FormToData('Xml2DBData')"
+                                commandok="showSuccess">
+                                <i class='icon-save'></i>保 存
+                            </button>
+                            <button class='btn btn-primary btn-small' type="button" onclick="javascript:history.go(-1);">
+                                <i class='icon-reply-all'></i>返回
+                            </button>
+                            <button id="btnDel" class='btn btn-primary btn-small'  commandname="ChangeXml2DB" commanddatas="FormToData('Xml2DBData');"
+                                 enablefield="Xml2DBData.IS_ENABLED" enablevalue="1"
+                                 commandok="showSuccess" confirmmessage="您确定要做失效操作吗？" isvalidate="0">
+                               	 <i class='icon-remove'></i>失效
+                          	</button>
+                          	<button id="btnRecovery" class='btn btn-primary btn-small'  commandname="ChangeXml2DB" commanddatas="FormToData('Xml2DBData');"
+                                 enablefield="Xml2DBData.IS_ENABLED" enablevalue="0"
+                                 commandok="showSuccess" confirmmessage="您确定要做恢复操作吗？" isvalidate="0">
+                               	 <i class='icon-ok'></i>恢复
+                          	</button>
+                        </td>
+                    </tr>
+                </table>-->
+				<table width="100%" border="0" cellspacing="0" cellpadding="0"
+					style="margin-bottom: 10px; border-bottom: 1px solid #114;">
+					<tr>
+						<td
+							style="text-align: left; padding-right: 10px; padding-left: 10px;">
+							<button id="btnHistory" class='btn btn-primary btn-small' style='padding-left: 10px;' onclick="javascript:history.go(-1)"><i class='icon-reply-all'></i>返回</button>
+							<button class='btn btn-primary btn-small' id="btnSave"
+								type="button" commandname="SaveXml2DBByIndx"
+								commanddatas="FormToData('XmlData')" commandok="showSuccess">
+								<i class='icon-save'></i>保 存
+							</button>
+							<!-- <button id="btnDel" class='btn btn-primary btn-small'
+								commandname="ChangeXml2DB"
+								commanddatas="FormToData('Xml2DBData');"
+								enablefield="Xml2DBData.IS_ENABLED" enablevalue="1"
+								commandok="showSuccess" confirmmessage="您确定要做失效操作吗？"
+								isvalidate="0">
+								<i class='icon-remove'></i>失效
+							</button> -->
+							<!-- <button id="btnRecovery" class='btn btn-primary btn-small'
+								commandname="ChangeXml2DB"
+								commanddatas="FormToData('Xml2DBData');"
+								enablefield="Xml2DBData.IS_ENABLED" enablevalue="0"
+								commandok="showSuccess" confirmmessage="您确定要做恢复操作吗？"
+								isvalidate="0">
+								<i class='icon-ok'></i>恢复
+							</button> -->
+						</td>
+					</tr>
+				</table>
+			</div>
+            <div class='row-fluid' id="GoodsData">
+                <input id='INDX' type="hidden" datafield="Xml2DBData.INDX" />
+                <!--	<input id='ORG_ID' type="hidden" datafield="Xml2DBData.REC_VER" />-->
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        实例名
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtQUARTZ_NAME' datafield="Xml2DBData.QUARTZ_NAME" type='text' ismust="1"
+                                            errormsg="实例名不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        消息类型
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtMESSAGE_TYPE' type='text' datafield="Xml2DBData.MESSAGE_TYPE" ismust="1"
+                                            errormsg="消息类型不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        源路径
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtSOURCE_PATH' type='text' datafield="Xml2DBData.SOURCE_PATH" ismust="1"
+                                            errormsg="源路径不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        备份路径
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtTARGET_PATH' type='text' datafield="Xml2DBData.TARGET_PATH" ismust="1"
+                                            errormsg="备份路径不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        错误路径
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtERROR_PATH' datafield="Xml2DBData.ERROR_PATH" type='text' ismust="1"
+                                            errormsg="错误路径不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        业务节点集合
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtROOT_NAMES' datafield="Xml2DBData.ROOT_NAMES" type='text' ismust="1"
+                                            errormsg="业务节点集合不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        数据库表集合
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtDB_TABLE_NAMES' datafield="Xml2DBData.DB_TABLE_NAMES" type='text' ismust="1"
+                                            errormsg="数据库表集合不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        业务根节点
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtXML_DOCUMENT' datafield="Xml2DBData.XML_DOCUMENT" type='text' ismust="1"
+                                            errormsg="业务根节点不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        业务头节点
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtXML_HEAD' datafield="Xml2DBData.XML_HEAD" type='text' ismust="1" errormsg="业务头节点不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        流水号名称
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtSERIAL_NAME' datafield="Xml2DBData.SERIAL_NAME" type='text' ismust="1"
+                                            errormsg="流水号名称不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        主键名称
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtINDX_NAME' datafield="Xml2DBData.INDX_NAME" type='text' ismust="1"
+                                            errormsg="主键名称不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        外键名称
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtPINDX_NAME' datafield="Xml2DBData.PINDX_NAME" type='text' ismust="1"
+                                            errormsg="外键名称不能为空！" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td> 
+                    </tr>
+                    <tr>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        BLOB处理类型
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtBLOB_PROCESS' datafield="Xml2DBData.BLOB_PROCESS" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        文件名规则
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtFILE_NAME_REG' datafield="Xml2DBData.FILE_NAME_REG" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        编码格式
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtENCODING' datafield="Xml2DBData.ENCODING" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        密钥
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtAES_KEY' datafield="Xml2DBData.AES_KEY" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        并发数
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtTHREAD_COUNT' datafield="Xml2DBData.THREAD_COUNT" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        修改SQL
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtUPDATE_SQL' datafield="Xml2DBData.UPDATE_SQL" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        回执消息类型
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtRECEIPT_TYPE' datafield="Xml2DBData.RECEIPT_TYPE" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        回执消息路径
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtRECEIVED_PATH' datafield="Xml2DBData.RECEIVED_PATH" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        字段检查点
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtFIELD_POINT_CODE' datafield="Xml2DBData.FIELD_POINT_CODE" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        规则检查点
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtRULE_POINT_CODE' datafield="Xml2DBData.RULE_POINT_CODE" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        临时路径
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtTEMP_PATH' datafield="Xml2DBData.TEMP_PATH" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        命中路径
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtHIT_PATH' datafield="Xml2DBData.HIT_PATH" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        入口类嵌入
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtCLASS_INVOKE' datafield="Xml2DBData.CLASS_INVOKE" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        前置类嵌入
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtPRE_METHOD_INVOKE' datafield="Xml2DBData.PRE_METHOD_INVOKE" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        主表类嵌入
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtROOT_METHOD_INVOKE' datafield="Xml2DBData.ROOT_METHOD_INVOKE" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 25%;">
+                            <table width="100%" border="0" cellspacing="10" cellpadding="0">
+                                <tr>
+                                    <td class="titleCss100">
+                                        子表类嵌入
+                                    </td>
+                                    <td class="tdCss">
+                                        <input id='txtCHILD_METHOD_INVOKE' datafield="Xml2DBData.CHILD_METHOD_INVOKE" type='text' />
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+					<tr>
+						<td style="width: 25%;" class="tdListBorder">
+							<table width="100%" border="0" cellspacing="0" cellpadding="0">
+								<tr>
+									<td class="titleCss100">是否有效</td>
+									<td class="tdCss"><select name="select" id="IS_ENABLED"
+										datafield="Xml2DBData.IS_ENABLED"
+										style="width: 105%; border-radius: 0PX">
+											<option value=""></option>
+											<option value="0">否</option>
+											<option value="1">是</option>
+									</select></td>
+								</tr>
+							</table>
+						</td>
+						<td style="width: 25%;">
+							<table width="100%" border="0" cellspacing="10" cellpadding="0">
+								<tr>
+									<td class="titleCss100">创建时间</td>
+									<td class="tdCss"><input id='txtCREATE_TIME'
+										readonly="readonly" datafield="Xml2DBData.CREATE_TIME"
+										type='text' /></td>
+								</tr>
+							</table>
+						</td>
+						<td style="width: 25%;">
+							<table width="100%" border="0" cellspacing="10" cellpadding="0">
+								<tr>
+									<td class="titleCss100">修改时间</td>
+									<td class="tdCss"><input id='txtMODIFY_TIME'
+										readonly="readonly" datafield="Xml2DBData.MODIFY_TIME"
+										type='text' /></td>
+								</tr>
+							</table>
+						</td>
+						<td style="width: 25%;">
+							<table width="100%" border="0" cellspacing="10" cellpadding="0">
+								<tr>
+									<td class="titleCss100">版本号</td>
+									<td class="tdCss"><input id='txtREC_VER'
+										datafield="Xml2DBData.REC_VER" readonly="readonly" type='text' />
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
